@@ -1,0 +1,73 @@
+name: deploy-unmanaged-dev-solution
+# pack and import the solution into a dev-environment.
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_environment_url:
+        description: 'the url for the environment to import the unmanaged solution to. e.g. https://xxxx.crmx.dynamics.com/'
+        required: true
+        default: https://XXXXXX.crmX.dynamics.com/
+      # Change this value
+      solution_name:
+        description: 'name of the solution to worked on from Power Platform'
+        required: true
+        default: PowerPlatformFusionDev
+        options: 
+          - PowerPlatformFusionDev
+       #Do Not change these values
+      solution_shipping_folder:
+        description: 'folder name for staging the exported solution *do not change*'
+        required: true
+        default: out/ship/
+      solution_outbound_folder:
+        description: 'staging the unpacked solution folder before check-in *do not change*'
+        required: true
+        default: out/solutions/
+      solution_source_folder: 
+       description: 'folder name to be created and checked in *do not change*'
+       required: true
+       default: solutions/
+      solution_release_folder:
+       description: 'folder where the released binaries are going to be hosted *do not change*'
+       required: true
+       default: out/release
+  release:
+    types: [created]
+  
+
+env:
+#edit your values here
+  TARGET_ENVIRONMENT_URL: ${{github.event.inputs.target_environment_url}}
+  CLIENT_ID: ${{secrets.AZURE_DATAVERSEDEVTOOLS_CLIENT_ID}}
+  TENANT_ID: ${{secrets.AZURE_TENANT_ID}}
+
+jobs:
+  pack-and-import-unmanaged-solution:
+    runs-on: windows-latest
+    # or you can say runs-on: ubuntu-latest
+    env:
+      RUNNER_DEBUG: 1
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        lfs: true
+
+    - name: Pack solution
+      uses: microsoft/powerplatform-actions/pack-solution@v0
+      with:
+        solution-folder: ${{ github.event.inputs.solution_source_folder}}/${{ github.event.inputs.solution_name }}
+        solution-file: ${{ github.event.inputs.solution_outbound_folder}}/${{ github.event.inputs.solution_name }}.zip
+        solution-type: Unmanaged
+
+    - name: Import solution as unmanaged to target env
+      uses: microsoft/powerplatform-actions/import-solution@v0
+      with:
+        environment-url: ${{env.TARGET_ENVIRONMENT_URL}}
+        app-id: ${{env.CLIENT_ID}}
+        client-secret: ${{ secrets.PowerPlatformSPN }}
+        tenant-id: ${{env.TENANT_ID}}
+        solution-file: ${{ github.event.inputs.solution_outbound_folder}}/${{ github.event.inputs.solution_name }}.zip
+        force-overwrite: true
+        publish-changes: true
