@@ -4,13 +4,15 @@ Template for citizen and fusion development that contains some useful documentat
 
 ## Why
 
-Provide a basic framework for teams that includes both citizen and professional developers. Based on professional development best practice with the least amount of [cognitive load](https://en.wikipedia.org/wiki/Cognitive_load) for both citizen and professional developers. This can also be helpful in mitigating [technical debt](https://en.wikipedia.org/wiki/Technical_debt) and prepare for smoother operation and maintenance by developers not included from the start of the project.
+* Provide a basic framework for teams that includes both citizen and professional developers.
 
-The development and maintenance of this repository will also help ensure compliance to Equinor governance.
+* Leverage professional development best practices with the least amount of [cognitive load](https://en.wikipedia.org/wiki/Cognitive_load) for both citizen and professional developers.
+* Help mitigate [technical debt](https://en.wikipedia.org/wiki/Technical_debt) and prepare for smoother operation and maintenance by developers not included from the start of the project.
+* The development and maintenance of this repository will also help ensure compliance to Equinor governance.
 
 ## What
 
-Primarily this repository contains examples and configurations that align with Equinor development governance and strategies. It never be a complete framework suitable for any solution, but it can help get your team started on projects.
+Primarily this repository contains examples and configurations that align with Equinor development governance and strategies. It will never be a complete framework suitable for any solution, but it can help get your team started on projects.
 
 ## Content
 
