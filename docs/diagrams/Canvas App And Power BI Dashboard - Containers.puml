@@ -1,0 +1,114 @@
+@startuml Canvas App And Power BI Dashboard - Containers
+
+title Power Platform Canvas App and Power BI report connected to enterprise API
+
+
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!define EDSICONS https://raw.githubusercontent.com/equinor/design-system/develop/assets/icons/system-icons
+!define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
+!define edsIconKey img:EDSICONS/security/key.svg
+!define edsIconVerifiedUser img:EDSICONS/security/verified_user.svg
+!define edsIconBadge img:EDSICONS/people/badge.svg
+
+!include <azure/AzureCommon>
+!include <c4/C4_Component.puml>
+'!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!include FONTAWESOME/users.puml
+
+top to bottom direction
+
+Person(user, "Users", "Users in need of functionality", $sprite="users")
+
+note top of PowerQuery
+Client IDs: 
+Power BI: b52893c8-bc2e-47fc-918b-77022b299bbc
+Dataverse: 7ab7862c-4c57-491e-8a45-d52a7e023983
+Excel: a672d62c-fc7b-4e81-a576-e60dc46e951d
+end note
+
+Container_Ext(PowerQuery, "Software system", "PowerQuery", "Official Microsoft service") {
+
+    Component(PowerQueryConnector, "Dataflow Connector", "PowerQuery", "Microsoft certified Power Query connector")
+        
+}
+
+Container_Boundary(DataverseSolution, "Power Platform application") {
+
+    Component(PowerAutomateFlow, "Power Automate Flow", "Scheduled or triggered PowerAutomateFlow")
+    Component(CanvasPowerApp, "Canvas App", "PowerApps", "Front end application")
+    Component(ModelDrivenPowerApp, "Modeldriven App", "PowerApps", "Front end application")
+    Component(DataverseCustomConnector, "Custom Connector", "Internal API", "custom connector for internal api")
+    Component(DataverseConnector, "Connector", "API", "Microsoft certified connector")
+    ComponentDb(DataverseTable, "Table(s)", "dataverse", "Table(s) in environment")
+    Component(DataverseDataflow, "Dataflow", "Scheduled or triggered")
+    Component(DataversePowerQueryCustomConnector, "Dataflow Custom Connector", "PowerQuery", "Power Query custom connector for internal api")
+
+    Rel(CanvasPowerApp, DataverseConnector, "requests")
+    Rel(CanvasPowerApp, DataverseCustomConnector, "requests")
+    Rel(CanvasPowerApp, PowerAutomateFlow, "triggers")
+    Rel(DataverseDataflow, DataverseTable, "writes")
+    Rel(DataverseDataflow, DataversePowerQueryCustomConnector, "reads")
+    Rel(DataverseDataflow, PowerQueryConnector, "reads")
+    Rel(DataversePowerQueryCustomConnector, ExternalService, "requests", "OAuth2 (AAD)")
+    Rel(ModelDrivenPowerApp, DataverseTable, "Reads/Writes")
+    Rel(DataverseConnector, DataverseTable, "read/writes")
+    Rel(PowerAutomateFlow, DataverseConnector, "requests")
+    Rel(PowerAutomateFlow, DataverseCustomConnector, "requests")
+
+}
+
+Container_Boundary(PowerBIService, "Power BI dashboard") {
+
+    Component(PowerBIDataflow, "Dataflow", "Scheduled or triggered")
+    Component(PowerBIReport, "Power BI Report", "Power BI", "Published Power BI Report")
+    ComponentDb(PowerBIDataset, "Report dataset", "dataset", "")
+    Component(PowerQueryCustomConnector, "Dataflow Custom Connector", "PowerQuery", "Power Query custom connector for internal api")
+
+    Rel(PowerBIReport, PowerBIDataset, "reads")
+    Rel(PowerBIDataflow, PowerQueryCustomConnector, "reads")
+    Rel(PowerBIDataflow, PowerBIDataset, "writes")
+    Rel(PowerBIDataflow, PowerQueryConnector, "reads")
+
+}
+
+System_Boundary(ExternalService, "Internally hosted API, Business logic and data") {
+    
+    Component(InternalAPI, "API Endpoint", "APIM | Standalone", "Business specific logic and data")
+    System(OmniaDataService, "Data service", "synchronize data with legacy and core systems. E.g. SAP, site sensors etc")
+    
+    ComponentDb(db, "Database", "OMNIA", "Business data")
+    ComponentDb(db2, "Database", "Generic", "Business data")
+    
+    Rel(InternalAPI, db, "Reads/Writes")
+    Rel(InternalAPI, db2, "Reads/Writes")
+    Rel(OmniaDataService, db, "writes")
+
+}
+
+System_Boundary(PublicService, "External or public API") {
+
+    Container_Ext(mssp, "Content store", "Software system", "OneDrive/SharePoint lists and files")
+    Container_Ext(msoutlook, "Email", "Software system", "Outlook mailing")
+    Container_Ext(msapproval, "Notification", "Software system", "Office 365 approvals via Teams and Email")
+    Container_Ext(genericservice, "Misc", "Software system", "Public service e.g. BringAPI")
+
+}
+
+Container_Boundary(OnPremService, "On premise") {
+    
+    Container_Ext(SAP, "SAP", "Software system", "Business management and data")
+
+}
+
+Rel(DataverseConnector, PublicService, "requests", "user_impersonation")
+Rel(DataverseCustomConnector, ExternalService, "requests", "user_impersonation")
+Rel(OmniaDataService, OnPremService, "requests")
+Rel(PowerQueryConnector, PublicService, "requests", "", "Anonymous, Windows, Basic, Web API, Organizational Account")
+Rel(PowerQueryConnector, ExternalService, "requests", "Web", "Anonymous, Windows, Basic, Web API, Organizational Account")
+'Authentication methods: "Anonymous, Windows, Basic, Web API, Organizational Account"
+'Note: the authentication methods available depends on the service, (Excel, PowerBI, Dataverse, datafactory)
+Rel(PowerQueryCustomConnector, ExternalService, "requests", "OAuth2")
+
+SHOW_FLOATING_LEGEND()
+Lay_Distance(LEGEND(), CanvasPowerApp, 0)
+@enduml
