@@ -16,13 +16,13 @@
 
 > Example context diagram
 
-![context](/assets/UML/Canvas%20App%20And%20Power%20BI%20Dashboard%20-%20Context.png)
+![context](../assets/UML/Canvas%20App%20And%20Power%20BI%20Dashboard%20-%20Context.png)
 
 #### Containers
 
 > Example container diagram
 
-![Containers](/assets/UML/Canvas%20App%20And%20Power%20BI%20Dashboard%20-%20Containers.png)
+![Containers](../assets/UML/Canvas%20App%20And%20Power%20BI%20Dashboard%20-%20Containers.png)
 
 ## Development
 

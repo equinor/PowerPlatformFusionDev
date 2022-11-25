@@ -2,18 +2,11 @@
 
 title Power Platform Canvas App and Power BI report connected to enterprise API
 
-
-!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
-!define EDSICONS https://raw.githubusercontent.com/equinor/design-system/develop/assets/icons/system-icons
 !define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
-!define edsIconKey img:EDSICONS/security/key.svg
-!define edsIconVerifiedUser img:EDSICONS/security/verified_user.svg
-!define edsIconBadge img:EDSICONS/people/badge.svg
 
-!include <azure/AzureCommon>
-!include <c4/C4_Component.puml>
-'!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
 !include FONTAWESOME/users.puml
+!include <c4/C4_Component.puml>
 
 top to bottom direction
 
