@@ -1,3 +1,4 @@
+#!/bin/bash 
 pip3 install --user paconn
 wget https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
 sudo dpkg -i packages-microsoft-prod.deb

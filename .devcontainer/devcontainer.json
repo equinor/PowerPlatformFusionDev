@@ -6,23 +6,31 @@
 		"dockerfile": "Dockerfile",
 		// Update 'VARIANT' to pick an Ubuntu version: jammy / ubuntu-22.04, focal / ubuntu-20.04, bionic /ubuntu-18.04
 		// Use ubuntu-22.04 or ubuntu-18.04 on local arm64/Apple Silicon.
-		"args": { "VARIANT": "ubuntu-22.04" }
+		"args": {
+			"VARIANT": "ubuntu-22.04"
+		}
 	},
-
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
-
 	// Use 'postCreateCommand' to run commands after the container is created.
-	//"postCreateCommand": "pip3 install --user paconn",
-	"postCreateCommand": "sh .devcontainer/install-pp-tools.sh",
-	
-
+	"postCreateCommand": "git config --global --add safe.directory /workspaces/PowerPlatformFusionDev",
+	//"postCreateCommand": "sh .devcontainer/install-pp-tools.sh",
 	// Comment out to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
 	"remoteUser": "vscode",
 	"features": {
-		"azure-cli": "latest",
-		"python": "3.9",
-		"powershell": "latest"
+		//"ghcr.io/devcontainers/features/azure-cli:1": {
+		//"azure-cli": {
+		//	"version": "latest"
+		//},
+		"ghcr.io/devcontainers/features/python:1": {
+		//"python": {
+			"version": "3.9",
+			"installJupyterlab": false
+		},
+		//"ghcr.io/devcontainers/features/powershell:1": {
+		"powershell": {
+			"version": "latest"
+		}
 	},
 	"customizations": {
 		"vscode": {
@@ -45,3 +53,8 @@
 		}
 	}
 }
+/*
+
+Command 'Dev Containers: Rebuild Without Cache and Reopen in Container' resulted in an error (Command failed: C:\Users\HJAF\AppData\Local\Programs\Microsoft VS Code\Code.exe --ms-enable-electron-run-as-node c:\Users\HJAF\.vscode\extensions\ms-vscode-remote.remote-containers-0.262.3\dist\spec-node\devContainersSpecCLI.js read-configuration --workspace-folder c:\Users\HJAF\SRC\Equinor\PowerPlatformFusionDev --log-level debug --log-format json --config c:\Users\HJAF\SRC\Equinor\PowerPlatformFusionDev\.devcontainer\devcontainer.json --include-merged-configuration --mount-workspace-git-root true)
+
+*/
