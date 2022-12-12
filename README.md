@@ -1,13 +1,13 @@
 # PowerPlatformFusionDev
 
-Template for citizen and fusion development that contains some useful documentation and resources for Power Platform in Equinor.
+Template for citizen and [fusion development](https://learn.microsoft.com/en-us/power-apps/guidance/fusion-dev-ebook/) that contains some useful documentation and resources for Power Platform in Equinor.
 
 ## Why
 
 * Provide a basic framework for teams that includes both citizen and professional developers.
 
 * Leverage professional development best practices with the least amount of [cognitive load](https://en.wikipedia.org/wiki/Cognitive_load) for both citizen and professional developers.
-* Help mitigate [technical debt](https://en.wikipedia.org/wiki/Technical_debt) and prepare for smoother operation and maintenance by developers not included from the start of the project.
+* Help mitigate [technical debt](https://en.wikipedia.org/wiki/Technical_debt) and prepare for smoother operation and maintenance by both citizen and professional developers.
 * The development and maintenance of this repository will also help ensure compliance to Equinor governance.
 
 ## What
