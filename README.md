@@ -28,6 +28,11 @@ Both development documentation examples and the self assessment also cover topic
 
 Actions for exporting power apps solution and releasing a solution to an environment
 > Note: This requires giving application users in the dev, build, test and production environments for an azure app registration.
+>
+
+The included actions are based on [GitHub Actions for Microsoft Power Platform](https://github.com/rpothin/PowerPlatform-ALM-With-GitHub-Template), see [microsoft/powerplatform-actions-lab](https://github.com/microsoft/powerplatform-actions-lab)
+
+[rpothin/PowerPlatform-ALM-With-GitHub-Template](https://github.com/rpothin/PowerPlatform-ALM-With-GitHub-Template) is another excellent resource for Power Platform ALM with GitHub actions.
 
 ## Codespace
 
