@@ -6,7 +6,8 @@ on:
       # Change this value
       environment_url:
         description: 'the environment url that the solution exists in (defaults to Citizen Dev)'
-        required: false
+        required: true
+        default: https://orga0657728.crm4.dynamics.com/
       branch_name:
         description: 'The name of the branch to export the solution to' 
       solution_name:
@@ -30,13 +31,12 @@ on:
 env:
   TENANT_ID: ${{vars.AZURE_TENANT_ID }}
 
-
 jobs:
   export-from-dev:
     runs-on: windows-latest
-    environment: development
+    environment: yellow
     env:
-      ENVIRONMENT_URL: ${{ github.event.inputs.environment_url || vars.ENV_SOURCE_DATAVERSE_ENVIRONMENT_URL }}
+      ENVIRONMENT_URL: ${{ github.event.inputs.environment_url }}
       CLIENT_ID: ${{ vars.ENV_DATAVERSE_ENVIRONMENT_APPUSER_AZURE_CLIENT_ID }}
       RUNNER_DEBUG: 1
 
