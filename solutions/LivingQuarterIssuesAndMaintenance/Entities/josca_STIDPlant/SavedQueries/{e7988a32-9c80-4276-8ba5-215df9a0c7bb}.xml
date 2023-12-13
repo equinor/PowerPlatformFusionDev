@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<savedqueries xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <savedquery>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>0</CanBeDeleted>
+    <isquickfindquery>0</isquickfindquery>
+    <isprivate>0</isprivate>
+    <isdefault>1</isdefault>
+    <savedqueryid>{e7988a32-9c80-4276-8ba5-215df9a0c7bb}</savedqueryid>
+    <layoutxml>
+      <grid name="resultset" jump="josca_plant" select="1" icon="1" preview="1">
+        <row name="result" id="josca_stidplantid">
+          <cell name="josca_sapplantid" width="100" />
+          <cell name="josca_description" width="214" />
+          <cell name="josca_instcode" width="135" />
+          <cell name="josca_businessarea" width="262" />
+          <cell name="josca_camanagementemail" width="224" />
+        </row>
+      </grid>
+    </layoutxml>
+    <querytype>0</querytype>
+    <fetchxml>
+      <fetch version="1.0" mapping="logical" distinct="true">
+        <entity name="josca_stidplant">
+          <attribute name="josca_instcode" />
+          <attribute name="josca_sapplantid" />
+          <attribute name="josca_stidplantid" />
+          <attribute name="josca_camanagementemail" />
+          <attribute name="josca_description" />
+          <attribute name="josca_businessarea" />
+          <filter type="and">
+            <condition attribute="statecode" operator="eq" value="0" />
+            <condition attribute="josca_businessarea" operator="not-like" value="EPI%" />
+            <condition attribute="josca_businessarea" operator="not-like" value="REN%" />
+            <condition attribute="josca_businessarea" operator="not-like" value="MMP%" />
+            <condition attribute="josca_businessarea" operator="not-like" value="TDI%" />
+          </filter>
+          <order attribute="josca_description" descending="false" />
+        </entity>
+      </fetch>
+    </fetchxml>
+    <IntroducedVersion>1.0</IntroducedVersion>
+    <LocalizedNames>
+      <LocalizedName description="Active STID Plants" languagecode="1033" />
+    </LocalizedNames>
+  </savedquery>
+</savedqueries>

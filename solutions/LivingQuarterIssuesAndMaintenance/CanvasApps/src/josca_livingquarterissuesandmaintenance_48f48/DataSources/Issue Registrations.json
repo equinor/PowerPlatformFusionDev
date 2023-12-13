@@ -1,0 +1,147 @@
+[
+  {
+    "CdsFCBContext": "{\"FileType\":true,\"ImageExternalStorage\":true}",
+    "EntitySetName": "josca_issueregistrations",
+    "IsHidden": false,
+    "IsSampleData": false,
+    "IsWritable": true,
+    "LogicalName": "josca_issueregistration",
+    "Name": "Issue Registrations",
+    "NativeCDSDataSourceInfoNameMapping": {
+      "_ownerid_value": "Owner",
+      "{Attachments}": "Attachments",
+      "createdby": "Created By",
+      "createdon": "Created On",
+      "createdonbehalfby": "Created By (Delegate)",
+      "importsequencenumber": "Import Sequence Number",
+      "josca_comment": "Comment",
+      "josca_discipline": "Discipline",
+      "josca_floor": "Floor",
+      "josca_functionallocation": "Functional location",
+      "josca_issueregistration_ActivityPointers": "Activities",
+      "josca_issueregistration_adx_inviteredemptions": "Invite Redemptions",
+      "josca_issueregistration_adx_portalcomments": "Portal Comments",
+      "josca_issueregistration_Annotations": "Notes",
+      "josca_issueregistration_Appointments": "Appointments",
+      "josca_issueregistration_AsyncOperations": "System Jobs",
+      "josca_issueregistration_BulkDeleteFailures": "Bulk Delete Failures",
+      "josca_issueregistration_chats": "Teams chats",
+      "josca_issueregistration_cr1c1_AVMTRUsages": "AVMTRUsages",
+      "josca_issueregistration_cr1c1_LicenceMeetingProcesses": "LicenceMeetingProcess",
+      "josca_issueregistration_DuplicateBaseRecord": "Duplicate Records (josca_issueregistration_DuplicateBaseRecord)",
+      "josca_issueregistration_DuplicateMatchingRecord": "Duplicate Records (josca_issueregistration_DuplicateMatchingRecord)",
+      "josca_issueregistration_Emails": "Email Messages",
+      "josca_issueregistration_Faxes": "Faxes",
+      "josca_issueregistration_Feedback": "Feedback",
+      "josca_issueregistration_josca_LivingQuarterMaintenanceTasks": "Living Quarter Maintenance Tasks (josca_issueregistration_josca_LivingQuarterMaintenanceTasks)",
+      "josca_issueregistration_Letters": "Letters",
+      "josca_issueregistration_MailboxTrackingFolders": "Mailbox Auto Tracking Folders",
+      "josca_issueregistration_msfp_alerts": "Customer Voice alert",
+      "josca_issueregistration_msfp_surveyinvites": "Customer Voice survey invites",
+      "josca_issueregistration_msfp_surveyresponses": "Customer Voice survey responses",
+      "josca_issueregistration_PhoneCalls": "Phone Calls",
+      "josca_issueregistration_PrincipalObjectAttributeAccesses": "Field Sharing",
+      "josca_issueregistration_ProcessSession": "Process Sessions",
+      "josca_issueregistration_RecurringAppointmentMasters": "Recurring Appointments",
+      "josca_issueregistration_SyncErrors": "Sync Errors",
+      "josca_IssueRegistration_Task": "Living Quarter Maintenance Tasks (josca_IssueRegistration_Task)",
+      "josca_issueregistration_Tasks": "MaintEngTasks",
+      "josca_issueregistrationid": "Issue Registration",
+      "josca_name": "SubmissionId",
+      "josca_Plant": "Plant",
+      "josca_registrationdatetime": "Registration Date Time",
+      "josca_registrationdetails": "Registration Details",
+      "josca_registrationlanguage": "Registration Language",
+      "modifiedby": "Modified By",
+      "modifiedon": "Modified On",
+      "modifiedonbehalfby": "Modified By (Delegate)",
+      "overriddencreatedon": "Record Created On",
+      "owningbusinessunit": "Owning Business Unit",
+      "owningteam": "Owning Team",
+      "owninguser": "Owning User",
+      "statecode": "Status",
+      "statuscode": "Status Reason",
+      "timezoneruleversionnumber": "Time Zone Rule Version Number",
+      "utcconversiontimezonecode": "UTC Conversion Time Zone Code",
+      "versionnumber": "Version Number"
+    },
+    "PreferredName": "Issue Registrations",
+    "Type": "NativeCDSDataSourceInfo"
+  },
+  {
+    "DisplayName": "Issue Registrations (Views)",
+    "Name": "_josca_issueregistration_views",
+    "RelatedEntityName": "Issue Registrations",
+    "TrimmedViewName": true,
+    "Type": "ViewInfo",
+    "ViewInfoNameMapping": {
+      "2273377a-d321-4360-b103-20a1fe05325d": "Issue Registration Lookup View",
+      "440923d7-79d1-449f-bb39-814dbedcbf26": "Issue Registration Associated View",
+      "857a429c-7ed4-404e-987f-e5f865fc05c2": "Issue Registration Advanced Find View",
+      "95e62836-671a-48d1-8218-633ba86a15fe": "Inactive Issue Registrations",
+      "f7041fda-e146-4f4f-8a72-d451811c31b7": "Active Issue Registrations"
+    }
+  },
+  {
+    "DisplayName": "Status (Issue Registrations)",
+    "Name": "josca_issueregistration_statecode",
+    "OptionSetInfoNameMapping": {
+      "0": "Active",
+      "1": "Inactive"
+    },
+    "OptionSetIsBooleanValued": false,
+    "OptionSetIsGlobal": false,
+    "OptionSetReference": {
+      "OptionSetReferenceItem0": {
+        "OptionSetReferenceColumnName": "statecode",
+        "OptionSetReferenceEntityName": "Issue Registrations"
+      }
+    },
+    "OptionSetTypeKey": "StateType",
+    "RelatedColumnInvariantName": "statecode",
+    "RelatedEntityName": "Issue Registrations",
+    "Type": "OptionSetInfo"
+  },
+  {
+    "DisplayName": "Status Reason (Issue Registrations)",
+    "Name": "josca_issueregistration_statuscode",
+    "OptionSetInfoNameMapping": {
+      "1": "Active",
+      "2": "Inactive"
+    },
+    "OptionSetIsBooleanValued": false,
+    "OptionSetIsGlobal": false,
+    "OptionSetReference": {
+      "OptionSetReferenceItem0": {
+        "OptionSetReferenceColumnName": "statuscode",
+        "OptionSetReferenceEntityName": "Issue Registrations"
+      }
+    },
+    "OptionSetTypeKey": "StatusType",
+    "RelatedColumnInvariantName": "statuscode",
+    "RelatedEntityName": "Issue Registrations",
+    "Type": "OptionSetInfo"
+  },
+  {
+    "DisplayName": "Maintenance Discipline",
+    "Name": "josca_maintenancediscipline",
+    "OptionSetInfoNameMapping": {
+      "459480000": "Electro",
+      "459480001": "Mechanic",
+      "459480002": "Automation",
+      "459480003": "Accommodation"
+    },
+    "OptionSetIsBooleanValued": false,
+    "OptionSetIsGlobal": true,
+    "OptionSetReference": {
+      "OptionSetReferenceItem0": {
+        "OptionSetReferenceColumnName": "josca_discipline",
+        "OptionSetReferenceEntityName": "Issue Registrations"
+      }
+    },
+    "OptionSetTypeKey": "MultiSelectPicklistType",
+    "RelatedColumnInvariantName": "josca_discipline",
+    "RelatedEntityName": "Issue Registrations",
+    "Type": "OptionSetInfo"
+  }
+]

@@ -1,0 +1,337 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_microsoftforms": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "hof_sharedmicrosoftforms_7251f"
+        },
+        "api": {
+          "name": "shared_microsoftforms"
+        }
+      },
+      "shared_commondataserviceforapps": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "eds_sharedcommondataserviceforapps_ebeeb"
+        },
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
+      },
+      "shared_approvals": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "eds_sharedapprovals_0f66c"
+        },
+        "api": {
+          "name": "shared_approvals"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        }
+      },
+      "triggers": {
+        "When_a_new_response_is_submitted": {
+          "splitOn": "@triggerOutputs()?['body/value']",
+          "metadata": {
+            "operationMetadataId": "cb0be5ca-e3c6-452e-aa28-31ec456824df"
+          },
+          "type": "OpenApiConnectionWebhook",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_microsoftforms",
+              "operationId": "CreateFormWebhook",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_microsoftforms"
+            },
+            "parameters": {
+              "form_id": "NaKkOuK21UiRlX_PBbRZsH7KSaHb7PlMq-3bpeEdFCxUQUFSVDVKVlhNS05LRVlZRFZaVFVIMklMVSQlQCN0PWcu"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        }
+      },
+      "actions": {
+        "Get_response_details": {
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "b0de163c-ba90-4443-8790-d8b29f1e09bf"
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_microsoftforms",
+              "operationId": "GetFormResponseById",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_microsoftforms"
+            },
+            "parameters": {
+              "form_id": "NaKkOuK21UiRlX_PBbRZsH7KSaHb7PlMq-3bpeEdFCxUQUFSVDVKVlhNS05LRVlZRFZaVFVIMklMVSQlQCN0PWcu",
+              "response_id": "@triggerOutputs()?['body/resourceData/responseId']"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        },
+        "Condition": {
+          "actions": {
+            "Set_variable_Known_Functional_Location": {
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "701e8632-1445-4522-8285-bc7f8ab0a59f"
+              },
+              "type": "SetVariable",
+              "inputs": {
+                "name": "varReportSummary",
+                "value": "Functional location: @{outputs('Get_response_details')?['body/r5b18b99494e8439bac4315d5b7fcb443']}\n@{outputs('Common_Response_Summary_')}"
+              }
+            }
+          },
+          "runAfter": {
+            "Initialize_variable": [
+              "Succeeded"
+            ]
+          },
+          "else": {
+            "actions": {
+              "Set_variable_Unknown_Functional_Location": {
+                "runAfter": {},
+                "metadata": {
+                  "operationMetadataId": "543e0732-56e7-4975-984d-c2bf5a773038"
+                },
+                "type": "SetVariable",
+                "inputs": {
+                  "name": "varReportSummary",
+                  "value": "Installation/Plant: @{outputs('Get_response_details')?['body/r6bfb412724824e888b20af071644bf2c']}\nFloor: @{outputs('Get_response_details')?['body/r8ded7e58bbdd4972b34cb10d1bbf5353']}\nLocation: @{outputs('Get_response_details')?['body/r3c4254d09b0445a48986324d74597847']} \n@{outputs('Common_Response_Summary_')}"
+                }
+              }
+            }
+          },
+          "expression": {
+            "equals": [
+              "@outputs('Get_response_details')?['body/rc8d89e3119da413e9500246057b01647']",
+              "Yes"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "e62cffb6-5e92-4693-a0e2-d306ec4a657c"
+          },
+          "type": "If"
+        },
+        "Initialize_variable": {
+          "runAfter": {
+            "Common_Response_Summary_": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "3df6d3c0-328a-4399-80cf-9d1ae746b30d"
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "varReportSummary",
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "Common_Response_Summary_": {
+          "runAfter": {
+            "Get_response_details": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "908840f5-c105-4d05-906e-f6aa00914e8e"
+          },
+          "type": "Compose",
+          "inputs": "Issue Type (discipline): @{outputs('Get_response_details')?['body/rf42275de4b574506b6c66a5cca3902ca']}\nIssue details: @{outputs('Get_response_details')?['body/r236f55bc1bea46deb097d3d4ebfee62b']}\n\nSubmitted by (name): @{outputs('Get_response_details')?['body/rbeecc6146e6d4cc2a4c8c070d14093e1']}"
+        },
+        "List_rows": {
+          "runAfter": {
+            "Condition": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "7d0fe7dd-6599-4b1c-90c0-41ed81f8b832"
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "ListRecords",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            },
+            "parameters": {
+              "entityName": "josca_stidplants",
+              "$filter": "josca_description eq '@{outputs('Get_response_details')?['body/r6bfb412724824e888b20af071644bf2c']}'",
+              "$top": 1
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        },
+        "Get_STID_Plant_Record": {
+          "runAfter": {
+            "List_rows": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "2334b5b5-b2e9-403d-8921-c0942e324884"
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "GetItem",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            },
+            "parameters": {
+              "entityName": "josca_stidplants",
+              "recordId": "@first(outputs('List_rows')?['body/value'])?['josca_stidplantid']"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        },
+        "Start_and_wait_for_an_approval": {
+          "runAfter": {
+            "Issue_Level_One_Handler": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "dd900893-1812-4efc-ba04-e7faf094b960"
+          },
+          "type": "OpenApiConnectionWebhook",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_approvals",
+              "operationId": "StartAndWaitForAnApproval",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_approvals"
+            },
+            "parameters": {
+              "approvalType": "CustomResponse",
+              "WebhookApprovalCreationInput/responseOptions": [
+                "Register and assign to discipline",
+                "Register and hold",
+                "Ignore"
+              ],
+              "WebhookApprovalCreationInput/title": "Issue reported for LQ",
+              "WebhookApprovalCreationInput/assignedTo": "@{outputs('Get_STID_Plant_Record')?['body/josca_camanagementemail']};gein@equinor.com;",
+              "WebhookApprovalCreationInput/details": "@variables('varReportSummary')",
+              "WebhookApprovalCreationInput/enableNotifications": true,
+              "WebhookApprovalCreationInput/enableReassignment": true
+            },
+            "authentication": "@parameters('$authentication')"
+          },
+          "description": "Issue level one handler will be the receiver."
+        },
+        "Switch": {
+          "runAfter": {
+            "Start_and_wait_for_an_approval": [
+              "Succeeded"
+            ]
+          },
+          "cases": {
+            "Register_and_assign": {
+              "case": "Register and assign to discipline",
+              "actions": {
+                "Register_an_assigned_issue": {
+                  "runAfter": {},
+                  "metadata": {
+                    "operationMetadataId": "0da404f8-0123-40ef-90ad-b47cfe8f0250"
+                  },
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_commondataserviceforapps",
+                      "operationId": "CreateRecord",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                    },
+                    "parameters": {
+                      "entityName": "josca_issueregistrations",
+                      "item/josca_discipline": "@outputs('Get_response_details')?['body/rf42275de4b574506b6c66a5cca3902ca']",
+                      "item/josca_registrationdatetime": "@outputs('Get_response_details')?['body/submitDate']",
+                      "item/josca_registrationdetails": "@variables('varReportSummary')",
+                      "item/josca_STIDPlant@odata.bind": "@outputs('Get_STID_Plant_Record')?['body/@odata.id']",
+                      "item/josca_name": "@triggerOutputs()?['body/resourceData/responseId']",
+                      "item/josca_comment": "@first(outputs('Start_and_wait_for_an_approval')?['body/responses'])?['comments']",
+                      "item/josca_floor": "@outputs('Get_response_details')?['body/r8ded7e58bbdd4972b34cb10d1bbf5353']",
+                      "item/josca_functionallocation": "@outputs('Get_response_details')?['body/ra19d5f53ccaa49c38807744f6d3d7666']"
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  }
+                }
+              }
+            },
+            "Register_and_hold": {
+              "case": "Register and hold",
+              "actions": {
+                "Register_and_Hold_New_Issue": {
+                  "runAfter": {},
+                  "metadata": {
+                    "operationMetadataId": "6bb44da4-41da-4a31-9577-7a6e194fbdfb"
+                  },
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_commondataserviceforapps",
+                      "operationId": "CreateRecord",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                    },
+                    "parameters": {
+                      "entityName": "josca_issueregistrations",
+                      "item/josca_discipline": "459480003",
+                      "item/josca_registrationdatetime": "@outputs('Get_response_details')?['body/submitDate']",
+                      "item/josca_registrationdetails": "@variables('varReportSummary')",
+                      "item/josca_STIDPlant@odata.bind": "@outputs('Get_STID_Plant_Record')?['body/@odata.id']",
+                      "item/josca_name": "@triggerOutputs()?['body/resourceData/responseId']",
+                      "item/josca_comment": "@first(outputs('Start_and_wait_for_an_approval')?['body/responses'])?['comments']",
+                      "item/josca_floor": "@outputs('Get_response_details')?['body/r8ded7e58bbdd4972b34cb10d1bbf5353']",
+                      "item/josca_functionallocation": "@outputs('Get_response_details')?['body/ra19d5f53ccaa49c38807744f6d3d7666']"
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "actions": {}
+          },
+          "expression": "@outputs('Start_and_wait_for_an_approval')?['body/outcome']",
+          "metadata": {
+            "operationMetadataId": "3492de5f-991b-4010-b03b-43421380b10d"
+          },
+          "type": "Switch"
+        },
+        "Issue_Level_One_Handler": {
+          "runAfter": {
+            "Get_STID_Plant_Record": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "62af887f-2f40-4c25-a1be-393e2c676bcb"
+          },
+          "type": "Compose",
+          "inputs": "@outputs('Get_STID_Plant_Record')?['body/josca_camanagementemail']"
+        }
+      }
+    },
+    "templateName": ""
+  },
+  "schemaVersion": "1.0.0.0"
+}

@@ -1,0 +1,747 @@
+"'Home Screen' As screen":
+
+    vcoMainHS As groupContainer.verticalAutoLayoutContainer:
+        Height: =Parent.Height
+        LayoutAlignItems: =LayoutAlignItems.Stretch
+        LayoutDirection: =LayoutDirection.Vertical
+        LayoutGap: =16
+        LayoutMode: =LayoutMode.Auto
+        PaddingBottom: =EDSDefaults.LayoutGap
+        PaddingLeft: =EDSDefaults.LayoutGap
+        PaddingRight: =EDSDefaults.LayoutGap
+        PaddingTop: =EDSDefaults.LayoutGap
+        Width: =Parent.Width
+        ZIndex: =1
+
+        hcoTopBarHS As groupContainer.horizontalAutoLayoutContainer:
+            AlignInContainer: =AlignInContainer.SetByContainer
+            BorderColor: =Color.Transparent
+            BorderStyle: =EDSStyles.TopBar.BorderStyle
+            Fill: =EDSStyles.TopBar.Fill
+            FillPortions: =0
+            Height: =EDSStyles.TopBar.Height+16
+            LayoutAlignItems: =LayoutAlignItems.Center
+            LayoutGap: =EDSStyles.TopBar.LayoutGap
+            LayoutJustifyContent: =LayoutJustifyContent.SpaceBetween
+            LayoutMinHeight: =100
+            LayoutMinWidth: =250
+            LayoutMode: =LayoutMode.Auto
+            LayoutWrap: =
+            PaddingBottom: =16
+            PaddingLeft: =EDSDefaults.BorderThickness
+            Width: =Parent.Width
+            ZIndex: =1
+
+            icoTopBarMenuToggleHS As image:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                BorderStyle: =BorderStyle.Dashed
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledFill: =RGBA(0, 0, 0, 0)
+                FocusedBorderColor: =EDSDefaults.FocusedBorderColor
+                FocusedBorderThickness: =EDSDefaults.FocusedBorderThickness
+                Height: =EDSStyles.IconMenu.TemplateSize
+                HoverBorderColor: =RGBA(0, 0, 0, 0)
+                HoverFill: =RGBA(0, 0, 0, 0)
+                Image: |-
+                    =If(
+                        gblEDSShowAppMenu,
+                        EDSIcons.ChevronDown,
+                        EDSIcons.Menu
+                    )
+                LayoutMinHeight: =0
+                LayoutMinWidth: =0
+                OnSelect: |-
+                    =//UpdateContext({locShowMenu: !locShowMenu})
+                    Set(gblEDSShowAppMenu, !gblEDSShowAppMenu)
+                PaddingBottom: =12
+                PaddingLeft: =12
+                PaddingRight: =12
+                PaddingTop: =12
+                PressedBorderColor: =RGBA(0, 0, 0, 0)
+                PressedFill: =RGBA(0, 0, 0, 0)
+                TabIndex: =1
+                Width: =EDSStyles.IconMenu.TemplateSize
+                ZIndex: =1
+
+            lblTopBarAppScreenNameHS As label:
+                AutoHeight: =true
+                BorderColor: =EDSDefaults.BorderColor
+                BorderStyle: =EDSDefaults.BorderStyle
+                BorderThickness: =EDSDefaults.BorderThickness
+                Color: =EDSDefaults.Color
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                FillPortions: =1
+                FocusedBorderThickness: =4
+                Font: =EDSDefaults.Font
+                Height: =Self.Size*Self.LineHeight * 1.75
+                LayoutMinHeight: =EDSDefaults.Height
+                LayoutMinWidth: =64
+                LineHeight: =1
+                PaddingBottom: =0
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Size: =EDSDefaults.FontSize
+                Text: =Concatenate("App Name", " - ", App.ActiveScreen.Name)
+                Visible: =hcoTopBarHS.Width > (icoTopBarMenuToggleHS.Width + galTopBarHorizontalMenuHS.Width+shpTopBarMenuDividerHS.Width+1+(Parent.LayoutGap*4))
+                Width: =EDSStyles.Label.Width
+                ZIndex: =2
+
+            shpTopBarMenuSpacerHS As rectangle:
+                BorderColor: =Color.Transparent
+                BorderStyle: =BorderStyle.None
+                Fill: =Color.Transparent
+                FillPortions: =1
+                FocusedBorderThickness: =0
+                Height: =48
+                LayoutMinWidth: =0
+                Visible: |-
+                    =//Self.Width<10
+                    !lblTopBarAppScreenNameHS.Visible
+                Width: =0
+                ZIndex: =3
+
+            galTabsTopBarHS As gallery.galleryHorizontal:
+                AccessibleLabel: =$"Tab selection"
+                AlignInContainer: =AlignInContainer.SetByContainer
+                BorderColor: =Color.Transparent
+                BorderStyle: =EDSDefaults.BorderStyle
+                BorderThickness: =EDSStyles.Tabs.BorderThickness
+                Fill: =EDSStyles.Tabs.Fill
+                FillPortions: =0
+                FocusedBorderThickness: =EDSDefaults.FocusedBorderThickness
+                Height: =EDSStyles.Tabs.LayoutMinHeight
+                Items: =colAppMenu
+                LayoutMinHeight: =287
+                LayoutMinWidth: =320
+                OnSelect: |
+                    =Switch(
+                        Lower(ThisItem.Action),
+                        "navigate",
+                        Navigate(
+                            ThisItem.Option.Screen,
+                            LookUp(
+                                ThisItem.Option.Arguments,
+                                Name = "Transition"
+                            ).Value
+                        ),
+                        "launch",
+                        Launch(
+                            LookUp(
+                                ThisItem.Option.Arguments,
+                                Name = "address"
+                            ).Value
+                        ),
+                        "notify",
+                        Notify(
+                            Coalesce(
+                                LookUp(
+                                    ThisItem.Option.Arguments,
+                                    Name = "text"
+                                ).Value,
+                                //ThisItem.Option.Text,// fallback to the main option property instead of using lookup.
+                                "Change this formula to what you wish, you can also provide a custom option"
+                            ),
+                            Coalesce(
+                                LookUp(
+                                    ThisItem.Option.Arguments,
+                                    Name = "notification_type"
+                                ).Value,
+                                NotificationType.Information
+                            ),
+                            LookUp(
+                                ThisItem.Option.Arguments,
+                                Name = "timeout"
+                            ).Value
+                        ),
+                        "return",
+                        Back(
+                            LookUp(
+                                ThisItem.Option.Arguments,
+                                Name = "transition"
+                            ).Value
+                        ),
+                        false
+                    );
+                ShowNavigation: =Self.Width<EDSStyles.Tabs.LayoutMinWidth*CountRows(Self.AllItems)
+                ShowScrollbar: =false
+                TabIndex: =0
+                TemplateFill: =EDSStyles.Tabs.TemplateFill
+                TemplatePadding: =0
+                TemplateSize: =EDSStyles.Tabs.LayoutMinWidth
+                Visible: =Self.Width < (Parent.Width - Parent.PaddingLeft - Parent.PaddingRight - Parent.LayoutGap*2 - Self.Width)
+                Width: |-
+                    =Max(
+                        Min(
+                            (CountRows(Self.AllItems) * Self.TemplateWidth)
+                        ),
+                        1
+                    )
+                WrapCount: =0
+                X: =EDSStyles.Tabs.BorderThickness
+                ZIndex: =5
+
+                vcoTabsTobBarTabItemHS As groupContainer.horizontalAutoLayoutContainer:
+                    BorderStyle: =BorderStyle.None
+                    Height: =Parent.TemplateHeight
+                    LayoutAlignItems: =LayoutAlignItems.Stretch
+                    LayoutDirection: =LayoutDirection.Vertical
+                    LayoutMode: =LayoutMode.Auto
+                    PaddingTop: |
+                        =EDSStyles.Tabs.BorderThickness
+                    Width: =Parent.TemplateWidth
+                    ZIndex: =1
+
+                    btnTabsTobBarTabItemButtonHS As button:
+                        BorderColor: =Color.Transparent
+                        BorderStyle: =BorderStyle.Dashed
+                        BorderThickness: =EDSStyles.Tabs.BorderThickness
+                        Color: |-
+                            =If(
+                                Or(
+                                    And(
+                                        // This will highlight the correct item when used as screen navigation.
+                                        ThisItem.Action = "navigate",
+                                        ThisItem.Option.Screen = App.ActiveScreen
+                                    ),
+                                    And(
+                                        ThisItem.Action <> "navigate",
+                                        ThisItem.IsSelected
+                                    )
+                                ),
+                                EDSStyles.Tabs.ActiveColor,
+                                EDSStyles.Tabs.Color
+                            )
+                        DisabledBorderColor: =EDSStyles.Tabs.DisabledBorderColor
+                        DisabledColor: =EDSStyles.Tabs.DisabledColor
+                        DisabledFill: =EDSStyles.Tabs.DisabledFill
+                        Fill: =Color.Transparent
+                        FocusedBorderColor: =EDSDefaults.FocusedBorderColor
+                        FocusedBorderThickness: =EDSDefaults.FocusedBorderThickness
+                        Font: =EDSStyles.Tabs.Font.Font
+                        FontWeight: |
+                            =EDSStyles.Tabs.Font.Weight
+                        Height: =Parent.Height-shpTabsTobBarTabItemBorderHS.Height-Parent.PaddingTop
+                        HoverBorderColor: =Self.BorderColor
+                        HoverColor: =EDSStyles.Tabs.HoverColor
+                        HoverFill: =EDSStyles.Tabs.HoverFill
+                        LayoutMinHeight: =Parent.Height-shpTabsTobBarTabItemBorderHS.Height
+                        LayoutMinWidth: =galTabsTopBarHS.TemplateWidth-(Self.FocusedBorderThickness*2)
+                        OnSelect: =Select(shpTabsTobBarSelectParentWorkaroundHS);
+                        PaddingBottom: =EDSStyles.Tabs.PaddingBottom
+                        PaddingLeft: =EDSStyles.Tabs.PaddingLeft
+                        PaddingRight: =EDSStyles.Tabs.PaddingRight
+                        PaddingTop: =EDSStyles.Tabs.PaddingTop
+                        PressedBorderColor: =Self.BorderColor
+                        PressedColor: =EDSStyles.Tabs.PressedColor
+                        PressedFill: =EDSStyles.Tabs.PressedFill
+                        RadiusBottomLeft: =0
+                        RadiusBottomRight: =0
+                        RadiusTopLeft: =EDSStyles.Tabs.RadiusTopLeft
+                        RadiusTopRight: =EDSStyles.Tabs.RadiusTopRight
+                        Size: =EDSStyles.Tabs.Font.Size
+                        Text: =ThisItem.Title
+                        Tooltip: =ThisItem.SubTitle
+                        Width: =galTabsTopBarHS.TemplateWidth -(Self.FocusedBorderThickness)
+                        ZIndex: =1
+
+                    shpTabsTobBarTabItemBorderHS As rectangle:
+                        BorderColor: =Color.Transparent
+                        BorderStyle: =BorderStyle.None
+                        DisabledFill: =EDSStyles.Tabs.DisabledFill
+                        Fill: |-
+                            =If(
+                                Or(
+                                    And(
+                                        // This will highlight the correct item when used as screen navigation.
+                                        ThisItem.Action = "navigate",
+                                        ThisItem.Option.Screen = App.ActiveScreen
+                                    ),
+                                    And(
+                                        ThisItem.Action <> "navigate",
+                                        ThisItem.IsSelected
+                                    )
+                                ),
+                                EDSStyles.Tabs.ActiveBorderColor,
+                                EDSStyles.Tabs.BorderColor
+                            )
+                        FocusedBorderThickness: =4
+                        Height: =EDSStyles.Tabs.BorderThickness
+                        HoverFill: =EDSStyles.Tabs.HoverFill
+                        LayoutMinWidth: =galTabsTopBarHS.TemplateWidth
+                        ZIndex: =3
+
+                shpTabsTobBarSelectParentWorkaroundHS As rectangle:
+                    AccessibleLabel: =$"Tab for {btnTabsTobBarTabItemButtonHS.Text}"
+                    BorderColor: =RGBA(0, 0, 0, 0)
+                    BorderStyle: =BorderStyle.None
+                    DisabledFill: =Color.Transparent
+                    Fill: =RGBA(0, 0, 0, 0)
+                    FocusedBorderColor: =EDSDefaults.FocusedBorderColor
+                    FocusedBorderThickness: =EDSDefaults.FocusedBorderThickness
+                    Height: =0
+                    HoverFill: =RGBA(0, 0, 0, 0)
+                    OnSelect: |-
+                        =Select(Parent)
+                        //Workaround for selecting this item so that the gallery control updates its selected item.
+                    PressedFill: =RGBA(0, 0, 0, 0)
+                    TabIndex: =0
+                    Tooltip: =ThisItem.SubTitle
+                    Visible: =false
+                    Width: =0
+                    ZIndex: =2
+
+            shpTopBarMenuDividerHS As rectangle:
+                BorderColor: =Color.Transparent
+                BorderStyle: =BorderStyle.None
+                Fill: =EDSColors.Background.Medium
+                FocusedBorderThickness: =0
+                Height: =48
+                LayoutMinWidth: =EDSStyles.Tabs.LayoutMinWidth
+                Width: =2
+                ZIndex: =6
+
+            galTopBarHorizontalMenuHS As gallery.galleryHorizontal:
+                AlignInContainer: =AlignInContainer.SetByContainer
+                BorderColor: =EDSDefaults.BorderColor
+                BorderStyle: =EDSDefaults.BorderStyle
+                BorderThickness: =EDSDefaults.BorderThickness
+                Fill: =EDSStyles.Icon.Fill
+                FillPortions: =0
+                FocusedBorderThickness: |-
+                    =//EDSDefaults.FocusedBorderThickness
+                    EDSDefaults.FocusedBorderThickness
+                Height: =EDSStyles.Icon.Height
+                Items: |-
+                    =// ForAll(Parent.MenuItems, Value), EDSIconMenu.MenuItems) // When using object array notation [] instead of Table()
+                    colTopBarMenu
+                LayoutMinHeight: =48
+                LayoutMinWidth: =320
+                OnSelect: |
+                    =Switch(
+                        Lower(ThisItem.Action),
+                        "navigate",
+                        Navigate(
+                            ThisItem.Option.Screen,
+                            LookUp(
+                                ThisItem.Option.Arguments,
+                                Name = "Transition"
+                            ).Value
+                        ),
+                        "launch",
+                        Launch(
+                            LookUp(
+                                ThisItem.Option.Arguments,
+                                Name = "address"
+                            ).Value
+                        ),
+                        "notify",
+                        Notify(
+                            Coalesce(
+                                LookUp(
+                                    ThisItem.Option.Arguments,
+                                    Name = "text"
+                                ).Value,
+                                //ThisItem.Option.Text,// fallback to the main option property instead of using lookup.
+                                "Change this formula to what you wish, you can also provide a custom option"
+                            ),
+                            Coalesce(
+                                LookUp(
+                                    ThisItem.Option.Arguments,
+                                    Name = "notification_type"
+                                ).Value,
+                                NotificationType.Information
+                            ),
+                            LookUp(
+                                ThisItem.Option.Arguments,
+                                Name = "timeout"
+                            ).Value
+                        ),
+                        "return",
+                        Back(
+                            LookUp(
+                                ThisItem.Option.Arguments,
+                                Name = "transition"
+                            ).Value
+                        ),
+                        false
+                    );
+                ShowScrollbar: =false
+                TabIndex: =0
+                TemplatePadding: =0
+                TemplateSize: |-
+                    =//EDSDefaults.TemplateSize+(EDSDefaults.FocusedBorderThickness*2)
+                    EDSStyles.IconMenu.TemplateSize
+                Width: =hcoHorizontalMenuItemHS.Width*CountRows(Self.AllItems)+(EDSDefaults.FocusedBorderThickness*2)
+                WrapCount: =0
+                X: =0 
+                ZIndex: =7
+
+                hcoHorizontalMenuItemHS As groupContainer.horizontalAutoLayoutContainer:
+                    BorderColor: =Color.Transparent
+                    BorderStyle: =BorderStyle
+                    Height: =Parent.Height
+                    LayoutAlignItems: =LayoutAlignItems.Stretch
+                    LayoutDirection: =LayoutDirection.Vertical
+                    LayoutJustifyContent: =LayoutJustifyContent.Center
+                    LayoutMode: =LayoutMode.Auto
+                    PaddingBottom: =2
+                    PaddingLeft: =2
+                    PaddingRight: =2
+                    PaddingTop: =2
+                    Width: =Parent.TemplateWidth
+                    ZIndex: =1
+
+                    icoHorizontalMenuItemHS As image:
+                        AccessibleLabel: =$"Button for {Self.Tooltip}"
+                        BorderColor: =Color.Transparent
+                        BorderStyle: =BorderStyle.Dashed
+                        BorderThickness: =EDSDefaults.BorderThickness
+                        DisabledBorderColor: =EDSDefaults.DisabledBorderColor
+                        DisabledFill: =EDSDefaults.DisabledFill
+                        Fill: =EDSStyles.Icon.Fill
+                        FillPortions: =1
+                        FocusedBorderColor: =EDSDefaults.FocusedBorderColor
+                        Height: =EDSStyles.Icon.Height
+                        HoverBorderColor: |-
+                            =//EDSDataTable.Styling.Defaults.HoverBorderColor
+                            Self.BorderColor
+                        HoverFill: =EDSDefaults.IconHoverFill
+                        Image: =ThisItem.Icon
+                        LayoutMinHeight: =0
+                        LayoutMinWidth: =0
+                        OnSelect: |
+                            =Switch(
+                                Lower(ThisItem.Action),
+                                "navigate",
+                                Navigate(ThisItem.Option.Screen),
+                                "launch",
+                                Launch(
+                                    LookUp(
+                                        ThisItem.Option.Arguments,
+                                        Name = "Url"
+                                    ).Value
+                                ),
+                                "notify",
+                                Notify(
+                                    Concatenate(
+                                        "Change this formula to what you wish, you can also provide a custom option ",
+                                        Coalesce(
+                                            LookUp(
+                                                ThisItem.Option.Arguments,
+                                                Name = "NotificationText"
+                                            ).Value
+                                        )
+                                    ),
+                                    LookUp(
+                                        ThisItem.Option.Arguments,
+                                        Name = "NotificationType"
+                                    ).Value
+                                ),
+                                "return",
+                                Back(
+                                    LookUp(
+                                        ThisItem.Option.Arguments,
+                                        Name = "ScreenTransition"
+                                    ).Value
+                                ),
+                                false
+                            );
+                        PaddingBottom: =EDSDefaults.IconButtonPadding
+                        PaddingLeft: =EDSDefaults.IconButtonPadding
+                        PaddingRight: =EDSDefaults.IconButtonPadding
+                        PaddingTop: =EDSDefaults.IconButtonPadding
+                        PressedBorderColor: =EDSDefaults.PressedBorderColor
+                        PressedFill: =Self.HoverFill
+                        RadiusBottomLeft: =Self.RadiusTopLeft
+                        RadiusBottomRight: =Self.RadiusTopLeft
+                        RadiusTopLeft: =Self.Height/2
+                        RadiusTopRight: =Self.RadiusTopLeft
+                        TabIndex: =0
+                        Tooltip: =ThisItem.Title &" - "& ThisItem.SubTitle
+                        Width: =Self.Height
+                        ZIndex: =1
+
+        vcoContentHS As groupContainer.verticalAutoLayoutContainer:
+            AlignInContainer: =AlignInContainer.SetByContainer
+            Height: =225
+            LayoutAlignItems: =LayoutAlignItems.Center
+            LayoutGap: =EDSDefaults.LayoutGap
+            LayoutMinHeight: =EDSDefaults.LayoutMinHeight
+            LayoutMinWidth: =EDSDefaults.LayoutMinWidth
+            LayoutMode: =LayoutMode.Auto
+            LayoutOverflowX: =LayoutOverflow.Scroll
+            LayoutOverflowY: =LayoutOverflow.Scroll
+            PaddingBottom: =EDSDefaults.PaddingBottom
+            PaddingLeft: =EDSDefaults.PaddingLeft
+            PaddingRight: =EDSDefaults.PaddingRight
+            PaddingTop: =EDSDefaults.PaddingTop
+            ZIndex: =3
+
+    grpAppMenuHS As group:
+        Height: =5
+        Width: =5
+        X: =40
+        Y: =40
+        ZIndex: =5
+
+        shpAppMenuDismissLayerHS As rectangle:
+            AccessibleLabel: ="Close the active menu"
+            BorderColor: =Self.Fill
+            Fill: =Color.Transparent
+            Height: =App.ActiveScreen.Height-Self.Y
+            OnSelect: =Set(gblEDSShowAppMenu, false)
+            TabIndex: =0
+            Visible: =conAppMenuHS.Visible
+            Width: =Parent.Width
+            Y: =40
+            ZIndex: =3
+
+        conAppMenuHS As groupContainer.manualLayoutContainer:
+            DropShadow: =DropShadow.Bold
+            Fill: =EDSStyles.Menu.Fill
+            Height: =48 * galAppMenuHS.AllItemsCount + 16
+            PaddingBottom: |
+                =//EDSStyles.Menu.PaddingBottom
+                8
+            PaddingTop: |-
+                =//EDSStyles.Menu.ShadowPadding
+                8
+            RadiusBottomLeft: =4
+            RadiusBottomRight: =4
+            RadiusTopLeft: =4
+            RadiusTopRight: =4
+            Visible: =gblEDSShowAppMenu
+            Width: =galAppMenuHS.Width
+            X: =70
+            Y: =100
+            ZIndex: =4
+
+            galAppMenuHS As gallery.galleryVertical:
+                AccessibleLabel: ="Choose from " & Concat(Self.AllItems, ThisRecord.Title, ", ")
+                BorderColor: =EDSStyles.Menu.BorderColor
+                BorderStyle: =EDSStyles.Menu.BorderStyle
+                BorderThickness: =EDSStyles.Menu.BorderThickness
+                Default: |-
+                    =Coalesce(
+                        LookUp(
+                            Self.AllItems,
+                            Or(
+                                And(
+                                    Action = "navigate",
+                                    Option.Screen = App.ActiveScreen
+                                )
+                            )
+                        )
+                    )
+                    /*
+                    */
+                Fill: |-
+                    =//EDSDataTable.Styling.Menu.Fill
+                    Color.Transparent
+                FocusedBorderThickness: |+
+                    =EDSStyles.Menu.FocusedBorderThickness
+                    
+                Height: =Parent.Height-Parent.PaddingTop-Parent.PaddingBottom
+                Items: =colAppMenu
+                Layout: =Layout.Vertical
+                OnSelect: |
+                    =Switch(
+                        Lower(ThisItem.Action),
+                        "navigate",
+                        Navigate(
+                            ThisItem.Option.Screen,
+                            LookUp(
+                                ThisItem.Option.Arguments,
+                                Name = "transition"
+                            ).Value
+                        ),
+                        "launch",
+                        Launch(
+                            LookUp(
+                                ThisItem.Option.Arguments,
+                                Name = "address"
+                            ).Value
+                        ),
+                        "notify",
+                        Notify(
+                            Coalesce(
+                                LookUp(
+                                    ThisItem.Option.Arguments,
+                                    Name = "text"
+                                ).Value,
+                                "Change this formula to what you wish, you can also provide a custom option"
+                            ),
+                            Coalesce(
+                                LookUp(
+                                    ThisItem.Option.Arguments,
+                                    Name = "notification_type"
+                                ).Value,
+                                NotificationType.Information
+                            ),
+                            LookUp(
+                                ThisItem.Option.Arguments,
+                                Name = "timeout"
+                            ).Value
+                        ),
+                        "return",
+                        Back(
+                            LookUp(
+                                ThisItem.Option.Arguments,
+                                Name = "transition"
+                            ).Value
+                        ),
+                        false
+                    );
+                ShowScrollbar: =false
+                TabIndex: =0
+                TemplateFill: |-
+                    =If(
+                        Or(
+                            And(
+                                // This will highlight the correct item when used as screen navigation.
+                                ThisItem.Action = "navigate",
+                                ThisItem.Option.Screen = App.ActiveScreen
+                            ),
+                            And(
+                                ThisItem.Action <> "navigate",
+                                ThisItem.IsSelected
+                            )
+                        ),
+                        EDSStyles.Menu.ActiveFill,
+                        Color.Transparent
+                    )
+                TemplatePadding: =0
+                TemplateSize: |
+                    =EDSStyles.Menu.TemplateHeight
+                    //48
+                Width: |
+                    =//If(EDSMenu.Complex, EDSStyles.Menu.TemplateWidth, EDSStyles.Menu.TemplateWidth-EDSStyles.Menu.IconWidth)
+                    If(true, 240, 216)
+                Y: =Parent.PaddingTop
+                ZIndex: =1
+
+                hcoAppMenuItemHS As groupContainer.horizontalAutoLayoutContainer:
+                    EnableChildFocus: =false
+                    Fill: =Color.Transparent
+                    Height: =Parent.TemplateHeight
+                    LayoutGap: =If(icoAppMenuItemHS.Visible, EDSStyles.Menu.LayoutGap, 0)
+                    LayoutMode: =LayoutMode.Auto
+                    PaddingBottom: |-
+                        =//0
+                        EDSStyles.Menu.PaddingBottom
+                    PaddingLeft: |-
+                        =EDSStyles.Menu.PaddingLeft
+                        //24
+                    PaddingRight: |-
+                        =EDSStyles.Menu.PaddingRight
+                        //24
+                    PaddingTop: |-
+                        =0
+                        //EDSMenu.Styling.Menu.PaddingTop
+                    Width: =Parent.TemplateWidth
+                    ZIndex: =1
+
+                    icoAppMenuItemHS As image:
+                        AccessibleLabel: =$"Icon for {btnAppMenuItemActionHS.Text} menu item"
+                        BorderColor: |
+                            =EDSStyles.Menu.BorderColor
+                        BorderStyle: =BorderStyle.None
+                        BorderThickness: =EDSStyles.Menu.BorderThickness
+                        DisabledFill: =Color.Transparent
+                        Height: |-
+                            =//EDSDataTable.Styling.Menu.IconHeight
+                            Parent.Height
+                        HoverFill: =Self.Fill
+                        Image: =ThisItem.Icon
+                        OnSelect: =Select(btnAppMenuItemActionHS)
+                        PaddingBottom: |
+                            =EDSStyles.Menu.IconPaddingBottom
+                        PaddingLeft: |
+                            =EDSStyles.Menu.IconPaddingLeft
+                        PaddingRight: |
+                            =EDSStyles.Menu.IconPaddingRight
+                        PaddingTop: |
+                            =EDSStyles.Menu.IconPaddingTop
+                        TabIndex: =0
+                        Tooltip: =ThisItem.SubTitle
+                        Visible: |-
+                            =//EDSMenu.Complex
+                            true
+                        Width: |
+                            =EDSStyles.Menu.IconWidth
+                        X: |-
+                            =//Parent.Width - Self.Width-EDSDataTable.Styling.Menu.PaddingRight
+                            0
+                        Y: =1
+                        ZIndex: =1
+
+                    btnAppMenuItemActionHS As button:
+                        Align: =Align.Left
+                        BorderColor: =Self.Fill
+                        BorderStyle: =BorderStyle.None
+                        BorderThickness: =EDSStyles.Menu.BorderThickness
+                        Color: =EDSStyles.Menu.Color
+                        DisabledBorderColor: =Self.DisabledFill
+                        DisabledColor: =EDSStyles.Menu.DisabledColor
+                        DisabledFill: =EDSStyles.Menu.DisabledFill
+                        Fill: |
+                            =//If(App.ActiveScreen.Name = ThisItem.Target.Screen.Name, EDSDataTable.Styling.Menu.ActiveFill, EDSDataTable.Styling.Menu.Fill)
+                            Color.Transparent
+                        FillPortions: =1
+                        FocusedBorderColor: =EDSStyles.Menu.FocusedBorderColor
+                        FocusedBorderThickness: =EDSStyles.Menu.FocusedBorderThickness
+                        Font: =EDSDefaults.Font
+                        FontWeight: =FontWeight.Normal
+                        Height: =galAppMenuHS.TemplateHeight
+                        HoverBorderColor: =Self.HoverFill
+                        HoverColor: =EDSStyles.Menu.HoverColor
+                        HoverFill: =EDSStyles.Menu.HoverFill
+                        LayoutMinHeight: =48
+                        LayoutMinWidth: |-
+                            =//EDSStyles.Menu.IconLayoutMinWidth
+                            48
+                        OnSelect: =Select(shpAppMenuItemOverlayHS)
+                        PaddingBottom: =//EDSDataTable.Styling.Menu.PaddingBottom
+                        PaddingLeft: |
+                            =//EDSDataTable.Styling.Menu.
+                            0
+                        PaddingRight: |-
+                            =//EDSDataTable.Styling.Menu.PaddingRight+icoMenuItem.Width
+                            0
+                        PaddingTop: =//EDSDataTable.Styling.Menu.PaddingTop
+                        PressedColor: =EDSStyles.Menu.PressedColor
+                        PressedFill: =EDSStyles.Menu.PressedFill
+                        RadiusBottomLeft: =0
+                        RadiusBottomRight: =0
+                        RadiusTopLeft: =0 
+                        RadiusTopRight: =0
+                        Size: =EDSDefaults.FontSize //Paragraph.BodyShort.Size
+                        Text: =ThisItem.Title
+                        Tooltip: =ThisItem.SubTitle
+                        Width: |-
+                            =//galAppMenu.TemplateWidth
+                            64
+                        ZIndex: =2
+
+                shpAppMenuItemOverlayHS As rectangle:
+                    AccessibleLabel: =$"Menu item for {btnAppMenuItemActionHS.Text}"
+                    BorderColor: =RGBA(0, 0, 0, 0)
+                    BorderStyle: =BorderStyle.Dashed
+                    DisabledFill: =Color.Transparent
+                    Fill: =RGBA(0, 0, 0, 0)
+                    FocusedBorderColor: |
+                        =EDSStyles.Menu.FocusedBorderColor
+                    FocusedBorderThickness: |
+                        =EDSStyles.Menu.FocusedBorderThickness
+                    Height: =Parent.TemplateHeight
+                    HoverFill: |
+                        =EDSStyles.Menu.HoverFill
+                    OnSelect: =Select(Parent)
+                    PressedFill: |
+                        =EDSStyles.Menu.PressedFill
+                    TabIndex: =0
+                    Tooltip: =ThisItem.SubTitle
+                    Width: =Parent.TemplateWidth
+                    ZIndex: =2
+

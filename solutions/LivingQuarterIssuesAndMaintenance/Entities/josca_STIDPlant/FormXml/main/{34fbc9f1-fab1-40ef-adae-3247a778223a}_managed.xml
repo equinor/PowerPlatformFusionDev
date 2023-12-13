@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{34fbc9f1-fab1-40ef-adae-3247a778223a}</formid>
+    <IntroducedVersion>1.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form headerdensity="HighWithControls">
+      <tabs>
+        <tab verticallayout="true" id="{895d632e-29ea-41fb-aa72-68165ba1c0b4}" IsUserDefined="1">
+          <labels>
+            <label description="General" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showlabel="false" showbar="false" IsUserDefined="0" id="{8a1ce449-858b-44aa-9a17-da1f3d4e6b5f}">
+                  <labels>
+                    <label description="General" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{ad119a75-04f7-42e2-a074-f4d0659fa1b9}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="josca_plant" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="josca_plant" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{e632dba7-cd0d-4692-9afc-360af9be1813}" locklevel="0" rowspan="1" colspan="1">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="josca_instcode" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="josca_instcode" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{625283c5-45d0-4626-9d7b-815e543f2cdd}" locklevel="0" rowspan="1" colspan="1">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="josca_sapplantid" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="josca_sapplantid" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{890317a5-1cca-43d8-b435-f74e1c6a6ad4}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="josca_description" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="josca_description" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{a6237d45-13e9-49ac-ae92-ebfe09c0e9d3}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="josca_businessarea" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="josca_businessarea" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{53aa817f-bea1-44b0-bb95-5f8210663d29}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="josca_camanagementemail" classid="{ADA2203E-B4CD-49BE-9DDF-234642B43B52}" datafieldname="josca_camanagementemail" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+      <header id="{117dd5f5-5c1e-4dc7-b9ab-02c6e031f6d1}" celllabelposition="Top" columns="111" labelwidth="115" celllabelalignment="Left">
+        <rows>
+          <row>
+            <cell id="{f41ea105-5610-47c4-87a0-0c7cbe9ebb20}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+            <cell id="{004b029c-e9f8-4d1d-b03f-62efc74f8f81}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+            <cell id="{887a1e0c-a583-4fc7-b5da-a5ffadf7d7d4}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+          </row>
+        </rows>
+      </header>
+      <footer id="{d4ebc286-7a1d-4a12-bc27-219503e6ba54}" celllabelposition="Top" columns="111" labelwidth="115" celllabelalignment="Left">
+        <rows>
+          <row>
+            <cell id="{d1441c9e-b05c-42d2-8930-f72069310348}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+            <cell id="{02b80203-5c28-4f99-8dc7-c25d334dd173}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+            <cell id="{f5ac94b3-ec27-4f89-a934-6546257f2cdb}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+          </row>
+        </rows>
+      </footer>
+      <DisplayConditions Order="0" FallbackForm="true">
+        <Role Id="{627090ff-40a3-4053-8790-584edc5be201}" />
+        <Role Id="{119f245c-3cc8-4b62-b31c-d1a046ced15d}" />
+      </DisplayConditions>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="Information" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="A form for this entity." languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>

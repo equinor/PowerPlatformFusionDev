@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<savedqueries xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <savedquery>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>0</CanBeDeleted>
+    <isquickfindquery>1</isquickfindquery>
+    <isprivate>0</isprivate>
+    <isdefault>1</isdefault>
+    <savedqueryid>{42f294aa-a0fe-43eb-afdd-7f0331430bf8}</savedqueryid>
+    <layoutxml>
+      <grid name="resultset" jump="josca_plant" select="1" icon="1" preview="1">
+        <row name="result" id="josca_stidplantid">
+          <cell name="josca_plant" width="300" />
+          <cell name="createdon" width="125" />
+          <cell name="josca_instcode" width="100" />
+          <cell name="josca_sapplantid" width="100" />
+          <cell name="josca_stidplantid" width="104" />
+          <cell name="josca_description" width="103" />
+          <cell name="josca_businessarea" width="115" />
+          <cell name="josca_camanagementemail" width="173" />
+        </row>
+      </grid>
+    </layoutxml>
+    <querytype>4</querytype>
+    <fetchxml>
+      <fetch version="1.0" mapping="logical">
+        <entity name="josca_stidplant">
+          <attribute name="josca_stidplantid" />
+          <attribute name="josca_plant" />
+          <attribute name="createdon" />
+          <order attribute="josca_plant" descending="false" />
+          <filter type="and">
+            <condition attribute="statecode" operator="eq" value="0" />
+          </filter>
+          <filter type="or" isquickfindfields="1">
+            <condition attribute="josca_plant" operator="like" value="{0}" />
+          </filter>
+          <attribute name="josca_instcode" />
+          <attribute name="josca_sapplantid" />
+          <attribute name="josca_description" />
+          <attribute name="josca_businessarea" />
+          <attribute name="josca_camanagementemail" />
+        </entity>
+      </fetch>
+    </fetchxml>
+    <IntroducedVersion>1.0</IntroducedVersion>
+    <LocalizedNames>
+      <LocalizedName description="Quick Find Active STID Plants" languagecode="1033" />
+    </LocalizedNames>
+  </savedquery>
+</savedqueries>

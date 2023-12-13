@@ -1,0 +1,1507 @@
+"'Issue Report Screen' As screen":
+
+    vcoMainIRS As groupContainer.verticalAutoLayoutContainer:
+        Height: =Parent.Height
+        LayoutAlignItems: =LayoutAlignItems.Stretch
+        LayoutDirection: =LayoutDirection.Vertical
+        LayoutGap: =16
+        LayoutMode: =LayoutMode.Auto
+        PaddingBottom: =EDSDefaults.LayoutGap
+        PaddingLeft: =EDSDefaults.LayoutGap
+        PaddingRight: =EDSDefaults.LayoutGap
+        PaddingTop: =EDSDefaults.LayoutGap
+        Width: =Parent.Width
+        ZIndex: =1
+
+        hcoTopBarIRS As groupContainer.horizontalAutoLayoutContainer:
+            AlignInContainer: =AlignInContainer.SetByContainer
+            BorderColor: =Color.Transparent
+            BorderStyle: =EDSStyles.TopBar.BorderStyle
+            Fill: =EDSStyles.TopBar.Fill
+            FillPortions: =0
+            Height: =EDSStyles.TopBar.Height+16
+            LayoutAlignItems: =LayoutAlignItems.Center
+            LayoutGap: =EDSStyles.TopBar.LayoutGap
+            LayoutJustifyContent: =LayoutJustifyContent.SpaceBetween
+            LayoutMinHeight: =100
+            LayoutMinWidth: =250
+            LayoutMode: =LayoutMode.Auto
+            LayoutWrap: =
+            PaddingBottom: =16
+            PaddingLeft: =EDSDefaults.BorderThickness
+            Width: =Parent.Width
+            ZIndex: =1
+
+            icoTopBarMenuToggleIRS As image:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                BorderStyle: =BorderStyle.Dashed
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledFill: =RGBA(0, 0, 0, 0)
+                FocusedBorderColor: =EDSDefaults.FocusedBorderColor
+                FocusedBorderThickness: =EDSDefaults.FocusedBorderThickness
+                Height: =EDSStyles.IconMenu.TemplateSize
+                HoverBorderColor: =RGBA(0, 0, 0, 0)
+                HoverFill: =RGBA(0, 0, 0, 0)
+                Image: |-
+                    =If(
+                        gblEDSShowAppMenu,
+                        EDSIcons.ChevronDown,
+                        EDSIcons.Menu
+                    )
+                LayoutMinHeight: =0
+                LayoutMinWidth: =0
+                OnSelect: |-
+                    =//UpdateContext({locShowMenu: !locShowMenu})
+                    Set(gblEDSShowAppMenu, !gblEDSShowAppMenu)
+                PaddingBottom: =12
+                PaddingLeft: =12
+                PaddingRight: =12
+                PaddingTop: =12
+                PressedBorderColor: =RGBA(0, 0, 0, 0)
+                PressedFill: =RGBA(0, 0, 0, 0)
+                TabIndex: =1
+                Width: =EDSStyles.IconMenu.TemplateSize
+                ZIndex: =1
+
+            lblTopBarAppScreenNameIRS As label:
+                AutoHeight: =true
+                BorderColor: =EDSDefaults.BorderColor
+                BorderStyle: =EDSDefaults.BorderStyle
+                BorderThickness: =EDSDefaults.BorderThickness
+                Color: =EDSDefaults.Color
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                FillPortions: =1
+                FocusedBorderThickness: =4
+                Font: =EDSDefaults.Font
+                Height: =Self.Size*Self.LineHeight * 1.75
+                LayoutMinHeight: =EDSDefaults.Height
+                LayoutMinWidth: =64
+                LineHeight: =1
+                PaddingBottom: =0
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Size: =EDSDefaults.FontSize
+                Text: =Concatenate("App Name", " - ", App.ActiveScreen.Name)
+                Visible: =hcoTopBarIRS.Width > (icoTopBarMenuToggleIRS.Width + galTopBarHorizontalMenuIRS.Width+shpTopBarMenuDividerIRS.Width+1+(Parent.LayoutGap*4))
+                Width: =EDSStyles.Label.Width
+                ZIndex: =2
+
+            shpTopBarMenuSpacerIRS As rectangle:
+                BorderColor: =Color.Transparent
+                BorderStyle: =BorderStyle.None
+                Fill: =Color.Transparent
+                FillPortions: =1
+                FocusedBorderThickness: =0
+                Height: =48
+                LayoutMinWidth: =0
+                Visible: |-
+                    =//Self.Width<10
+                    !lblTopBarAppScreenNameIRS.Visible
+                Width: =0
+                ZIndex: =3
+
+            galTabsTopBarIRS As gallery.galleryHorizontal:
+                AccessibleLabel: =$"Tab selection"
+                AlignInContainer: =AlignInContainer.SetByContainer
+                BorderColor: =Color.Transparent
+                BorderStyle: =EDSDefaults.BorderStyle
+                BorderThickness: =EDSStyles.Tabs.BorderThickness
+                Fill: =EDSStyles.Tabs.Fill
+                FillPortions: =0
+                FocusedBorderThickness: =EDSDefaults.FocusedBorderThickness
+                Height: =EDSStyles.Tabs.LayoutMinHeight
+                Items: =colAppMenu
+                LayoutMinHeight: =287
+                LayoutMinWidth: =320
+                OnSelect: |
+                    =Switch(
+                        Lower(ThisItem.Action),
+                        "navigate",
+                        Navigate(
+                            ThisItem.Option.Screen,
+                            LookUp(
+                                ThisItem.Option.Arguments,
+                                Name = "Transition"
+                            ).Value
+                        ),
+                        "launch",
+                        Launch(
+                            LookUp(
+                                ThisItem.Option.Arguments,
+                                Name = "address"
+                            ).Value
+                        ),
+                        "notify",
+                        Notify(
+                            Coalesce(
+                                LookUp(
+                                    ThisItem.Option.Arguments,
+                                    Name = "text"
+                                ).Value,
+                                //ThisItem.Option.Text,// fallback to the main option property instead of using lookup.
+                                "Change this formula to what you wish, you can also provide a custom option"
+                            ),
+                            Coalesce(
+                                LookUp(
+                                    ThisItem.Option.Arguments,
+                                    Name = "notification_type"
+                                ).Value,
+                                NotificationType.Information
+                            ),
+                            LookUp(
+                                ThisItem.Option.Arguments,
+                                Name = "timeout"
+                            ).Value
+                        ),
+                        "return",
+                        Back(
+                            LookUp(
+                                ThisItem.Option.Arguments,
+                                Name = "transition"
+                            ).Value
+                        ),
+                        false
+                    );
+                ShowNavigation: =Self.Width<EDSStyles.Tabs.LayoutMinWidth*CountRows(Self.AllItems)
+                ShowScrollbar: =false
+                TabIndex: =0
+                TemplateFill: =EDSStyles.Tabs.TemplateFill
+                TemplatePadding: =0
+                TemplateSize: =EDSStyles.Tabs.LayoutMinWidth
+                Visible: =Self.Width < (Parent.Width - Parent.PaddingLeft - Parent.PaddingRight - Parent.LayoutGap*2 - Self.Width)
+                Width: |-
+                    =Max(
+                        Min(
+                            (CountRows(Self.AllItems) * Self.TemplateWidth)
+                        ),
+                        1
+                    )
+                WrapCount: =0
+                X: =EDSStyles.Tabs.BorderThickness
+                ZIndex: =5
+
+                vcoTabsTobBarTabItemIRS As groupContainer.horizontalAutoLayoutContainer:
+                    BorderStyle: =BorderStyle.None
+                    Height: =Parent.TemplateHeight
+                    LayoutAlignItems: =LayoutAlignItems.Stretch
+                    LayoutDirection: =LayoutDirection.Vertical
+                    LayoutMode: =LayoutMode.Auto
+                    PaddingTop: |
+                        =EDSStyles.Tabs.BorderThickness
+                    Width: =Parent.TemplateWidth
+                    ZIndex: =1
+
+                    btnTabsTobBarTabItemButtonIRS As button:
+                        BorderColor: =Color.Transparent
+                        BorderStyle: =BorderStyle.Dashed
+                        BorderThickness: =EDSStyles.Tabs.BorderThickness
+                        Color: |-
+                            =If(
+                                Or(
+                                    And(
+                                        // This will highlight the correct item when used as screen navigation.
+                                        ThisItem.Action = "navigate",
+                                        ThisItem.Option.Screen = App.ActiveScreen
+                                    ),
+                                    And(
+                                        ThisItem.Action <> "navigate",
+                                        ThisItem.IsSelected
+                                    )
+                                ),
+                                EDSStyles.Tabs.ActiveColor,
+                                EDSStyles.Tabs.Color
+                            )
+                        DisabledBorderColor: =EDSStyles.Tabs.DisabledBorderColor
+                        DisabledColor: =EDSStyles.Tabs.DisabledColor
+                        DisabledFill: =EDSStyles.Tabs.DisabledFill
+                        Fill: =Color.Transparent
+                        FocusedBorderColor: =EDSDefaults.FocusedBorderColor
+                        FocusedBorderThickness: =EDSDefaults.FocusedBorderThickness
+                        Font: =EDSStyles.Tabs.Font.Font
+                        FontWeight: |
+                            =EDSStyles.Tabs.Font.Weight
+                        Height: =Parent.Height-shpTabsTobBarTabItemBorderIRS.Height-Parent.PaddingTop
+                        HoverBorderColor: =Self.BorderColor
+                        HoverColor: =EDSStyles.Tabs.HoverColor
+                        HoverFill: =EDSStyles.Tabs.HoverFill
+                        LayoutMinHeight: =Parent.Height-shpTabsTobBarTabItemBorderIRS.Height
+                        LayoutMinWidth: =galTabsTopBarIRS.TemplateWidth-(Self.FocusedBorderThickness*2)
+                        OnSelect: =Select(shpTabsTobBarSelectParentWorkaroundIRS);
+                        PaddingBottom: =EDSStyles.Tabs.PaddingBottom
+                        PaddingLeft: =EDSStyles.Tabs.PaddingLeft
+                        PaddingRight: =EDSStyles.Tabs.PaddingRight
+                        PaddingTop: =EDSStyles.Tabs.PaddingTop
+                        PressedBorderColor: =Self.BorderColor
+                        PressedColor: =EDSStyles.Tabs.PressedColor
+                        PressedFill: =EDSStyles.Tabs.PressedFill
+                        RadiusBottomLeft: =0
+                        RadiusBottomRight: =0
+                        RadiusTopLeft: =EDSStyles.Tabs.RadiusTopLeft
+                        RadiusTopRight: =EDSStyles.Tabs.RadiusTopRight
+                        Size: =EDSStyles.Tabs.Font.Size
+                        Text: =ThisItem.Title
+                        Tooltip: =ThisItem.SubTitle
+                        Width: =galTabsTopBarIRS.TemplateWidth -(Self.FocusedBorderThickness)
+                        ZIndex: =1
+
+                    shpTabsTobBarTabItemBorderIRS As rectangle:
+                        BorderColor: =Color.Transparent
+                        BorderStyle: =BorderStyle.None
+                        DisabledFill: =EDSStyles.Tabs.DisabledFill
+                        Fill: |-
+                            =If(
+                                Or(
+                                    And(
+                                        // This will highlight the correct item when used as screen navigation.
+                                        ThisItem.Action = "navigate",
+                                        ThisItem.Option.Screen = App.ActiveScreen
+                                    ),
+                                    And(
+                                        ThisItem.Action <> "navigate",
+                                        ThisItem.IsSelected
+                                    )
+                                ),
+                                EDSStyles.Tabs.ActiveBorderColor,
+                                EDSStyles.Tabs.BorderColor
+                            )
+                        FocusedBorderThickness: =4
+                        Height: =EDSStyles.Tabs.BorderThickness
+                        HoverFill: =EDSStyles.Tabs.HoverFill
+                        LayoutMinWidth: =galTabsTopBarIRS.TemplateWidth
+                        ZIndex: =3
+
+                shpTabsTobBarSelectParentWorkaroundIRS As rectangle:
+                    AccessibleLabel: =$"Tab for {btnTabsTobBarTabItemButtonIRS.Text}"
+                    BorderColor: =RGBA(0, 0, 0, 0)
+                    BorderStyle: =BorderStyle.None
+                    DisabledFill: =Color.Transparent
+                    Fill: =RGBA(0, 0, 0, 0)
+                    FocusedBorderColor: =EDSDefaults.FocusedBorderColor
+                    FocusedBorderThickness: =EDSDefaults.FocusedBorderThickness
+                    Height: =0
+                    HoverFill: =RGBA(0, 0, 0, 0)
+                    OnSelect: |-
+                        =Select(Parent)
+                        //Workaround for selecting this item so that the gallery control updates its selected item.
+                    PressedFill: =RGBA(0, 0, 0, 0)
+                    TabIndex: =0
+                    Tooltip: =ThisItem.SubTitle
+                    Visible: =false
+                    Width: =0
+                    ZIndex: =2
+
+            shpTopBarMenuDividerIRS As rectangle:
+                BorderColor: =Color.Transparent
+                BorderStyle: =BorderStyle.None
+                Fill: =EDSColors.Background.Medium
+                FocusedBorderThickness: =0
+                Height: =48
+                LayoutMinWidth: =EDSStyles.Tabs.LayoutMinWidth
+                Width: =2
+                ZIndex: =6
+
+            galTopBarHorizontalMenuIRS As gallery.galleryHorizontal:
+                AlignInContainer: =AlignInContainer.SetByContainer
+                BorderColor: =EDSDefaults.BorderColor
+                BorderStyle: =EDSDefaults.BorderStyle
+                BorderThickness: =EDSDefaults.BorderThickness
+                Fill: =EDSStyles.Icon.Fill
+                FillPortions: =0
+                FocusedBorderThickness: |-
+                    =//EDSDefaults.FocusedBorderThickness
+                    EDSDefaults.FocusedBorderThickness
+                Height: =EDSStyles.Icon.Height
+                Items: |-
+                    =// ForAll(Parent.MenuItems, Value), EDSIconMenu.MenuItems) // When using object array notation [] instead of Table()
+                    colTopBarMenu
+                LayoutMinHeight: =48
+                LayoutMinWidth: =320
+                OnSelect: |
+                    =Switch(
+                        Lower(ThisItem.Action),
+                        "navigate",
+                        Navigate(
+                            ThisItem.Option.Screen,
+                            LookUp(
+                                ThisItem.Option.Arguments,
+                                Name = "Transition"
+                            ).Value
+                        ),
+                        "launch",
+                        Launch(
+                            LookUp(
+                                ThisItem.Option.Arguments,
+                                Name = "address"
+                            ).Value
+                        ),
+                        "notify",
+                        Notify(
+                            Coalesce(
+                                LookUp(
+                                    ThisItem.Option.Arguments,
+                                    Name = "text"
+                                ).Value,
+                                //ThisItem.Option.Text,// fallback to the main option property instead of using lookup.
+                                "Change this formula to what you wish, you can also provide a custom option"
+                            ),
+                            Coalesce(
+                                LookUp(
+                                    ThisItem.Option.Arguments,
+                                    Name = "notification_type"
+                                ).Value,
+                                NotificationType.Information
+                            ),
+                            LookUp(
+                                ThisItem.Option.Arguments,
+                                Name = "timeout"
+                            ).Value
+                        ),
+                        "return",
+                        Back(
+                            LookUp(
+                                ThisItem.Option.Arguments,
+                                Name = "transition"
+                            ).Value
+                        ),
+                        false
+                    );
+                ShowScrollbar: =false
+                TabIndex: =0
+                TemplatePadding: =0
+                TemplateSize: |-
+                    =//EDSDefaults.TemplateSize+(EDSDefaults.FocusedBorderThickness*2)
+                    EDSStyles.IconMenu.TemplateSize
+                Width: =hcoHorizontalMenuItemIRS.Width*CountRows(Self.AllItems)+(EDSDefaults.FocusedBorderThickness*2)
+                WrapCount: =0
+                X: =0 
+                ZIndex: =7
+
+                hcoHorizontalMenuItemIRS As groupContainer.horizontalAutoLayoutContainer:
+                    BorderColor: =Color.Transparent
+                    BorderStyle: =BorderStyle
+                    Height: =Parent.Height
+                    LayoutAlignItems: =LayoutAlignItems.Stretch
+                    LayoutDirection: =LayoutDirection.Vertical
+                    LayoutJustifyContent: =LayoutJustifyContent.Center
+                    LayoutMode: =LayoutMode.Auto
+                    PaddingBottom: =2
+                    PaddingLeft: =2
+                    PaddingRight: =2
+                    PaddingTop: =2
+                    Width: =Parent.TemplateWidth
+                    ZIndex: =1
+
+                    icoHorizontalMenuItemIRS As image:
+                        AccessibleLabel: =$"Button for {Self.Tooltip}"
+                        BorderColor: =Color.Transparent
+                        BorderStyle: =BorderStyle.Dashed
+                        BorderThickness: =EDSDefaults.BorderThickness
+                        DisabledBorderColor: =EDSDefaults.DisabledBorderColor
+                        DisabledFill: =EDSDefaults.DisabledFill
+                        Fill: =EDSStyles.Icon.Fill
+                        FillPortions: =1
+                        FocusedBorderColor: =EDSDefaults.FocusedBorderColor
+                        Height: =EDSStyles.Icon.Height
+                        HoverBorderColor: |-
+                            =//EDSDataTable.Styling.Defaults.HoverBorderColor
+                            Self.BorderColor
+                        HoverFill: =EDSDefaults.IconHoverFill
+                        Image: =ThisItem.Icon
+                        LayoutMinHeight: =0
+                        LayoutMinWidth: =0
+                        OnSelect: |
+                            =Switch(
+                                Lower(ThisItem.Action),
+                                "navigate",
+                                Navigate(ThisItem.Option.Screen),
+                                "launch",
+                                Launch(
+                                    LookUp(
+                                        ThisItem.Option.Arguments,
+                                        Name = "Url"
+                                    ).Value
+                                ),
+                                "notify",
+                                Notify(
+                                    Concatenate(
+                                        "Change this formula to what you wish, you can also provide a custom option ",
+                                        Coalesce(
+                                            LookUp(
+                                                ThisItem.Option.Arguments,
+                                                Name = "NotificationText"
+                                            ).Value
+                                        )
+                                    ),
+                                    LookUp(
+                                        ThisItem.Option.Arguments,
+                                        Name = "NotificationType"
+                                    ).Value
+                                ),
+                                "return",
+                                Back(
+                                    LookUp(
+                                        ThisItem.Option.Arguments,
+                                        Name = "ScreenTransition"
+                                    ).Value
+                                ),
+                                false
+                            );
+                        PaddingBottom: =EDSDefaults.IconButtonPadding
+                        PaddingLeft: =EDSDefaults.IconButtonPadding
+                        PaddingRight: =EDSDefaults.IconButtonPadding
+                        PaddingTop: =EDSDefaults.IconButtonPadding
+                        PressedBorderColor: =EDSDefaults.PressedBorderColor
+                        PressedFill: =Self.HoverFill
+                        RadiusBottomLeft: =Self.RadiusTopLeft
+                        RadiusBottomRight: =Self.RadiusTopLeft
+                        RadiusTopLeft: =Self.Height/2
+                        RadiusTopRight: =Self.RadiusTopLeft
+                        TabIndex: =0
+                        Tooltip: =ThisItem.Title &" - "& ThisItem.SubTitle
+                        Width: =Self.Height
+                        ZIndex: =1
+
+        vcoContentIRS As groupContainer.verticalAutoLayoutContainer:
+            AlignInContainer: =AlignInContainer.SetByContainer
+            Height: =225
+            LayoutAlignItems: =LayoutAlignItems.Center
+            LayoutGap: =EDSDefaults.LayoutGap
+            LayoutMinHeight: =EDSDefaults.LayoutMinHeight
+            LayoutMinWidth: =EDSDefaults.LayoutMinWidth
+            LayoutMode: =LayoutMode.Auto
+            LayoutOverflowX: =LayoutOverflow.Scroll
+            LayoutOverflowY: =LayoutOverflow.Scroll
+            PaddingBottom: =EDSDefaults.PaddingBottom
+            PaddingLeft: =EDSDefaults.PaddingLeft
+            PaddingRight: =EDSDefaults.PaddingRight
+            PaddingTop: =EDSDefaults.PaddingTop
+            ZIndex: =3
+
+            vcoDataTableGalIRS As groupContainer.verticalAutoLayoutContainer:
+                Height: |-
+                    =//Max(EDSStyles.Gallery.LayoutMinHeight, (Parent.Height-Self.Y*4))
+                    480
+                LayoutAlignItems: =LayoutAlignItems.Stretch
+                LayoutDirection: =LayoutDirection.Vertical
+                LayoutMinHeight: =100
+                LayoutMinWidth: =250
+                LayoutMode: =LayoutMode.Auto
+                Width: =375
+                X: =40
+                Y: =40
+                ZIndex: =1
+
+                hcoTableHeaderItemsIRS As groupContainer.horizontalAutoLayoutContainer:
+                    AlignInContainer: =AlignInContainer.SetByContainer
+                    Fill: =EDSStyles.DataTable.HeadingFill
+                    FillPortions: =0
+                    Height: =EDSStyles.DataTable.HeadingHeight
+                    LayoutAlignItems: =LayoutAlignItems.Center
+                    LayoutMinHeight: =100
+                    LayoutMinWidth: =250
+                    LayoutMode: =LayoutMode.Auto
+                    PaddingBottom: =EDSStyles.Menu.PaddingBottom//
+                    PaddingRight: |-
+                        =//EDSStyles.Menu.PaddingRight
+                        0
+                    PaddingTop: =EDSStyles.Menu.PaddingTop
+                    Width: =galIssueRegistrationsIRS.Width
+                    ZIndex: =1
+
+                    vcoColumnHeaderSeletAllIRS As groupContainer.horizontalAutoLayoutContainer:
+                        AlignInContainer: =AlignInContainer.SetByContainer
+                        FillPortions: =0
+                        Height: =EDSStyles.DataTable.HeadingHeight
+                        LayoutAlignItems: =LayoutAlignItems.Stretch
+                        LayoutDirection: =LayoutDirection.Vertical
+                        LayoutJustifyContent: =LayoutJustifyContent.SpaceBetween
+                        LayoutMinHeight: =EDSStyles.DataTable.HeadingHeight
+                        LayoutMinWidth: =Self.Width
+                        LayoutMode: =LayoutMode.Auto
+                        Width: =EDSStyles.Menu.IconWidth+EDSStyles.DataTable.PaddingLeft+EDSStyles.DataTable.PaddingRight
+                        ZIndex: =1
+
+                        icoDataTableItemCheckboxSelectAllIRS As image:
+                            BorderColor: =EDSDefaults.BorderColor
+                            BorderStyle: =BorderStyle.None
+                            BorderThickness: =EDSDefaults.BorderThickness
+                            DisabledFill: =Color.Transparent
+                            FillPortions: =1
+                            Height: =48
+                            HoverFill: =Self.Fill
+                            Image: |-
+                                =If(
+                                    CountRows(colGallerySelected) = CountRows(galIssueRegistrationsIRS.AllItems),
+                                    EDSIcons.Checkbox,
+                                    EDSIcons.CheckboxOutline
+                                )
+                                
+                                // TODO: improve all-items check.
+                            LayoutMinHeight: =0
+                            LayoutMinWidth: =Parent.Width
+                            OnSelect: |-
+                                =If(
+                                    CountRows(colGallerySelected) = CountRows(galIssueRegistrationsIRS.AllItems),
+                                    Clear(colGallerySelected),
+                                    ClearCollect(
+                                        colGallerySelected,
+                                        galIssueRegistrationsIRS.AllItems
+                                    )
+                                )
+                            PaddingBottom: =EDSStyles.Menu.IconPaddingBottom
+                            PaddingLeft: =EDSStyles.DataTable.PaddingLeft
+                            PaddingRight: =EDSStyles.DataTable.PaddingRight
+                            PaddingTop: =EDSStyles.Menu.IconPaddingTop
+                            Tooltip: |-
+                                ="Attention: remember to change the collection to use in the select all!" //"Select all"
+                            Width: =EDSStyles.Menu.IconWidth+Self.PaddingLeft+Self.PaddingRight
+                            X: =EDSStyles.DataTable.PaddingLeft
+                            ZIndex: =1
+
+                        HeaderBorderSelectAllIRS As rectangle:
+                            BorderColor: =RGBA(0, 0, 0, 0)
+                            BorderStyle: =BorderStyle.None
+                            DisabledFill: =RGBA(166, 166, 166, 1)
+                            Fill: |-
+                                =If(
+                                    false,
+                                    EDSDefaults.BorderColor,
+                                    EDSColors.Background.Medium
+                                )
+                            FocusedBorderThickness: =4
+                            Height: =EDSStyles.Tabs.BorderThickness
+                            HoverFill: =RGBA(105, 121, 126, 1)
+                            LayoutMinWidth: =Parent.Width
+                            PressedFill: =RGBA(105, 121, 126, 1)
+                            Width: =Parent.Width
+                            ZIndex: =2
+
+                    vcoColumnHeaderEndIRS As groupContainer.horizontalAutoLayoutContainer:
+                        AlignInContainer: =AlignInContainer.SetByContainer
+                        Height: =EDSStyles.DataTable.HeadingHeight
+                        LayoutAlignItems: =LayoutAlignItems.Stretch
+                        LayoutDirection: =LayoutDirection.Vertical
+                        LayoutJustifyContent: =LayoutJustifyContent.End
+                        LayoutMinHeight: =EDSStyles.DataTable.HeadingHeight
+                        LayoutMinWidth: =0
+                        LayoutMode: =LayoutMode.Auto
+                        Width: =EDSStyles.Menu.IconWidth+EDSStyles.DataTable.PaddingLeft+EDSStyles.DataTable.PaddingRight
+                        ZIndex: =5
+
+                        lblColumnHeaderTitleIRS As label:
+                            Align: =Align.Center
+                            BorderColor: =EDSStyles.Label.BorderColor
+                            BorderStyle: =EDSStyles.Label.BorderStyle
+                            BorderThickness: =EDSStyles.Label.BorderThickness
+                            Color: =EDSStyles.Label.Color
+                            DisabledBorderColor: =EDSStyles.Label.DisabledBorderColor
+                            DisabledColor: =EDSStyles.Label.DisabledColor
+                            DisabledFill: =EDSStyles.Label.DisabledFill
+                            Fill: =Color.Transparent
+                            FillPortions: =1
+                            FocusedBorderColor: =EDSStyles.Label.FocusedBorderColor
+                            FocusedBorderThickness: =EDSStyles.Label.FocusedBorderThickness
+                            Font: =EDSStyles.DataTable.Heading.Font
+                            FontWeight: =EDSStyles.DataTable.Heading.FontWeight
+                            Height: =EDSStyles.Label.Height
+                            HoverBorderColor: =EDSStyles.Label.HoverBorderColor
+                            HoverColor: =EDSStyles.Label.HoverColor
+                            HoverFill: =EDSStyles.DataTable.HeadingHoverFill
+                            LayoutMinHeight: =EDSStyles.Label.LayoutMinHeight
+                            LayoutMinWidth: =EDSStyles.Label.LayoutMinWidth
+                            LineHeight: =EDSFonts.Heading.H5.LineHeight
+                            PaddingBottom: =EDSStyles.Label.PaddingBottom
+                            PaddingLeft: =EDSStyles.Label.PaddingLeft
+                            PaddingRight: =EDSStyles.Label.PaddingRight
+                            PaddingTop: =EDSStyles.Label.PaddingTop
+                            PressedBorderColor: =EDSStyles.Label.PressedBorderColor
+                            PressedColor: =EDSStyles.Label.PressedColor
+                            PressedFill: =EDSStyles.Label.PressedFill
+                            Size: =EDSStyles.DataTable.Heading.FontSize
+                            Text: ="Issues"
+                            Width: =EDSStyles.Label.Width
+                            ZIndex: =1
+
+                        shpColumnHeaderBorderEndIRS As rectangle:
+                            BorderColor: =RGBA(0, 0, 0, 0)
+                            BorderStyle: =BorderStyle.None
+                            DisabledFill: =RGBA(166, 166, 166, 1)
+                            Fill: |-
+                                =If(
+                                    false,
+                                    EDSDefaults.BorderColor,
+                                    EDSColors.Background.Medium
+                                )
+                            FocusedBorderThickness: =4
+                            Height: =EDSStyles.Tabs.BorderThickness
+                            HoverFill: =RGBA(105, 121, 126, 1)
+                            LayoutMinWidth: =Parent.Width
+                            PressedFill: =RGBA(105, 121, 126, 1)
+                            Width: =Parent.Width
+                            ZIndex: =2
+
+                galIssueRegistrationsIRS As gallery.galleryVertical:
+                    AccessibleLabel: ="Choose row"
+                    AlignInContainer: =AlignInContainer.SetByContainer
+                    BorderColor: =EDSDefaults.BorderColor
+                    BorderStyle: =EDSDefaults.BorderStyle
+                    BorderThickness: =EDSDefaults.BorderThickness
+                    Fill: |-
+                        =//EDSStyles.Menu.Fill
+                        Color.Transparent
+                    FocusedBorderThickness: =EDSDefaults.FocusedBorderThickness
+                    Height: =EDSStyles.Gallery.Height
+                    Items: ='Issue Registrations'
+                    Layout: =Layout.Vertical
+                    LayoutMinHeight: |-
+                        =//Min(EDSStyles.Gallery.LayoutMinHeight, Self.TemplateHeight*CountRows(Self.AllItems))
+                        EDSStyles.Gallery.LayoutMinHeight
+                    LayoutMinWidth: =EDSDefaults.LayoutMinWidth
+                    LoadingSpinner: =LoadingSpinner.Data
+                    LoadingSpinnerColor: =EDSDefaults.LoadingSpinnerColor
+                    TabIndex: =0
+                    TemplateFill: |-
+                        =If(
+                            ThisItem.IsSelected,
+                            EDSStyles.Menu.ActiveFill,
+                            Color.Transparent
+                        )
+                    TemplatePadding: =0
+                    TemplateSize: |-
+                        =//EDSDefaults.Card.HeaderSubtitleDescription.Height
+                        120
+                    Width: =EDSStyles.Gallery.Width
+                    X: =EDSStyles.Menu.Margin
+                    Y: =EDSStyles.Menu.Margin+8
+                    ZIndex: =3
+
+                    hcoIssueRegistrationsItemLayoutIRS As groupContainer.horizontalAutoLayoutContainer:
+                        Fill: =Color.Transparent
+                        Height: =Parent.TemplateHeight
+                        LayoutAlignItems: =LayoutAlignItems.Center
+                        LayoutMode: =LayoutMode.Auto
+                        PaddingBottom: =EDSStyles.Menu.PaddingBottom//
+                        PaddingLeft: =icoIssueRegistrationsItemCheckboxIRS.Width
+                        PaddingRight: =EDSStyles.Menu.PaddingRight
+                        PaddingTop: =EDSStyles.Menu.PaddingTop
+                        Width: =Parent.TemplateWidth
+                        ZIndex: =1
+
+                        imgIssueRegistrationsImageIRS As image:
+                            BorderColor: =RGBA(0, 0, 0, 0)
+                            BorderStyle: =BorderStyle.None
+                            BorderThickness: =2
+                            DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                            DisabledFill: =RGBA(0, 0, 0, 0)
+                            FocusedBorderThickness: =4
+                            HoverBorderColor: =RGBA(0, 0, 0, 0)
+                            HoverFill: =RGBA(0, 0, 0, 0)
+                            Image: =EDSIcons.AddCircleFilled
+                            PaddingLeft: =4
+                            PaddingRight: =4
+                            PressedBorderColor: =RGBA(0, 0, 0, 0)
+                            PressedFill: =RGBA(0, 0, 0, 0)
+                            ZIndex: =1
+
+                        lblIssueRegistrationsTitleIRS As label:
+                            Align: =Align.Center
+                            AutoHeight: =true
+                            BorderColor: =EDSStyles.Label.BorderColor
+                            BorderStyle: =EDSStyles.Label.BorderStyle
+                            BorderThickness: =EDSStyles.Label.BorderThickness
+                            Color: =EDSStyles.Label.Color
+                            DisabledBorderColor: =EDSStyles.Label.DisabledBorderColor
+                            DisabledColor: =EDSStyles.Label.DisabledColor
+                            DisabledFill: =EDSStyles.Label.DisabledFill
+                            DisplayMode: =DisplayMode.View
+                            Fill: =Color.Transparent
+                            FocusedBorderColor: =EDSStyles.Label.FocusedBorderColor
+                            FocusedBorderThickness: =EDSStyles.Label.FocusedBorderThickness
+                            Font: =EDSStyles.Label.Font
+                            FontWeight: =EDSFonts.Heading.H4.Weight
+                            Height: =EDSStyles.Label.Height
+                            HoverBorderColor: =EDSStyles.Label.HoverBorderColor
+                            HoverColor: =EDSStyles.Label.HoverColor
+                            HoverFill: =EDSStyles.Label.HoverFill
+                            LineHeight: =EDSFonts.Heading.H4.LineHeight
+                            PaddingBottom: =EDSStyles.Label.PaddingBottom
+                            PaddingLeft: =EDSStyles.Label.PaddingLeft
+                            PaddingRight: =EDSStyles.Label.PaddingRight
+                            PaddingTop: =EDSStyles.Label.PaddingTop
+                            PressedBorderColor: =EDSStyles.Label.PressedBorderColor
+                            PressedColor: =EDSStyles.Label.PressedColor
+                            PressedFill: =EDSStyles.Label.PressedFill
+                            Size: =EDSFonts.Heading.H4.Size
+                            Text: =ThisItem.'Functional location'
+                            VerticalAlign: =VerticalAlign.Top
+                            Width: |-
+                                =//DataTableHeaderItemWidthAdjustableIRS.ColumnWidth
+                                EDSStyles.Label.Width/2
+                            X: =16
+                            Y: =16
+                            ZIndex: =2
+
+                        lblIssueRegistrationsDescriptionIRS As label:
+                            BorderColor: =EDSStyles.Label.BorderColor
+                            BorderStyle: =EDSStyles.Label.BorderStyle
+                            BorderThickness: =EDSStyles.Label.BorderThickness
+                            Color: =EDSStyles.Label.Color
+                            DisabledBorderColor: =EDSStyles.Label.DisabledBorderColor
+                            DisabledColor: =EDSStyles.Label.DisabledColor
+                            DisabledFill: =EDSStyles.Label.DisabledFill
+                            DisplayMode: =DisplayMode.View
+                            Fill: =Color.Transparent
+                            FillPortions: =1
+                            FocusedBorderColor: =EDSStyles.Label.FocusedBorderColor
+                            FocusedBorderThickness: =EDSStyles.Label.FocusedBorderThickness
+                            Font: =EDSStyles.Label.Font
+                            FontWeight: =EDSStyles.Label.FontWeight
+                            Height: =EDSStyles.Label.Height
+                            HoverBorderColor: =EDSStyles.Label.HoverBorderColor
+                            HoverColor: =EDSStyles.Label.HoverColor
+                            HoverFill: =EDSStyles.Label.HoverFill
+                            LayoutMinWidth: =295
+                            PaddingBottom: =EDSStyles.Label.PaddingBottom
+                            PaddingLeft: =EDSStyles.Label.PaddingLeft
+                            PaddingRight: =EDSStyles.Label.PaddingRight
+                            PaddingTop: =EDSStyles.Label.PaddingTop
+                            PressedBorderColor: =EDSStyles.Label.PressedBorderColor
+                            PressedColor: =EDSStyles.Label.PressedColor
+                            PressedFill: =EDSStyles.Label.PressedFill
+                            Size: =EDSStyles.Label.FontSize
+                            Text: =ThisItem.Comment
+                            Width: =EDSStyles.Label.Width
+                            X: =16
+                            Y: =16
+                            ZIndex: =3
+
+                    shpIssueRegistrationsItemOverlayIRS As rectangle:
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        BorderStyle: =BorderStyle.None
+                        DisabledFill: =Color.Transparent
+                        Fill: =RGBA(0, 0, 0, 0)
+                        FocusedBorderThickness: =4
+                        Height: =Parent.TemplateHeight
+                        HoverFill: =RGBA(0, 0, 0, 0.2)
+                        OnSelect: =If(icoIssueRegistrationsItemCheckboxIRS.Visible, Select(icoIssueRegistrationsItemCheckboxIRS), Select(Parent))
+                        PressedFill: =EDSStyles.Menu.PressedFill
+                        Width: =Parent.TemplateWidth
+                        ZIndex: =2
+
+                    icoIssueRegistrationsItemCheckboxIRS As image:
+                        BorderColor: =EDSDefaults.BorderColor
+                        BorderStyle: =BorderStyle.None
+                        BorderThickness: =EDSDefaults.BorderThickness
+                        DisabledFill: =Color.Transparent
+                        Height: =Parent.TemplateHeight
+                        HoverFill: =Self.Fill
+                        Image: |-
+                            =//If(ThisItem.SampleHeading exactin colGallerySelected.SampleHeading, EDSIcons.Checkbox, EDSIcons.CheckboxOutline)
+                            EDSIcons.AddBox
+                        PaddingBottom: =EDSStyles.Menu.IconPaddingBottom
+                        PaddingLeft: =EDSStyles.DataTable.PaddingLeft
+                        PaddingRight: =EDSStyles.DataTable.PaddingLeft
+                        PaddingTop: =EDSStyles.Menu.IconPaddingTop
+                        Tooltip: |-
+                            ="Attention: remember to change the collection to use for multiselection!"
+                        Width: =48
+                        ZIndex: =4
+
+                lblGallerySelectionInformationIRS As label:
+                    BorderColor: =EDSStyles.Label.BorderColor
+                    BorderStyle: =EDSStyles.Label.BorderStyle
+                    BorderThickness: =EDSStyles.Label.BorderThickness
+                    Color: =EDSStyles.Label.Color
+                    DisabledBorderColor: =EDSStyles.Label.DisabledBorderColor
+                    DisabledColor: =EDSStyles.Label.DisabledColor
+                    DisabledFill: =EDSStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =EDSStyles.Label.Fill
+                    FocusedBorderColor: =EDSStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =EDSStyles.Label.FocusedBorderThickness
+                    Font: =EDSStyles.Label.Font
+                    FontWeight: =FontWeight.Lighter
+                    Height: =EDSStyles.Label.Height
+                    HoverBorderColor: =EDSStyles.Label.HoverBorderColor
+                    HoverColor: =EDSStyles.Label.HoverColor
+                    HoverFill: =EDSStyles.Label.HoverFill
+                    PaddingBottom: =EDSStyles.Label.PaddingBottom
+                    PaddingLeft: =EDSStyles.Label.PaddingLeft
+                    PaddingRight: =EDSStyles.Label.PaddingRight
+                    PaddingTop: =EDSStyles.Label.PaddingTop
+                    PressedBorderColor: =EDSStyles.Label.PressedBorderColor
+                    PressedColor: =EDSStyles.Label.PressedColor
+                    PressedFill: =EDSStyles.Label.PressedFill
+                    Size: =EDSStyles.Label.FontSize
+                    Text: ="" & CountRows(colGallerySelected) & " of "&CountRows(galIssueRegistrationsIRS.AllItems) &" items selected"
+                    Width: =Parent.Width
+                    X: =16
+                    Y: =16
+                    ZIndex: =4
+
+            vcoIssueAssignmentAndTasksIRS As groupContainer.verticalAutoLayoutContainer:
+                Height: |-
+                    =//Max(EDSStyles.Gallery.LayoutMinHeight, (Parent.Height-Self.Y*4))
+                    480
+                LayoutAlignItems: =LayoutAlignItems.Stretch
+                LayoutDirection: =LayoutDirection.Vertical
+                LayoutMinHeight: =100
+                LayoutMinWidth: =250
+                LayoutMode: =LayoutMode.Auto
+                Width: =375
+                X: =40
+                Y: =40
+                ZIndex: =3
+
+                vcoIssueDetailsIRS As groupContainer.verticalAutoLayoutContainer:
+                    AlignInContainer: =AlignInContainer.Center
+                    FillPortions: =0
+                    Height: =120
+                    LayoutAlignItems: =LayoutAlignItems.Stretch
+                    LayoutDirection: =LayoutDirection.Vertical
+                    LayoutJustifyContent: =LayoutJustifyContent.SpaceBetween
+                    LayoutMinHeight: =100
+                    LayoutMinWidth: =250
+                    LayoutMode: =LayoutMode.Auto
+                    ZIndex: =1
+
+                    htmIssueDetailsIRS As htmlViewer:
+                        AlignInContainer: =AlignInContainer.Stretch
+                        BorderColor: =EDSStyles.HtmlText.BorderColor
+                        BorderStyle: =EDSStyles.HtmlText.BorderStyle
+                        BorderThickness: =EDSStyles.HtmlText.BorderThickness
+                        Color: =EDSStyles.HtmlText.Color
+                        DisabledBorderColor: =EDSStyles.HtmlText.DisabledBorderColor
+                        DisabledFill: =EDSStyles.HtmlText.DisabledFill
+                        Fill: =EDSStyles.HtmlText.Fill
+                        FillPortions: =1
+                        Font: =EDSStyles.HtmlText.Font
+                        Height: =68
+                        HoverBorderColor: =EDSStyles.HtmlText.HoverBorderColor
+                        HtmlText: =$"Assigned to discipline <b><font color='{EDSColorValues.Interactive.Primary.Resting}'>{Concat(galIssueRegistrationsIRS.Selected.Discipline, ThisRecord.Value)}</font></b>"
+                        PaddingBottom: =EDSStyles.HtmlText.PaddingBottom
+                        PaddingLeft: =EDSStyles.HtmlText.PaddingLeft
+                        PaddingRight: =EDSStyles.HtmlText.PaddingRight
+                        PaddingTop: =EDSStyles.HtmlText.PaddingTop
+                        Size: =EDSStyles.HtmlText.FontSize
+                        Width: =EDSStyles.HtmlText.Width
+                        X: =16
+                        Y: =16
+                        ZIndex: =1
+
+                hcoIssueTaskTableHeaderItemsIRS As groupContainer.horizontalAutoLayoutContainer:
+                    AlignInContainer: =AlignInContainer.SetByContainer
+                    Fill: =EDSStyles.DataTable.HeadingFill
+                    FillPortions: =0
+                    Height: =EDSStyles.DataTable.HeadingHeight
+                    LayoutAlignItems: =LayoutAlignItems.Center
+                    LayoutMinHeight: =100
+                    LayoutMinWidth: =250
+                    LayoutMode: =LayoutMode.Auto
+                    PaddingBottom: =EDSStyles.Menu.PaddingBottom//
+                    PaddingRight: |-
+                        =//EDSStyles.Menu.PaddingRight
+                        0
+                    PaddingTop: =EDSStyles.Menu.PaddingTop
+                    Width: =galIssueTasksIRS.Width
+                    ZIndex: =2
+
+                    vcoIssueTasksColumnHeaderSelectAllIRS As groupContainer.horizontalAutoLayoutContainer:
+                        AlignInContainer: =AlignInContainer.SetByContainer
+                        FillPortions: =0
+                        Height: =EDSStyles.DataTable.HeadingHeight
+                        LayoutAlignItems: =LayoutAlignItems.Stretch
+                        LayoutDirection: =LayoutDirection.Vertical
+                        LayoutJustifyContent: =LayoutJustifyContent.SpaceBetween
+                        LayoutMinHeight: =EDSStyles.DataTable.HeadingHeight
+                        LayoutMinWidth: =Self.Width
+                        LayoutMode: =LayoutMode.Auto
+                        Width: =EDSStyles.Menu.IconWidth+EDSStyles.DataTable.PaddingLeft+EDSStyles.DataTable.PaddingRight
+                        ZIndex: =1
+
+                        icoIssueTasksTableItemCheckboxSelectAllIRS As image:
+                            BorderColor: =EDSDefaults.BorderColor
+                            BorderStyle: =BorderStyle.None
+                            BorderThickness: =EDSDefaults.BorderThickness
+                            DisabledFill: =Color.Transparent
+                            FillPortions: =1
+                            Height: =48
+                            HoverFill: =Self.Fill
+                            Image: |-
+                                =If(
+                                    CountRows(colGallerySelected) = CountRows(galIssueTasksIRS.AllItems),
+                                    EDSIcons.Checkbox,
+                                    EDSIcons.CheckboxOutline
+                                )
+                                
+                                // TODO: improve all-items check.
+                            LayoutMinHeight: =0
+                            LayoutMinWidth: =Parent.Width
+                            OnSelect: |-
+                                =If(
+                                    CountRows(colGallerySelected) = CountRows(galIssueTasksIRS.AllItems),
+                                    Clear(colGallerySelected),
+                                    ClearCollect(
+                                        colGallerySelected,
+                                        galIssueTasksIRS.AllItems
+                                    )
+                                )
+                            PaddingBottom: =EDSStyles.Menu.IconPaddingBottom
+                            PaddingLeft: =EDSStyles.DataTable.PaddingLeft
+                            PaddingRight: =EDSStyles.DataTable.PaddingRight
+                            PaddingTop: =EDSStyles.Menu.IconPaddingTop
+                            Tooltip: |-
+                                ="Attention: remember to change the collection to use in the select all!" //"Select all"
+                            Width: =EDSStyles.Menu.IconWidth+Self.PaddingLeft+Self.PaddingRight
+                            X: =EDSStyles.DataTable.PaddingLeft
+                            ZIndex: =1
+
+                        shpIssueTaskHeaderBorderSelectAllIRS As rectangle:
+                            BorderColor: =RGBA(0, 0, 0, 0)
+                            BorderStyle: =BorderStyle.None
+                            DisabledFill: =RGBA(166, 166, 166, 1)
+                            Fill: |-
+                                =If(
+                                    false,
+                                    EDSDefaults.BorderColor,
+                                    EDSColors.Background.Medium
+                                )
+                            FocusedBorderThickness: =4
+                            Height: =EDSStyles.Tabs.BorderThickness
+                            HoverFill: =RGBA(105, 121, 126, 1)
+                            LayoutMinWidth: =Parent.Width
+                            PressedFill: =RGBA(105, 121, 126, 1)
+                            Width: =Parent.Width
+                            ZIndex: =2
+
+                    vcoIssueTaskColumnHeaderEndIRS As groupContainer.horizontalAutoLayoutContainer:
+                        AlignInContainer: =AlignInContainer.SetByContainer
+                        Height: =EDSStyles.DataTable.HeadingHeight
+                        LayoutAlignItems: =LayoutAlignItems.Stretch
+                        LayoutDirection: =LayoutDirection.Vertical
+                        LayoutJustifyContent: =LayoutJustifyContent.End
+                        LayoutMinHeight: =EDSStyles.DataTable.HeadingHeight
+                        LayoutMinWidth: =0
+                        LayoutMode: =LayoutMode.Auto
+                        Width: =EDSStyles.Menu.IconWidth+EDSStyles.DataTable.PaddingLeft+EDSStyles.DataTable.PaddingRight
+                        ZIndex: =5
+
+                        lblIssueTaskColumnHeaderTitleIRS As label:
+                            Align: =Align.Center
+                            BorderColor: =EDSStyles.Label.BorderColor
+                            BorderStyle: =EDSStyles.Label.BorderStyle
+                            BorderThickness: =EDSStyles.Label.BorderThickness
+                            Color: =EDSStyles.Label.Color
+                            DisabledBorderColor: =EDSStyles.Label.DisabledBorderColor
+                            DisabledColor: =EDSStyles.Label.DisabledColor
+                            DisabledFill: =EDSStyles.Label.DisabledFill
+                            Fill: =Color.Transparent
+                            FillPortions: =1
+                            FocusedBorderColor: =EDSStyles.Label.FocusedBorderColor
+                            FocusedBorderThickness: =EDSStyles.Label.FocusedBorderThickness
+                            Font: =EDSStyles.DataTable.Heading.Font
+                            FontWeight: =EDSStyles.DataTable.Heading.FontWeight
+                            Height: =EDSStyles.Label.Height
+                            HoverBorderColor: =EDSStyles.Label.HoverBorderColor
+                            HoverColor: =EDSStyles.Label.HoverColor
+                            HoverFill: =EDSStyles.DataTable.HeadingHoverFill
+                            LayoutMinHeight: =EDSStyles.Label.LayoutMinHeight
+                            LayoutMinWidth: =EDSStyles.Label.LayoutMinWidth
+                            LineHeight: =EDSFonts.Heading.H5.LineHeight
+                            PaddingBottom: =EDSStyles.Label.PaddingBottom
+                            PaddingLeft: =EDSStyles.Label.PaddingLeft
+                            PaddingRight: =EDSStyles.Label.PaddingRight
+                            PaddingTop: =EDSStyles.Label.PaddingTop
+                            PressedBorderColor: =EDSStyles.Label.PressedBorderColor
+                            PressedColor: =EDSStyles.Label.PressedColor
+                            PressedFill: =EDSStyles.Label.PressedFill
+                            Size: =EDSStyles.DataTable.Heading.FontSize
+                            Text: ="Tasks"
+                            Width: =EDSStyles.Label.Width
+                            ZIndex: =1
+
+                        shpIssueTaskColumnHeaderBorderEndIRS As rectangle:
+                            BorderColor: =RGBA(0, 0, 0, 0)
+                            BorderStyle: =BorderStyle.None
+                            DisabledFill: =RGBA(166, 166, 166, 1)
+                            Fill: |-
+                                =If(
+                                    false,
+                                    EDSDefaults.BorderColor,
+                                    EDSColors.Background.Medium
+                                )
+                            FocusedBorderThickness: =4
+                            Height: =EDSStyles.Tabs.BorderThickness
+                            HoverFill: =RGBA(105, 121, 126, 1)
+                            LayoutMinWidth: =Parent.Width
+                            PressedFill: =RGBA(105, 121, 126, 1)
+                            Width: =Parent.Width
+                            ZIndex: =2
+
+                galIssueTasksIRS As gallery.galleryVertical:
+                    AccessibleLabel: ="Choose row"
+                    AlignInContainer: =AlignInContainer.SetByContainer
+                    BorderColor: =EDSDefaults.BorderColor
+                    BorderStyle: =EDSDefaults.BorderStyle
+                    BorderThickness: =EDSDefaults.BorderThickness
+                    Fill: |-
+                        =//EDSStyles.Menu.Fill
+                        Color.Transparent
+                    FocusedBorderThickness: =EDSDefaults.FocusedBorderThickness
+                    Height: =EDSStyles.Gallery.Height
+                    Items: ='Issue Registrations'
+                    Layout: =Layout.Vertical
+                    LayoutMinHeight: |-
+                        =//Min(EDSStyles.Gallery.LayoutMinHeight, Self.TemplateHeight*CountRows(Self.AllItems))
+                        EDSStyles.Gallery.LayoutMinHeight
+                    LayoutMinWidth: =EDSDefaults.LayoutMinWidth
+                    LoadingSpinner: =LoadingSpinner.Data
+                    LoadingSpinnerColor: =EDSDefaults.LoadingSpinnerColor
+                    TabIndex: =0
+                    TemplateFill: |-
+                        =If(
+                            ThisItem.IsSelected,
+                            EDSStyles.Menu.ActiveFill,
+                            Color.Transparent
+                        )
+                    TemplatePadding: =0
+                    TemplateSize: |-
+                        =//EDSDefaults.Card.HeaderSubtitleDescription.Height
+                        120
+                    Width: =EDSStyles.Gallery.Width
+                    X: =EDSStyles.Menu.Margin
+                    Y: =EDSStyles.Menu.Margin+8
+                    ZIndex: =3
+
+                    hcoIssueTaskItemLayoutIRS As groupContainer.horizontalAutoLayoutContainer:
+                        Fill: =Color.Transparent
+                        Height: =Parent.TemplateHeight
+                        LayoutAlignItems: =LayoutAlignItems.Center
+                        LayoutMode: =LayoutMode.Auto
+                        PaddingBottom: =EDSStyles.Menu.PaddingBottom//
+                        PaddingLeft: =icoIssueTaskItemCheckboxIRS.Width
+                        PaddingRight: =EDSStyles.Menu.PaddingRight
+                        PaddingTop: =EDSStyles.Menu.PaddingTop
+                        Width: =Parent.TemplateWidth
+                        ZIndex: =1
+
+                        imgIssueTaskImageIRS As image:
+                            BorderColor: =RGBA(0, 0, 0, 0)
+                            BorderStyle: =BorderStyle.None
+                            BorderThickness: =2
+                            DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                            DisabledFill: =RGBA(0, 0, 0, 0)
+                            FocusedBorderThickness: =4
+                            HoverBorderColor: =RGBA(0, 0, 0, 0)
+                            HoverFill: =RGBA(0, 0, 0, 0)
+                            Image: =EDSIcons.AddCircleFilled
+                            PaddingLeft: =4
+                            PaddingRight: =4
+                            PressedBorderColor: =RGBA(0, 0, 0, 0)
+                            PressedFill: =RGBA(0, 0, 0, 0)
+                            ZIndex: =1
+
+                        lblIssueTaskTitleIRS As label:
+                            Align: =Align.Center
+                            AutoHeight: =true
+                            BorderColor: =EDSStyles.Label.BorderColor
+                            BorderStyle: =EDSStyles.Label.BorderStyle
+                            BorderThickness: =EDSStyles.Label.BorderThickness
+                            Color: =EDSStyles.Label.Color
+                            DisabledBorderColor: =EDSStyles.Label.DisabledBorderColor
+                            DisabledColor: =EDSStyles.Label.DisabledColor
+                            DisabledFill: =EDSStyles.Label.DisabledFill
+                            DisplayMode: =DisplayMode.View
+                            Fill: =Color.Transparent
+                            FocusedBorderColor: =EDSStyles.Label.FocusedBorderColor
+                            FocusedBorderThickness: =EDSStyles.Label.FocusedBorderThickness
+                            Font: =EDSStyles.Label.Font
+                            FontWeight: =EDSFonts.Heading.H4.Weight
+                            Height: =EDSStyles.Label.Height
+                            HoverBorderColor: =EDSStyles.Label.HoverBorderColor
+                            HoverColor: =EDSStyles.Label.HoverColor
+                            HoverFill: =EDSStyles.Label.HoverFill
+                            LineHeight: =EDSFonts.Heading.H4.LineHeight
+                            PaddingBottom: =EDSStyles.Label.PaddingBottom
+                            PaddingLeft: =EDSStyles.Label.PaddingLeft
+                            PaddingRight: =EDSStyles.Label.PaddingRight
+                            PaddingTop: =EDSStyles.Label.PaddingTop
+                            PressedBorderColor: =EDSStyles.Label.PressedBorderColor
+                            PressedColor: =EDSStyles.Label.PressedColor
+                            PressedFill: =EDSStyles.Label.PressedFill
+                            Size: =EDSFonts.Heading.H4.Size
+                            Text: =ThisItem.'Functional location'
+                            VerticalAlign: =VerticalAlign.Top
+                            Width: |-
+                                =//DataTableHeaderItemWidthAdjustableIRS.ColumnWidth
+                                EDSStyles.Label.Width/2
+                            X: =16
+                            Y: =16
+                            ZIndex: =2
+
+                        lblIssueTaskDescriptionIRS As label:
+                            BorderColor: =EDSStyles.Label.BorderColor
+                            BorderStyle: =EDSStyles.Label.BorderStyle
+                            BorderThickness: =EDSStyles.Label.BorderThickness
+                            Color: =EDSStyles.Label.Color
+                            DisabledBorderColor: =EDSStyles.Label.DisabledBorderColor
+                            DisabledColor: =EDSStyles.Label.DisabledColor
+                            DisabledFill: =EDSStyles.Label.DisabledFill
+                            DisplayMode: =DisplayMode.View
+                            Fill: =Color.Transparent
+                            FillPortions: =1
+                            FocusedBorderColor: =EDSStyles.Label.FocusedBorderColor
+                            FocusedBorderThickness: =EDSStyles.Label.FocusedBorderThickness
+                            Font: =EDSStyles.Label.Font
+                            FontWeight: =EDSStyles.Label.FontWeight
+                            Height: =EDSStyles.Label.Height
+                            HoverBorderColor: =EDSStyles.Label.HoverBorderColor
+                            HoverColor: =EDSStyles.Label.HoverColor
+                            HoverFill: =EDSStyles.Label.HoverFill
+                            LayoutMinWidth: =295
+                            PaddingBottom: =EDSStyles.Label.PaddingBottom
+                            PaddingLeft: =EDSStyles.Label.PaddingLeft
+                            PaddingRight: =EDSStyles.Label.PaddingRight
+                            PaddingTop: =EDSStyles.Label.PaddingTop
+                            PressedBorderColor: =EDSStyles.Label.PressedBorderColor
+                            PressedColor: =EDSStyles.Label.PressedColor
+                            PressedFill: =EDSStyles.Label.PressedFill
+                            Size: =EDSStyles.Label.FontSize
+                            Text: =ThisItem.Comment
+                            Width: =EDSStyles.Label.Width
+                            X: =16
+                            Y: =16
+                            ZIndex: =3
+
+                    shpIssueTaskItemOverlayIRS As rectangle:
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        BorderStyle: =BorderStyle.None
+                        DisabledFill: =Color.Transparent
+                        Fill: =RGBA(0, 0, 0, 0)
+                        FocusedBorderThickness: =4
+                        Height: =Parent.TemplateHeight
+                        HoverFill: =RGBA(0, 0, 0, 0.2)
+                        OnSelect: =If(icoIssueTaskItemCheckboxIRS.Visible, Select(icoIssueTaskItemCheckboxIRS), Select(Parent))
+                        PressedFill: =EDSStyles.Menu.PressedFill
+                        Width: =Parent.TemplateWidth
+                        ZIndex: =2
+
+                    icoIssueTaskItemCheckboxIRS As image:
+                        BorderColor: =EDSDefaults.BorderColor
+                        BorderStyle: =BorderStyle.None
+                        BorderThickness: =EDSDefaults.BorderThickness
+                        DisabledFill: =Color.Transparent
+                        Height: =Parent.TemplateHeight
+                        HoverFill: =Self.Fill
+                        Image: |-
+                            =//If(ThisItem.SampleHeading exactin colGallerySelected.SampleHeading, EDSIcons.Checkbox, EDSIcons.CheckboxOutline)
+                            EDSIcons.AddBox
+                        PaddingBottom: =EDSStyles.Menu.IconPaddingBottom
+                        PaddingLeft: =EDSStyles.DataTable.PaddingLeft
+                        PaddingRight: =EDSStyles.DataTable.PaddingLeft
+                        PaddingTop: =EDSStyles.Menu.IconPaddingTop
+                        Tooltip: |-
+                            ="Attention: remember to change the collection to use for multiselection!"
+                        Width: =1
+                        ZIndex: =4
+
+                lblIssueTaskGallerySelectionInformationIRS As label:
+                    BorderColor: =EDSStyles.Label.BorderColor
+                    BorderStyle: =EDSStyles.Label.BorderStyle
+                    BorderThickness: =EDSStyles.Label.BorderThickness
+                    Color: =EDSStyles.Label.Color
+                    DisabledBorderColor: =EDSStyles.Label.DisabledBorderColor
+                    DisabledColor: =EDSStyles.Label.DisabledColor
+                    DisabledFill: =EDSStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =EDSStyles.Label.Fill
+                    FocusedBorderColor: =EDSStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =EDSStyles.Label.FocusedBorderThickness
+                    Font: =EDSStyles.Label.Font
+                    FontWeight: =FontWeight.Lighter
+                    Height: =EDSStyles.Label.Height
+                    HoverBorderColor: =EDSStyles.Label.HoverBorderColor
+                    HoverColor: =EDSStyles.Label.HoverColor
+                    HoverFill: =EDSStyles.Label.HoverFill
+                    PaddingBottom: =EDSStyles.Label.PaddingBottom
+                    PaddingLeft: =EDSStyles.Label.PaddingLeft
+                    PaddingRight: =EDSStyles.Label.PaddingRight
+                    PaddingTop: =EDSStyles.Label.PaddingTop
+                    PressedBorderColor: =EDSStyles.Label.PressedBorderColor
+                    PressedColor: =EDSStyles.Label.PressedColor
+                    PressedFill: =EDSStyles.Label.PressedFill
+                    Size: =EDSStyles.Label.FontSize
+                    Text: ="" & CountRows(colGallerySelected) & " of "&CountRows(galIssueTasksIRS.AllItems) &" items selected"
+                    Width: =Parent.Width
+                    X: =16
+                    Y: =16
+                    ZIndex: =4
+
+    grpAppMenuIRS As group:
+        Height: =5
+        Width: =5
+        X: =40
+        Y: =40
+        ZIndex: =5
+
+        shpAppMenuDismissLayerIRS As rectangle:
+            AccessibleLabel: ="Close the active menu"
+            BorderColor: =Self.Fill
+            Fill: =Color.Transparent
+            Height: =App.ActiveScreen.Height-Self.Y
+            OnSelect: =Set(gblEDSShowAppMenu, false)
+            TabIndex: =0
+            Visible: =conAppMenuIRS.Visible
+            Width: =Parent.Width
+            Y: =40
+            ZIndex: =3
+
+        conAppMenuIRS As groupContainer.manualLayoutContainer:
+            DropShadow: =DropShadow.Bold
+            Fill: =EDSStyles.Menu.Fill
+            Height: =48 * galAppMenuIRS.AllItemsCount + 16
+            PaddingBottom: |
+                =//EDSStyles.Menu.PaddingBottom
+                8
+            PaddingTop: |-
+                =//EDSStyles.Menu.ShadowPadding
+                8
+            RadiusBottomLeft: =4
+            RadiusBottomRight: =4
+            RadiusTopLeft: =4
+            RadiusTopRight: =4
+            Visible: =gblEDSShowAppMenu
+            Width: =galAppMenuIRS.Width
+            X: =30
+            Y: =60
+            ZIndex: =4
+
+            galAppMenuIRS As gallery.galleryVertical:
+                AccessibleLabel: ="Choose from " & Concat(Self.AllItems, ThisRecord.Title, ", ")
+                BorderColor: =EDSStyles.Menu.BorderColor
+                BorderStyle: =EDSStyles.Menu.BorderStyle
+                BorderThickness: =EDSStyles.Menu.BorderThickness
+                Default: |-
+                    =Coalesce(
+                        LookUp(
+                            Self.AllItems,
+                            Or(
+                                And(
+                                    Action = "navigate",
+                                    Option.Screen = App.ActiveScreen
+                                )
+                            )
+                        )
+                    )
+                    /*
+                    */
+                Fill: |-
+                    =//EDSDataTable.Styling.Menu.Fill
+                    Color.Transparent
+                FocusedBorderThickness: |+
+                    =EDSStyles.Menu.FocusedBorderThickness
+                    
+                Height: =Parent.Height-Parent.PaddingTop-Parent.PaddingBottom
+                Items: =colAppMenu
+                Layout: =Layout.Vertical
+                OnSelect: |
+                    =Switch(
+                        Lower(ThisItem.Action),
+                        "navigate",
+                        Navigate(
+                            ThisItem.Option.Screen,
+                            LookUp(
+                                ThisItem.Option.Arguments,
+                                Name = "transition"
+                            ).Value
+                        ),
+                        "launch",
+                        Launch(
+                            LookUp(
+                                ThisItem.Option.Arguments,
+                                Name = "address"
+                            ).Value
+                        ),
+                        "notify",
+                        Notify(
+                            Coalesce(
+                                LookUp(
+                                    ThisItem.Option.Arguments,
+                                    Name = "text"
+                                ).Value,
+                                "Change this formula to what you wish, you can also provide a custom option"
+                            ),
+                            Coalesce(
+                                LookUp(
+                                    ThisItem.Option.Arguments,
+                                    Name = "notification_type"
+                                ).Value,
+                                NotificationType.Information
+                            ),
+                            LookUp(
+                                ThisItem.Option.Arguments,
+                                Name = "timeout"
+                            ).Value
+                        ),
+                        "return",
+                        Back(
+                            LookUp(
+                                ThisItem.Option.Arguments,
+                                Name = "transition"
+                            ).Value
+                        ),
+                        false
+                    );
+                ShowScrollbar: =false
+                TabIndex: =0
+                TemplateFill: |-
+                    =If(
+                        Or(
+                            And(
+                                // This will highlight the correct item when used as screen navigation.
+                                ThisItem.Action = "navigate",
+                                ThisItem.Option.Screen = App.ActiveScreen
+                            ),
+                            And(
+                                ThisItem.Action <> "navigate",
+                                ThisItem.IsSelected
+                            )
+                        ),
+                        EDSStyles.Menu.ActiveFill,
+                        Color.Transparent
+                    )
+                TemplatePadding: =0
+                TemplateSize: |
+                    =EDSStyles.Menu.TemplateHeight
+                    //48
+                Width: |
+                    =//If(EDSMenu.Complex, EDSStyles.Menu.TemplateWidth, EDSStyles.Menu.TemplateWidth-EDSStyles.Menu.IconWidth)
+                    If(true, 240, 216)
+                Y: =Parent.PaddingTop
+                ZIndex: =1
+
+                hcoAppMenuItemIRS As groupContainer.horizontalAutoLayoutContainer:
+                    EnableChildFocus: =false
+                    Fill: =Color.Transparent
+                    Height: =Parent.TemplateHeight
+                    LayoutGap: =If(icoAppMenuItemIRS.Visible, EDSStyles.Menu.LayoutGap, 0)
+                    LayoutMode: =LayoutMode.Auto
+                    PaddingBottom: |-
+                        =//0
+                        EDSStyles.Menu.PaddingBottom
+                    PaddingLeft: |-
+                        =EDSStyles.Menu.PaddingLeft
+                        //24
+                    PaddingRight: |-
+                        =EDSStyles.Menu.PaddingRight
+                        //24
+                    PaddingTop: |-
+                        =0
+                        //EDSMenu.Styling.Menu.PaddingTop
+                    Width: =Parent.TemplateWidth
+                    ZIndex: =1
+
+                    icoAppMenuItemIRS As image:
+                        AccessibleLabel: =$"Icon for {btnAppMenuItemActionIRS.Text} menu item"
+                        BorderColor: |
+                            =EDSStyles.Menu.BorderColor
+                        BorderStyle: =BorderStyle.None
+                        BorderThickness: =EDSStyles.Menu.BorderThickness
+                        DisabledFill: =Color.Transparent
+                        Height: |-
+                            =//EDSDataTable.Styling.Menu.IconHeight
+                            Parent.Height
+                        HoverFill: =Self.Fill
+                        Image: =ThisItem.Icon
+                        OnSelect: =Select(btnAppMenuItemActionIRS)
+                        PaddingBottom: |
+                            =EDSStyles.Menu.IconPaddingBottom
+                        PaddingLeft: |
+                            =EDSStyles.Menu.IconPaddingLeft
+                        PaddingRight: |
+                            =EDSStyles.Menu.IconPaddingRight
+                        PaddingTop: |
+                            =EDSStyles.Menu.IconPaddingTop
+                        TabIndex: =0
+                        Tooltip: =ThisItem.SubTitle
+                        Visible: |-
+                            =//EDSMenu.Complex
+                            true
+                        Width: |
+                            =EDSStyles.Menu.IconWidth
+                        X: |-
+                            =//Parent.Width - Self.Width-EDSDataTable.Styling.Menu.PaddingRight
+                            0
+                        Y: =1
+                        ZIndex: =1
+
+                    btnAppMenuItemActionIRS As button:
+                        Align: =Align.Left
+                        BorderColor: =Self.Fill
+                        BorderStyle: =BorderStyle.None
+                        BorderThickness: =EDSStyles.Menu.BorderThickness
+                        Color: =EDSStyles.Menu.Color
+                        DisabledBorderColor: =Self.DisabledFill
+                        DisabledColor: =EDSStyles.Menu.DisabledColor
+                        DisabledFill: =EDSStyles.Menu.DisabledFill
+                        Fill: |
+                            =//If(App.ActiveScreen.Name = ThisItem.Target.Screen.Name, EDSDataTable.Styling.Menu.ActiveFill, EDSDataTable.Styling.Menu.Fill)
+                            Color.Transparent
+                        FillPortions: =1
+                        FocusedBorderColor: =EDSStyles.Menu.FocusedBorderColor
+                        FocusedBorderThickness: =EDSStyles.Menu.FocusedBorderThickness
+                        Font: =EDSDefaults.Font
+                        FontWeight: =FontWeight.Normal
+                        Height: =galAppMenuIRS.TemplateHeight
+                        HoverBorderColor: =Self.HoverFill
+                        HoverColor: =EDSStyles.Menu.HoverColor
+                        HoverFill: =EDSStyles.Menu.HoverFill
+                        LayoutMinHeight: =48
+                        LayoutMinWidth: |-
+                            =//EDSStyles.Menu.IconLayoutMinWidth
+                            48
+                        OnSelect: =Select(shpAppMenuItemOverlayIRS)
+                        PaddingBottom: =//EDSDataTable.Styling.Menu.PaddingBottom
+                        PaddingLeft: |
+                            =//EDSDataTable.Styling.Menu.
+                            0
+                        PaddingRight: |-
+                            =//EDSDataTable.Styling.Menu.PaddingRight+icoMenuItem.Width
+                            0
+                        PaddingTop: =//EDSDataTable.Styling.Menu.PaddingTop
+                        PressedColor: =EDSStyles.Menu.PressedColor
+                        PressedFill: =EDSStyles.Menu.PressedFill
+                        RadiusBottomLeft: =0
+                        RadiusBottomRight: =0
+                        RadiusTopLeft: =0 
+                        RadiusTopRight: =0
+                        Size: =EDSDefaults.FontSize //Paragraph.BodyShort.Size
+                        Text: =ThisItem.Title
+                        Tooltip: =ThisItem.SubTitle
+                        Width: |-
+                            =//galAppMenu.TemplateWidth
+                            64
+                        ZIndex: =2
+
+                shpAppMenuItemOverlayIRS As rectangle:
+                    AccessibleLabel: =$"Menu item for {btnAppMenuItemActionIRS.Text}"
+                    BorderColor: =RGBA(0, 0, 0, 0)
+                    BorderStyle: =BorderStyle.Dashed
+                    DisabledFill: =Color.Transparent
+                    Fill: =RGBA(0, 0, 0, 0)
+                    FocusedBorderColor: |
+                        =EDSStyles.Menu.FocusedBorderColor
+                    FocusedBorderThickness: |
+                        =EDSStyles.Menu.FocusedBorderThickness
+                    Height: =Parent.TemplateHeight
+                    HoverFill: |
+                        =EDSStyles.Menu.HoverFill
+                    OnSelect: =Select(Parent)
+                    PressedFill: |
+                        =EDSStyles.Menu.PressedFill
+                    TabIndex: =0
+                    Tooltip: =ThisItem.SubTitle
+                    Width: =Parent.TemplateWidth
+                    ZIndex: =2
+
