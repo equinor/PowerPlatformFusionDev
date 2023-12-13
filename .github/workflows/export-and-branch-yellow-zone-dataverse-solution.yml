@@ -90,7 +90,7 @@ jobs:
     - name: branch-solution, prepare it for a PullRequest
       uses: microsoft/powerplatform-actions/branch-solution@v1
       with:
-        branch-name: ${{ github.event.inputs.solution_name }}
+        branch-name: ${{ github.event.inputs.branch_name }}
         solution-folder: ${{ github.event.inputs.solution_folder}}/${{ github.event.inputs.solution_name }}
         solution-target-folder: ${{ github.event.inputs.solution_target_folder}}/${{ github.event.inputs.solution_name }}
         repo-token: ${{ secrets.GITHUB_TOKEN }}
