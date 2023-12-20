@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# Autocomplion for the Equinor Power Platfom Development (eppdev) script
+
+source /workspaces/PowerPlatformFusionDev/tools/eppdev_config
+
+_eppdev_completion() {
+    local script_flags="-h --help -v --verbose -i --interactive -d --dry-run -l --list-actions -c --component"
+    local script_options="-e --environment -s --solution"
+    local script_actions="export unpack build deploy-unmanaged deploy-managed upgrade-managed deploy-test export-deploy-test new-pcf-component push-pcf-component setup-auth setup-config"
+    local script_environments="componentdev dev test prod"
+    local cur="${COMP_WORDS[COMP_CWORD]}"
+    local prev="${COMP_WORDS[COMP_CWORD - 1]}"
+    local completion_alternatives=""
+
+    if [[ "$prev" == "--solution" || "$prev" == "-s" ]]; then
+        # Show only relevant solution alternatives.
+        script_options=$(ls -1 --ignore='*.md' --ignore='release' $solutions_path)
+        script_actions=""
+        script_flags=""
+    elif [[ "$prev" == "--component" || "$prev" == "-c" ]]; then
+        # Show only relevant component alternatives
+        script_options=$(ls -1 --ignore='*.md' --ignore='release' --ignore='docs' $components_path)
+        script_actions=""
+        script_flags=""
+    elif [[ "$prev" == "--environment" || "$prev" == "-e" ]]; then
+        # Show only relevant environment alternatives.
+        script_options="$script_environments"
+        script_actions=""
+        script_flags=""
+    fi
+
+    completion_alternatives="$script_actions $script_options $script_flags"
+
+    COMPREPLY=($(compgen -W "$completion_alternatives" -- "$cur"))
+}
+
+complete -F _eppdev_completion eppdev

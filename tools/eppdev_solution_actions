@@ -1,0 +1,229 @@
+#!/bin/bash
+
+function export_solution() {
+    # For verbose and interactive mode outputs.
+    action_description="Exporting $solution_name from active environment"
+    if $flag_help; then
+        echo -e "
+ ** export **
+
+ This will export and unpack the solution to the local filesystem.
+ The default solution is $solution_name, use the '--solution | -s' flag to override the configuration.
+        "
+        exit 0
+    fi
+    # Steps in order of execution
+    export_steps=(
+    "pac solution export --path $solutions_path/release/$solution_name.zip --name $solution_name --overwrite"
+    "pac solution export --path $solutions_path/release/"$solution_name"_managed.zip --managed --name $solution_name --overwrite"
+    "pac solution unpack --folder $solutions_path/$solution_name --zipfile $solutions_path/release/$solution_name.zip --packagetype Both --processCanvasApps --allowDelete"
+        )
+    # Evaluate the steps
+    do_steps "${export_steps[@]}"
+}
+
+function unpack_solution() {
+    # For verbose and interactive mode outputs.
+    action_description="Unpacking $solution_name"
+    # If the help flag is set, print the help text and exit
+    if $flag_help; then
+        echo -e "
+ ** unpack **
+ 
+ This will unpack $solution_name files from exported file:
+ solutions/release/$solution_name.zip
+ solutions/release/"$solution_name"_managed.zip
+ 
+ The default solution is $solution_name, use the '--solution | -s' flag to override the configuration.
+ Warning: this overwrites solution source files, make sure you have commited your changes you wish to keep!
+        "
+        exit 0
+    fi
+    # Steps in order of execution
+    local action_steps=(
+        "pac solution unpack --folder $solutions_path/$solution_name --zipfile $solutions_path/release/$solution_name.zip --packagetype Both --processCanvasApps --allowDelete"
+        #"pac solution version --strategy Solution --solutionPath $solutions_path/$solution_name"
+    )
+    # Execute or evaluate the steps in the action
+    do_steps "${action_steps[@]}"
+}
+
+function build_solution_apps() {
+    local build_solution_path=$1
+    action_description="Building solution apps apps present in $build_solution_path"
+    
+    local action_steps=()
+    for canvasapp in $(ls $build_solution_path"/CanvasApps/src"); do
+        echo "Building $canvasapp"
+        action_steps+=("pac canvas pack --sources "$build_solution_path"/CanvasApps/src/"$canvasapp" --msapp "$build_solution_path"/CanvasApps/"$canvasapp"_DocumentUri.msapp")
+    done
+    do_steps "${action_steps[@]}"
+
+}
+
+function build-solution() {
+    # For verbose and interactive mode outputs.
+    action_description="Building / packing managed and unmanaged files (.zip) for $solution_name"
+    if $flag_help; then
+        echo -e "
+ ** build **
+ 
+ $action_description
+ This will pack $solution_name files from source code in:
+ solutions/$solution_name
+ 
+ The default solution is $solution_name, use the '--solution | -s' flag to override the configuration.
+ Warning: this overwrites existing solution files.
+        "
+        exit 0
+    fi
+    # Build canvas apps:
+    build_solution_apps "$solutions_path/$solution_name"
+    # Execute or evaluate the steps in the action
+    local action_steps=(
+        # "pac solution version --solutionPath $solutions_path/$solution_name --buildversion"
+        "pac solution pack --folder $solutions_path/$solution_name --zipfile $solutions_path/release/$solution_name.zip --processCanvasApps --packagetype Unmanaged"
+        "pac solution pack --folder $solutions_path/$solution_name --zipfile $solutions_path/release/"$solution_name"_managed.zip --processCanvasApps --packagetype Managed"
+    )
+    do_steps "${action_steps[@]}"
+}
+
+function deploy_unmanaged_solution() {
+
+    action_description="Deploying unmanaged solution file $solution_name.zip to environment currently active environment"
+    # If the help flag is set, print the help text and exit
+    if $flag_help; then
+        echo -e "
+ ** deploy-unmanaged **
+ 
+ $action_description
+ This will deploy or import the $solution_name to the currently active environment.
+ use 'pac org who' to see which environment is active
+ 
+ The default solution is $solution_name, use the '--solution | -s' flag to override the configuration.
+ Warning: this updates any existing unmanaged version of the '$solution_name' solution in the target environment.
+        "
+        exit 0
+    fi
+
+    # Steps in order of execution
+    local action_steps=(
+        "pac org who"
+        "echo deploying to this environment in 10 seconds, (Ctrl-C to cancel)."
+        "sleep 10s"
+        "pac solution import --path $solutions_path/release/$solution_name.zip --publish-changes"
+    )
+    # Execute or evaluate the steps in the action
+    do_steps "${action_steps[@]}"
+}
+
+function deploy_managed_solution() {
+
+    action_description="Deploying managed solution file "$solution_name"_managed.zip to environment currently active environment"
+    
+    # If the help flag is set, print the help text and exit
+    if $flag_help; then
+        echo -e "
+ ** deploy-managed ** 
+ 
+ $action_description
+ This will deploy or import the MANAGED $solution_name to the currently active environment.
+ Use 'pac org who' to see which environment is active
+ 
+ The default solution is $solution_name, use the '--solution | -s' flag to override the configuration.
+ Warning: this updates any existing managed version of the '$solution_name' solution in the target environment.
+        "
+        exit 0
+    fi
+    # Steps in order of execution
+    local action_steps=(
+        "pac org who"
+        "echo deploying to this environment in 10 seconds, (Ctrl-C to cancel)."
+        "sleep 10s"
+        "pac solution import --path $solutions_path/release/"$solution_name"_managed.zip --publish-changes"
+    )
+    # Execute or evaluate the steps in the action
+    do_steps "${action_steps[@]}"
+}
+
+function upgrade_managed_solution() {
+
+    action_description="Deploying solution (UPGRADE) file "$solution_name".zip as a managed solution to currently active environment"
+    # Steps in order of execution
+    local action_steps=(
+        "pac org who"
+        "echo deploying to this environment in 10 seconds, (Ctrl-C to cancel)."
+        "sleep 10s"
+        "pac solution import --path $solutions_path/release/"$solution_name".zip --convert-to-managed --publish-changes  --import-as-holding"
+        "echo imported the solution applying upgrade in 10 seconds, (Ctrl-C to cancel)."
+        "sleep 10s"
+        "pac solution upgrade --solution-name $solution_name"
+        )
+    # If the help flag is set, print the help text and exit
+    if $flag_help; then
+        echo -e "
+ ** upgrade-managed **
+  
+  $action_description
+  
+  This will UPGRADE the MANAGED $solution_name in the currently active environment.
+  use 'pac org who' to see which environment is active
+  
+  IMPORTANT:
+  This is requires that the solution to be upgraded is newer than the installed solution, 
+  i.e. "$solution_name"_managed.zip version must be higher than the version in the target environment
+ 
+  Warning: This updates any existing managed version of the '$solution_name' solution in the target environment, recommend using interactive mode for this (-i) action.
+  
+  The default solution is $solution_name, use the '--solution | -s' flag to override the configuration.
+        "
+        exit 0
+    fi
+    # Execute or evaluate the steps in the action
+
+    do_steps "${action_steps[@]}"
+}
+
+function deploy_test_solution() {
+
+    if $flag_help; then
+                echo -e "
+ ** deploy-test **
+ 
+ 1. Pack the local source files to the solution ($soluiton_name).
+ 2. Switch to the configured test environment ($test_env_name).
+ 3. Deploy the solution.
+                "
+                if $flag_dry_run; then
+                    flag_help=false
+                else
+                    exit 0
+                fi
+            fi
+            build-solution
+            change_environment "test"
+            deploy_managed_solution
+}
+
+function export_build_deploy_test_solution() {
+    if $flag_help; then
+        echo -e "
+ ** export-deploy-test **
+ 
+ 1. Export the solution from the configured dev environment ($dev_env_name).
+ 2. Repack/rebuild the solution.
+ 3. Switch to the configured test environment ($test_env_name).
+ 4. Deploy the solution.
+            "
+        if $flag_dry_run; then
+            flag_help=false
+        else
+            exit 0
+        fi
+    fi
+    change_environment "dev"
+    export_solution
+    build-solution
+    change_environment "test"
+    deploy_managed_solution
+}

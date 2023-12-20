@@ -1,0 +1,194 @@
+#!/bin/bash
+#
+# Admin and configuration functions
+
+function verify_pac_auth() {
+    # Verify authentication is set up
+    # TODO: set $pac_authenticated from environment var for shell persistence.
+    if [[ ! "$pac_authenticated" = true ]]; then
+        set +e
+        pac_auth_test=$(pac org who)
+        local pac_auth_status=$?
+        set -e
+        if [ $pac_auth_status -ne 0 ]; then
+            if confirm_act "Authentication is not configured, do you wish to configure this now?"; then
+                # echo "init auth setup.."
+                setup_auth
+                export pac_authenticated=true
+                echo -e "\nAuthentication is now conigured, continuing."
+            else
+                echo -e "\nSorry, authentication is required. quitting."
+                exit 0
+            fi
+        else
+            export pac_authenticated=true
+            echo -e "
+ Authentication is configured.
+ Run 'export pac_authenticated=true' to bypass auth verification for this session
+ Run 'echo \"export pac_authenticated=true\" >> ~/.bashrc' to persist for all shells.
+            "
+        fi
+    fi
+}
+
+function change_environment() {
+    verify_pac_auth
+    # For verbose and interactive mode outputs.
+    action_description="Switching active environment"
+
+    if [ -z "$1" ]; then
+        echo "Environment parameter missing"
+        exit 1
+    else
+        case $1 in
+            dev)
+                new_active_env_id=$dev_env_id # Default
+            ;;
+            componentdev)
+                new_active_env_id=$componentdev_env_id
+            ;;
+            test)
+                new_active_env_id=$test_env_id
+            ;;
+            prod)
+                new_active_env_id=$prod_env_id
+            ;;
+            *)
+                new_active_env_id=$componentdev_env_id
+            ;;
+        esac
+    fi
+
+    if $flag_help; then
+        echo -e "
+ ** env **
+ $action_description
+        "
+        exit 0
+    fi
+
+    local action_steps=(
+        "pac org select --environment $new_active_env_id"
+        "pac org who"
+    )
+    
+    # Execute or evaluate the steps in the action
+    do_steps "${action_steps[@]}"
+}
+
+function update_config() {
+    var_name=$1
+    new_value=$2
+    config_file=$script_init_loc"_config"
+
+    # Read the current value of the variable from the config file
+    current_value=$(grep "^$var_name=" "$config_file" | cut -d= -f2)
+   
+    # Use the new value if provided, otherwise use the current value
+    if [ -z "$new_value" ]; then
+        read -p "Enter a new value for $var_name [$current_value]: " new_value
+    fi
+
+    replace_command="s/^$var_name=\".*\"/$var_name=\\\"$new_value\\\"/g"
+    # Update the value of the variable in the config file
+    if $flag_dry_run; then
+        echo "sed -i" "$replace_command" $config_file
+    else 
+        echo "setting $var_name in $config_file to '$new_value'"
+        sed -i "$replace_command" $config_file
+        echo "done."
+    fi
+}
+
+function confirm_act() {
+    confirmation_act="$@"
+    echo -e "
+ $confirmation_act   
+ (y)es / (n)o  : \c
+    "
+    read -n 1 update
+    [[ "$update" =~ [yY](es)?$ ]]
+    return $?
+}
+
+function interactive_confirguration() {
+    verify_pac_auth
+    # For verbose and interactive mode outputs.
+    action_description="Interactively setting up their development environment"
+    
+    # environments
+    echo -e "\nGetting available environments..."
+    local environment_list=$(pac org list --filter $environment_prefix)
+    local indexed_env_list=$(echo "$environment_list" | awk 'NR>1 && NF{print "[" NR-1 "] " $0}')
+    environment_cofigurations=(
+        "dev $dev_env_id $dev_env_name"
+        "componentdev $componentdev_env_id $componentdev_env_name"
+        "test $test_env_id $test_env_name"
+
+        # Syntax explanation:
+        # This is to improve verbosity, showing current values immediately.
+        # {Environment type} {Environment ID} {Environment name}
+        # - Environmet type: The same as the argument passed to -e / --environment
+        # - Environment ID: The corresponding variable for ID - (${Vaiable prefix}_id)
+        # - Environment name: The corresponding variable for name (${Vaiable prefix}_name)
+        # 
+        # PRODUCTION ENVIRONMENTS SHOULD NOT BE AVAILABLE TO DEVELOPERS.
+        # Uncomment the line below only if you are admin in the 
+        # production environment and know what you are doing.
+        #
+        # "prod $prod_env_id $prod_env_name"
+        #
+    )    
+    for env_conf in "${environment_cofigurations[@]}"; do
+        read -r env_type env_id env_name <<< "$env_conf"
+        if [[ "$env_conf" ]]; then
+            echo -e "
+ Current configuration 
+ Environment type:                 '$env_type'
+
+ Dataverse environment Name:        $env_name
+ Dataverse environment ID:          $env_id
+            "
+            if confirm_act "Update"; then
+                echo -e "\nSelect environment to set as environment type: $env_type"
+                echo "$indexed_env_list"
+                read -p "Enter the number of the environment: " selected_index 
+                
+                local selcted_environment_config=$(echo "$environment_list" | sed -n "$(($selected_index+1))p")
+                local new_env_name=$(echo "$selcted_environment_config" | awk '{for(i=1;i<=NF-3;i++) printf "%s ", $i}' | tr -d ' ') 
+                local new_env_id=$(echo "$selcted_environment_config" | awk '{print $(NF-2)}')
+                
+                update_config $env_type"_env_id" $new_env_id
+                update_config $env_type"_env_name" $new_env_name 
+            else
+                echo -e "\n\nConfiguration for envionment type: '$env_type' will not be updated.\n"
+            fi
+        fi
+    done
+}
+
+function setup_auth() {
+    
+    if [[ "$pac_authenticated" = true ]]; then
+        echo -e "
+ pac is already authenticated.
+ See 'pac auth help' for documentation set up more than one authentication profile.
+        "
+        pac auth list
+        exit 0
+    fi
+    
+    local action_steps=(
+        "pac auth create --name $environment_prefix"
+    )
+    if $flag_help; then
+        printf "\n$action_description\n
+        This is an interactve function that requires user input.\n"
+        exit 0
+    fi
+
+    # Steps in order of execution
+    do_steps "${action_steps[@]}"
+    # set the dev envrionment type as active for the created authentication.
+    change_environment "dev"
+}

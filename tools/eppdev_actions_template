@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# ACTION TEMPLATE ##
+action_template() {
+    action_description="Short description with context ref such as $solution_name and $dev_env_name"
+    # commands in order of execution
+    local action_steps=(
+        "echo command one $dev_env_name"
+        "echo command two $solution_name"
+        "echo command three"
+    )
+    # If the help flag is set, print the help text and exit
+    if $flag_help; then
+        echo -e "
+ ** Help Title **
+ $action_description
+        "
+        exit 0
+    fi
+    # do steps will check if the dry-run or interactive mode is true.
+    do_steps "${action_steps[@]}"
+}

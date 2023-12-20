@@ -1,0 +1,78 @@
+#!/bin/bash
+
+namespace="EquinorDesignSystem"
+## Start development of a new EDS PCF component
+function initiate_pcf_component() {
+
+    action_description="new-pcf-component help:
+    Create the folders and confgiuration for a new pcf controls in $components_path
+
+    Note: requres the -c or --component [ComponentName] option.
+    "
+    
+    # Capitalize the first letter of each word
+    # TODO: allow argument to include spaces
+    component_proper_name=$(echo "$1" | sed -e 's/\b\(.\)/\u\1/g' | tr -d '[:space:]' )
+
+    # Steps in order of execution
+    local action_steps=(
+        "mkdir $components_path/$component_proper_name"
+        "cd $components_path/$component_proper_name"
+        "pac pcf init --namespace $namespace --name "$component_proper_name"Control --template field --run-npm-install --framework react"
+        
+        ## Psuedo (TODO/CONSIDER):
+        # Install linting and tools
+        # npm install typescript --save-dev
+        # npm install eslint --save dev
+        # npm install --save-dev --save-exact prettier
+        # npm install --save-dev @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint-plugin-react eslint-config-prettier eslint-plugin-prettier
+        # install additional libraries :
+        # npm install --save mobx mobx-react
+        # npm install --save @fluentui/react react react-dom
+        # npm install --save pcf-react
+
+        "echo The component $component_proper_name has been initiated in: $components_path/$component_proper_name"
+    )
+    # If the help flag is set, print the help text and exit
+    if $flag_help; then
+        echo -e " $action_description"
+        exit 0
+    fi
+    if [ -z "$1" ]; then
+        echo "Error: missing required component name. See '$SCRIPT_NAME $choice -h'"
+        exit 1
+    fi
+    
+    # Execute or evaluate the steps in the action
+    do_steps "${action_steps[@]}"
+}
+
+function push_to_componentdev_pcf_component() {
+    action_description="push-pcf-component help:
+    Build and push the pcf-component to the $componentdev_env_name environment, with the $component_publisher_prefix publisher prefix.
+    It will increase the patch-version defined in the component manifest so that power apps studio detects that there is an update for the component.
+
+    Note: requres the -c or --component [ComponentName] option.
+    "
+    local component_name=$1
+    local action_steps=(
+        "cd $components_path/$component_name"
+        "npm ci"
+        "npm run build --if-present"
+        "pac pcf version -s Manifest -p "$components_path"/"$component_name"/"$component_name"Control/ControlManifest.Input.xml"
+        "pac pcf push -pp $component_publisher_prefix"
+    )
+
+    if $flag_help; then
+        echo -e " $action_description"
+        exit 0
+    fi
+    if [ -z "$1" ]; then
+        echo "Error: missing required component name. See '$SCRIPT_NAME $choice -h'"
+        exit 1
+    fi
+    
+    change_environment "componentdev"
+    # Execute or evaluate the steps in the action
+    do_steps "${action_steps[@]}"
+}

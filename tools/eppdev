@@ -1,0 +1,354 @@
+#!/bin/bash
+#
+# This script is for power platform fusion development in Equinor.
+# - Exporting and importing Power Platform Solutions for source version control.
+# - Compile and deploy Power Apps Component Framework (PCF) components.
+# - Maintain repository file structure.
+#
+# Roadmap / work in progress:
+# - Interactive configuration in codespace / remote container
+#
+# ---------------------------------------------------------------------------------
+#
+# Dependencies 
+# pac:
+#   Microsoft PowerPlatform CLI
+#   Version: 1.25.2+g1c4a1b8
+#   Online documentation: https://aka.ms/PowerPlatformCLI
+#
+# ---------------------------------------------------------------------------------
+#
+# Script autocomplete
+#
+# The _eppdev_autocomplete file contains autocompletes for this script,
+# the needs to be  updated manually to accomodate changes. 
+# To load the autocomplete in your shell: 
+# echo "source /path/to/autocomplete/_eppdev_autocomplete" >> /home/node/.bashrc
+#
+# ---------------------------------------------------------------------------------
+
+# Configuration
+source /workspaces/PowerPlatformFusionDev/tools/eppdev_config
+
+# Exit on errors
+set -e
+
+# Flag defaults
+flag_verbose=false
+flag_interactive=false
+flag_help=false
+flag_dry_run=false
+
+script_init_loc=$(readlink -f "$0")
+SCRIPT_NAME=$(basename "$0")
+CWD=$(pwd)
+param_count=$#
+action_description=""
+
+# Actions 
+# See /workspaces/PowerPlatformFusionDev/tools/eppdev_actions_template for adding more actions to the script
+
+# Actions related to script and environment configuration.
+source /workspaces/PowerPlatformFusionDev/tools/eppdev_admin_actions
+
+# Actions related to Power Platform solutions.
+source /workspaces/PowerPlatformFusionDev/tools/eppdev_solution_actions
+
+# Actions related to Power Apps Component Framework (PCF) components.
+source /workspaces/PowerPlatformFusionDev/tools/eppdev_component_actions
+
+# Core script functionality.
+
+function usage() {
+
+    echo -e "
+ eppdev - Equinor Power Platform Development CLI Tool
+ 
+ Usage: $SCRIPT_NAME [OPTION]... [ACTION]
+ 
+ Description:
+    This is a helper tool for power platform development and the PAC cli-tool.
+ 
+ Options:
+    -h, --help                  Display this help message and exit.
+    -v, --verbose               Print verbose output.
+    -i, --interactive           Prompt for confirmation before executing each step.
+    -d, --dry-run               Print the commands that would be executed, but will not execute them.
+    -l, --list-actions          Print the available actions
+    -s, --solution [arg]        Argument: The name of the solution to export and unpack. 
+                                Default: '$solution_name'.
+    -c, --component [arg]       Argument: The name of the component to perform component actions on. 
+    -e, --environment [arg]     Argument: One of the configured environments 'dev', 'componentdev', 'test', 'prod'
+                                Note: ignores other flags and options such as --dry-run and --interactive
+                                Warning: 'prod' is not configured and should not be used under normal circumstances!
+ Examples:
+    $SCRIPT_NAME --verbose --solution $solution_name export
+    $SCRIPT_NAME -i export
+
+    "
+}
+
+function list_actions() {
+
+    # env                         Switch to a different active environment
+    echo -e "
+ Actions:
+
+    
+    Solution actions: 
+
+    export                      Get $solution_name from the active environment and unpack it
+    unpack                      Unpack exported $solution_name file 
+                                Warning: this overwrites $solution_name source files for solution in $solutions_path
+    build                       Build $solution_name from source
+    deploy-unmanaged            Import (import) $solution_name to the active environment
+    deploy-managed              Deploy (import) managed $solution_name to the active environment
+    upgrade-managed             Upgrade manage solution $solution_name in the active environment.
+
+    Component actions:
+    Note: all component actions require the -c or --component [ComponentName] option.
+
+    new-pcf-component           Create the folders and confgiuration for a new pcf controls in $components_path
+    push-pcf-component          Build and push the pcf-component to the $componentdev_env_name environment, with the $component_publisher_prefix publisher prefix
+    
+    
+ Interactive actions:
+    setup-auth                  Will simply run 'pac auth create' 
+    setup-config                Configure the script defautls
+    exit                        Quit interactive mode
+
+ Recipes:
+    
+    Combinations of above actions frequently used during development
+
+    deploy-test                 Build and deploy (import) managed solution to environment $test_env_name
+    export-deploy-test          1. Export $soliton_name from environment $dev_env_name
+                                2. Unpack the $solution_name to the folder $solutions_path/$solution_name/
+                                3. Build and deploy (import) the managed $solution_name to the $test_env_name environment
+    
+    Override the solution with the -s / --solution option. 
+    Example: eppdev --solution EDSCodeComponents export-deploy-test
+    "
+
+}
+
+function countdown() {
+    local seconds=$1
+        while [ $seconds -gt 0 ]; do
+        printf "\r%02d" $seconds
+        sleep 1
+    seconds=$((seconds - 1))
+    done
+}
+
+function execute_step() {
+
+    # If the verbose flag is set, print the command before executing it
+    if $flag_verbose; then # & ! $flag_dry_run; then
+        echo -e "
+ - Executing command -
+ 
+ '$@'
+ 
+ ---------------------
+        "
+    fi
+    # If the dry-run flag is set, print the command but don't execute it
+    if $flag_dry_run; then
+        echo "$@"
+    else
+        # Execute the command
+        $@
+    fi
+}
+
+function confirm_step() {
+    # Print the command and prompt the user for confirmation
+    echo -e "
+ Command:
+ $@
+
+ Execute this command?
+ (y)es / (n)o  : \c
+    "
+    read -n 1 confirm
+    echo 
+    if [[ "$confirm" =~ ^[yY](es)?$ ]]; then
+        execute_step $@
+        echo -e "Done.\n"
+    else
+        echo "Skipping step."
+    fi
+}
+
+function do_steps() {
+    if
+        $flag_verbose &
+        ! $flag_dry_run
+    then
+        echo $action_description
+    fi
+    # Iterate over the steps and execute or confirm each one
+    steps=("$@")
+    for step in "${steps[@]}"; do
+        if [[ "$step" ]]; then
+            # Show the steps if the verbose flag is set
+            if $flag_interactive; then
+                confirm_step $step
+            else
+                execute_step $step
+            fi
+        fi
+    done
+}
+
+function script_options() {
+    # Get options and arguments
+    
+    while [[ "$#" -gt 0 ]]; do
+        case $1 in
+        -v | --verbose)
+            flag_verbose=true
+            shift
+            ;;
+        -i | --interactive)
+            flag_interactive=true
+            shift
+            ;;
+        -d | --dry-run)
+            flag_dry_run=true
+            echo -e "
+ #########################################
+ ## Dry run, will not execute commands. ##
+ #########################################
+                "
+            shift
+            ;;
+        -e | --environment)
+            if [[ -n "$2" && "${2:0:1}" != "-" ]]; then
+                change_environment $2
+                exit 0
+            else
+                echo "Error: Argument for $1 is missing or invalid"
+                exit 1
+            fi
+            ;;
+        -l | --list-actions)
+            list_actions
+            exit 1
+            ;;
+        -h | --help)
+            flag_help=true
+            shift
+            ;;
+        -s | --solution)
+            if [[ -n "$2" && "${2:0:1}" != "-" ]]; then
+                solution_name="$2"
+                shift 2
+            else
+                echo "Error: Argument for $1 is missing or invalid"
+                exit 1
+            fi
+            ;;
+        -c | --component)
+            if [[ -n "$2" && "${2:0:1}" != "-" ]]; then
+                component_name="$2"
+                shift 2
+            else
+                echo "Error: Argument for $1 is missing or invalid"
+                exit 1
+            fi
+            ;;
+        -*)
+            echo "Invalid option: $1" >&2
+            exit 1
+            ;;
+        *)
+            action="$1"
+            shift
+            ;;
+        esac
+    done
+
+    if [ -z "$action" ]; then
+        # Interactive
+        if $flag_interactive; then
+            echo "Available actions: "
+            list_actions
+            read choice
+        elif $flag_help; then
+            usage
+            exit 0
+        else
+            echo "At least one action must be selected, see -h or use -i for interactive mode."
+            exit 0
+        fi
+    else
+        choice=$action
+    fi
+}
+
+function script_actions() {
+    # Get actions
+
+    case $choice in
+        export)
+            export_solution
+            ;;
+        unpack)
+            unpack_solution
+            ;;
+        build)
+            build-solution
+            ;;
+        deploy-unmanaged)
+            deploy_unmanaged_solution
+            ;;
+        deploy-managed)
+            deploy_managed_solution
+            ;;
+        upgrade-managed)
+            upgrade_managed_solution
+            ;;
+        new-pcf-component)
+            # requires -c / --component argument
+            initiate_pcf_component $component_name
+            ;;
+        push-pcf-component)
+            # requires -c / --component argument
+            push_to_componentdev_pcf_component $component_name
+            ;;
+        # Recipies
+        deploy-test)
+            # Requires configuration
+            deploy_test_solution
+        ;;
+        export-deploy-test)
+            # Requires configuration
+            export_build_deploy_test_solution
+        ;;
+        # Interactive
+        setup-auth)
+            setup_auth
+        ;;  
+        setup-config)
+            interactive_confirguration
+        ;;
+        # env)
+        #     change_environment
+        # ;;
+        exit)
+            echo "Bye!"
+            exit 0
+            ;;
+        *)
+            echo "Unknown or invalid choice"
+        ;;
+    esac
+}
+
+script_options $@
+
+script_actions $@
+
+exit 0

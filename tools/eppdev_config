@@ -1,0 +1,33 @@
+# The configuration file is used by the eppdev script and
+# the _eppdev_autocomplete script.
+#
+# Conventions:
+# The solution name, this will be used as file and folder names.
+# Encourage using PascalCase without spaces or special characters.
+#
+# the prefix will be used in filters and configurations
+environment_prefix="CfE"
+
+solutions_path="/workspaces/PowerPlatformFusionDev/solutions"
+components_path="/workspaces/PowerPlatformFusionDev/components"
+component_publisher_prefix="eds"
+
+# default solution (logical name)
+solution_name="LivingQuarterIssuesAndMaintenance"
+
+# Component development environment
+componentdev_env_id="20c085a1-7f1d-e2d5-b776-b6da38f7ce5c"
+componentdev_env_name="EDSComponentDev"
+
+# Development environment
+dev_env_id="edffaed6-96b0-4e61-8c4b-291f25201b5b"
+dev_env_name="CitizenDev"
+
+# Test environment
+test_env_id="7ea712b5-e354-435c-8ac8-982ed61f8a1c"
+test_env_name="CitizenTest"
+
+# Production environment 
+# NOTE: Production configuration should not be used unless you are certain about the implications!
+prod_env_id="e3826ef7-60b0-4e30-a6cf-f469aa3883d8"
+prod_env_name="CitizenProd"
