@@ -14,13 +14,9 @@ FROM mcr.microsoft.com/vscode/devcontainers/typescript-node:${VARIANT}
 # [Optional] Uncomment if you want to install more global node packages
 # RUN su node -c "npm install -g <your-package-list -here>"
 
-RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-   && apt-get -y install --no-install-recommends \
-   graphviz \
-   plantuml \
-   python3 \
-   python3-pip \
-   vim
+# RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
+#    && apt-get -y install --no-install-recommends \
+#    vim
 
 # For additional dotnet functionality 
 # Ref: https://learn.microsoft.com/en-us/dotnet/core/install/linux-debian
@@ -29,4 +25,5 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 # sudo dpkg -i packages-microsoft-prod.deb
 # rm packages-microsoft-prod.deb
 # RUN sudo apt-get update && \
-#    sudo apt-get install -y dotnet-sdk-7.0
+# apt-get -y install --no-install-recommends \
+# dotnet-sdk-7.0

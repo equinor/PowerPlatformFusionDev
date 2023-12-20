@@ -15,7 +15,7 @@
 	// Alternatively you may add the commands to a shellscript:
 	"postCreateCommand": "sh .devcontainer/install-pp-tools.sh", 
 	// Comment out to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
-	"remoteUser": "vscode",
+	"remoteUser": "node",
 	"features": {
 		//"ghcr.io/devcontainers/features/powershell:1": {}
 		"ghcr.io/devcontainers/features/dotnet:1": {
