@@ -4,22 +4,26 @@
 	"name": "Power Platform Fusion Development",
 	"build": {
 		"dockerfile": "Dockerfile",
-		// Update 'VARIANT' to pick an Ubuntu version: jammy / ubuntu-22.04, focal / ubuntu-20.04, bionic /ubuntu-18.04
-		// Use ubuntu-22.04 or ubuntu-18.04 on local arm64/Apple Silicon.
-		"args": { "VARIANT": "3.16" }
+		"args": {
+			"VARIANT": "16-bullseye"
+		}
 	},
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
-	
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "git config --global --add safe.directory /workspaces/PowerPlatformFusionDev && pip3 install --user paconn",
-	// Alternatively you may add the commands to a shellscript:
-	//"postCreateCommand": "sh .devcontainer/install-pp-tools.sh", 
 
+	// Alternatively you may add the commands to a shellscript:
+	"postCreateCommand": "sh .devcontainer/install-pp-tools.sh", 
 	// Comment out to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
 	"remoteUser": "vscode",
 	"features": {
 		//"ghcr.io/devcontainers/features/powershell:1": {}
+		"ghcr.io/devcontainers/features/dotnet:1": {
+			"version": "latest"
+		},
+		"ghcr.io/devcontainers/features/git-lfs:1": {
+			"version": "latest"
+		}
 	},
 	"customizations": {
 		"vscode": {
@@ -37,7 +41,10 @@
 				"DavidAnson.vscode-markdownlint",
 				"megel.mme2k-powerapps-helper",
 				"ms-vscode-remote.remote-containers",
-				"jebbs.plantuml"
+				"jebbs.plantuml",
+				"github.vscode-github-actions",
+				"vscodevim.vim",
+				"bierner.markdown-mermaid"
 			]
 		}
 	}
