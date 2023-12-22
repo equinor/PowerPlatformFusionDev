@@ -12,20 +12,44 @@
     <Description description="" languagecode="1033" />
   </Descriptions>
   <options>
-    <option value="459480000" ExternalValue="">
+    <option value="459480003" ExternalValue="">
       <labels>
-        <label description="Electro" languagecode="1033" />
+        <label description="Accommodation" languagecode="1033" />
       </labels>
       <Descriptions>
-        <Description description="" languagecode="1033" />
+        <Description description="Default / initial case handler" languagecode="1033" />
+      </Descriptions>
+    </option>
+    <option value="459480004" ExternalValue="">
+      <labels>
+        <label description="Kitchen" languagecode="1033" />
+      </labels>
+      <Descriptions>
+        <Description description="Kjøkkensjef" languagecode="1033" />
+      </Descriptions>
+    </option>
+    <option value="459480005" ExternalValue="">
+      <labels>
+        <label description="Hotel" languagecode="1033" />
+      </labels>
+      <Descriptions>
+        <Description description="Renholdsleder" languagecode="1033" />
+      </Descriptions>
+    </option>
+    <option value="459480000" ExternalValue="">
+      <labels>
+        <label description="Electrical" languagecode="1033" />
+      </labels>
+      <Descriptions>
+        <Description description="FA Elektro" languagecode="1033" />
       </Descriptions>
     </option>
     <option value="459480001" ExternalValue="">
       <labels>
-        <label description="Mechanic" languagecode="1033" />
+        <label description="Mechanical" languagecode="1033" />
       </labels>
       <Descriptions>
-        <Description description="" languagecode="1033" />
+        <Description description="FA Mekanisk" languagecode="1033" />
       </Descriptions>
     </option>
     <option value="459480002" ExternalValue="">
@@ -33,15 +57,7 @@
         <label description="Automation" languagecode="1033" />
       </labels>
       <Descriptions>
-        <Description description="" languagecode="1033" />
-      </Descriptions>
-    </option>
-    <option value="459480003" ExternalValue="">
-      <labels>
-        <label description="Accommodation" languagecode="1033" />
-      </labels>
-      <Descriptions>
-        <Description description="" languagecode="1033" />
+        <Description description="FA Automasjon" languagecode="1033" />
       </Descriptions>
     </option>
   </options>

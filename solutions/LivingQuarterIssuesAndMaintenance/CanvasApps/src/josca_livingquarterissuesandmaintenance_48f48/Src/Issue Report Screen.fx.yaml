@@ -1,4 +1,60 @@
 "'Issue Report Screen' As screen":
+    OnHidden: |-
+        =Set(
+            gblIgnoreParam,
+            true
+        );
+        UpdateContext(
+            {
+                locActiveIssueReport: Blank(),
+                locIssueReportFocused: false,
+                locIssueReportListFocused: false
+            }
+        )
+    OnVisible: |+
+        =If(
+            And(
+                !IsBlank(Param("issueId")),
+                !gblIgnoreParam
+            ),
+            With(
+                {
+                    IssueRegistrationParamGUID: GUID(Param("issueId")),
+                    IssueItem: LookUp(
+                        'Issue Registrations',
+                        IssueRegistrationGUID = GUID(Param("issueId"))
+                    )
+                },
+                UpdateContext(
+                    {
+                        locActiveIssueReport: IssueItem,
+                        locIssueReportFocused: true,
+                        locIssueReportsStatusFilter: 'Status (Issue Registrations)'.Active
+                    }
+                );
+                Set(
+                    gblActivePlant,
+                    LookUp(
+                        Installations,
+                        ThisRecord.PlantGUID = locActiveIssueReport.Installation.PlantGUID
+                        /* 
+                        // This does not work for some reason:
+                        ThisRecord.PlantGUID = IssueItem.Installation.PlantGUID 
+                        */ 
+                    )
+                )
+            ),
+            //Reset(galIssueRegistrationsIRS),
+            UpdateContext(
+                {
+                    locIssueReportsStatusFilter: 'Status (Issue Registrations)'.Active,
+                    //locActiveIssueReport: Blank(),
+                    locIssueReportFocused: false
+                }
+            );
+            //Reset(rdoIssueReportStatusIRS)
+        );
+        
 
     vcoMainIRS As groupContainer.verticalAutoLayoutContainer:
         Height: =Parent.Height
@@ -6,9 +62,6 @@
         LayoutDirection: =LayoutDirection.Vertical
         LayoutGap: =16
         LayoutMode: =LayoutMode.Auto
-        PaddingBottom: =EDSDefaults.LayoutGap
-        PaddingLeft: =EDSDefaults.LayoutGap
-        PaddingRight: =EDSDefaults.LayoutGap
         PaddingTop: =EDSDefaults.LayoutGap
         Width: =Parent.Width
         ZIndex: =1
@@ -28,11 +81,13 @@
             LayoutMode: =LayoutMode.Auto
             LayoutWrap: =
             PaddingBottom: =16
-            PaddingLeft: =EDSDefaults.BorderThickness
+            PaddingLeft: =16  
+            PaddingRight: =16
             Width: =Parent.Width
             ZIndex: =1
 
             icoTopBarMenuToggleIRS As image:
+                AccessibleLabel: ="Toggles visibility of main menu dropdown"
                 BorderColor: =RGBA(0, 0, 0, 0)
                 BorderStyle: =BorderStyle.Dashed
                 DisabledBorderColor: =RGBA(0, 0, 0, 0)
@@ -59,9 +114,42 @@
                 PaddingTop: =12
                 PressedBorderColor: =RGBA(0, 0, 0, 0)
                 PressedFill: =RGBA(0, 0, 0, 0)
-                TabIndex: =1
+                TabIndex: =0
                 Width: =EDSStyles.IconMenu.TemplateSize
                 ZIndex: =1
+
+            "tabUserDisplayLanguageSettingIRS As 'Tab list'.pcfdataset":
+                AccessibleLabel: ="Switch between English and Norwegian display language for the application."
+                DefaultSelectedItems: =[gblDisplayLanguageSetting]
+                DisplayMode: =DisplayMode.Edit
+                Height: =36
+                Items: |-
+                    =[
+                        {
+                            Title: "EN",
+                            Language: "en-GB"
+                        },
+                        {
+                            Title: "NO",
+                            Language: "no-NO"
+                        }
+                    ]
+                LayoutMinHeight: =55
+                LayoutMinWidth: =280
+                OnChange: =Set(gblDisplayLanguageSetting, Self.Selected)
+                Size: ='TabList.Size'.Small
+                Width: =100
+                X: =0
+                Y: =0
+                ZIndex: =2
+
+                valUserDisplayLanguageSettingIRS As pcfDataField.textualColumn:
+                    FieldDisplayName: ="Title"
+                    FieldName: ="Title"
+                    FieldType: ="s"
+                    FieldVariantName: ="textualColumn"
+                    Order: =1
+                    ZIndex: =13
 
             lblTopBarAppScreenNameIRS As label:
                 AutoHeight: =true
@@ -73,19 +161,26 @@
                 FillPortions: =1
                 FocusedBorderThickness: =4
                 Font: =EDSDefaults.Font
+                FontWeight: =EDSFonts.Heading.H1.Weight
                 Height: =Self.Size*Self.LineHeight * 1.75
                 LayoutMinHeight: =EDSDefaults.Height
                 LayoutMinWidth: =64
-                LineHeight: =1
+                LineHeight: =EDSFonts.Heading.H1.LineHeight
                 PaddingBottom: =0
                 PaddingLeft: =0
                 PaddingRight: =0
                 PaddingTop: =0
-                Size: =EDSDefaults.FontSize
-                Text: =Concatenate("App Name", " - ", App.ActiveScreen.Name)
+                Size: =EDSFonts.Heading.H1.Size
+                Text: |-
+                    =Switch(
+                        gblDisplayLanguageSetting.Language,
+                        "no-NO",
+                        "Feil og vedlikeholdsoppgaver",
+                        "Issues and maintenance tasks"
+                    )
                 Visible: =hcoTopBarIRS.Width > (icoTopBarMenuToggleIRS.Width + galTopBarHorizontalMenuIRS.Width+shpTopBarMenuDividerIRS.Width+1+(Parent.LayoutGap*4))
                 Width: =EDSStyles.Label.Width
-                ZIndex: =2
+                ZIndex: =3
 
             shpTopBarMenuSpacerIRS As rectangle:
                 BorderColor: =Color.Transparent
@@ -99,7 +194,7 @@
                     =//Self.Width<10
                     !lblTopBarAppScreenNameIRS.Visible
                 Width: =0
-                ZIndex: =3
+                ZIndex: =4
 
             galTabsTopBarIRS As gallery.galleryHorizontal:
                 AccessibleLabel: =$"Tab selection"
@@ -240,7 +335,13 @@
                         RadiusTopLeft: =EDSStyles.Tabs.RadiusTopLeft
                         RadiusTopRight: =EDSStyles.Tabs.RadiusTopRight
                         Size: =EDSStyles.Tabs.Font.Size
-                        Text: =ThisItem.Title
+                        Text: |-
+                            =Switch(
+                                gblDisplayLanguageSetting.Language,
+                                "no-NO",
+                                ThisItem.NO_Title,
+                                ThisItem.Title
+                            )
                         Tooltip: =ThisItem.SubTitle
                         Width: =galTabsTopBarIRS.TemplateWidth -(Self.FocusedBorderThickness)
                         ZIndex: =1
@@ -302,6 +403,7 @@
                 ZIndex: =6
 
             galTopBarHorizontalMenuIRS As gallery.galleryHorizontal:
+                AccessibleLabel: ="Menu with links to common external resources and back button for app navigation."
                 AlignInContainer: =AlignInContainer.SetByContainer
                 BorderColor: =EDSDefaults.BorderColor
                 BorderStyle: =EDSDefaults.BorderStyle
@@ -462,412 +564,1079 @@
                         Width: =Self.Height
                         ZIndex: =1
 
+        lblInstallationHeaderIRS As Text:
+            Align: ='TextCanvas.Align'.Center
+            AlignInContainer: =AlignInContainer.Center
+            DisplayMode: =DisplayMode.Edit
+            Font: =EDSFonts.Paragraph.BodyLong.Font
+            FontColor: =EDSColors.Static.Default
+            Height: =32
+            LayoutMinHeight: =32
+            LayoutMinWidth: =96
+            Size: =EDSFonts.Heading.H2.Size
+            Text: =$"{gblActivePlant.description}"
+            Weight: =EDSFonts.Paragraph.BodyLong.Weight
+            Width: =320
+            X: =0
+            Y: =0
+            ZIndex: =2
+
         vcoContentIRS As groupContainer.verticalAutoLayoutContainer:
             AlignInContainer: =AlignInContainer.SetByContainer
+            Fill: =EDSColors.Background.Light
             Height: =225
-            LayoutAlignItems: =LayoutAlignItems.Center
+            LayoutAlignItems: =LayoutAlignItems.Stretch
             LayoutGap: =EDSDefaults.LayoutGap
             LayoutMinHeight: =EDSDefaults.LayoutMinHeight
             LayoutMinWidth: =EDSDefaults.LayoutMinWidth
             LayoutMode: =LayoutMode.Auto
-            LayoutOverflowX: =LayoutOverflow.Scroll
             LayoutOverflowY: =LayoutOverflow.Scroll
-            PaddingBottom: =EDSDefaults.PaddingBottom
-            PaddingLeft: =EDSDefaults.PaddingLeft
-            PaddingRight: =EDSDefaults.PaddingRight
-            PaddingTop: =EDSDefaults.PaddingTop
+            LayoutWrap: |-
+                =//(App.ActiveScreen.Size < ScreenSize.Medium)
+                true
+            PaddingBottom: =16
+            PaddingLeft: =16
+            PaddingRight: =16
+            PaddingTop: =16
             ZIndex: =3
 
-            vcoDataTableGalIRS As groupContainer.verticalAutoLayoutContainer:
+            vcoIssueRegistrationsIRS As groupContainer.verticalAutoLayoutContainer:
+                AlignInContainer: =AlignInContainer.SetByContainer
+                DropShadow: =DropShadow.Light
+                Fill: =EDSColors.Background.Default
                 Height: |-
                     =//Max(EDSStyles.Gallery.LayoutMinHeight, (Parent.Height-Self.Y*4))
                     480
                 LayoutAlignItems: =LayoutAlignItems.Stretch
                 LayoutDirection: =LayoutDirection.Vertical
+                LayoutGap: =4
                 LayoutMinHeight: =100
-                LayoutMinWidth: =250
+                LayoutMinWidth: =343
                 LayoutMode: =LayoutMode.Auto
-                Width: =375
+                PaddingBottom: =8
+                PaddingTop: =8
+                RadiusBottomLeft: =4
+                RadiusBottomRight: =4
+                RadiusTopLeft: =4
+                RadiusTopRight: =4
+                Visible: =!locIssueReportFocused
+                Width: =343
                 X: =40
                 Y: =40
                 ZIndex: =1
 
-                hcoTableHeaderItemsIRS As groupContainer.horizontalAutoLayoutContainer:
+                conIssueRegistrationsHeaderIRS As groupContainer.horizontalAutoLayoutContainer:
                     AlignInContainer: =AlignInContainer.SetByContainer
-                    Fill: =EDSStyles.DataTable.HeadingFill
+                    DropShadow: =DropShadow.None
                     FillPortions: =0
-                    Height: =EDSStyles.DataTable.HeadingHeight
+                    Height: =50
                     LayoutAlignItems: =LayoutAlignItems.Center
+                    LayoutGap: =8
+                    LayoutJustifyContent: =LayoutJustifyContent.End
                     LayoutMinHeight: =100
                     LayoutMinWidth: =250
                     LayoutMode: =LayoutMode.Auto
-                    PaddingBottom: =EDSStyles.Menu.PaddingBottom//
-                    PaddingRight: |-
-                        =//EDSStyles.Menu.PaddingRight
-                        0
-                    PaddingTop: =EDSStyles.Menu.PaddingTop
-                    Width: =galIssueRegistrationsIRS.Width
+                    PaddingLeft: =1
+                    PaddingRight: =1
                     ZIndex: =1
 
-                    vcoColumnHeaderSeletAllIRS As groupContainer.horizontalAutoLayoutContainer:
-                        AlignInContainer: =AlignInContainer.SetByContainer
-                        FillPortions: =0
-                        Height: =EDSStyles.DataTable.HeadingHeight
-                        LayoutAlignItems: =LayoutAlignItems.Stretch
-                        LayoutDirection: =LayoutDirection.Vertical
-                        LayoutJustifyContent: =LayoutJustifyContent.SpaceBetween
-                        LayoutMinHeight: =EDSStyles.DataTable.HeadingHeight
-                        LayoutMinWidth: =Self.Width
-                        LayoutMode: =LayoutMode.Auto
-                        Width: =EDSStyles.Menu.IconWidth+EDSStyles.DataTable.PaddingLeft+EDSStyles.DataTable.PaddingRight
+                    "tabIssueRegistrationTypeIRS As 'Tab list'.pcfdataset":
+                        AccessibleLabel: ="Tab choice for issue types to display in the issue registration list (filtering)"
+                        BasePaletteColor: =EDSColors.Interactive.Primary.Resting
+                        DefaultSelectedItems: |-
+                            =[{Value: Coalesce(locActiveIssueReport.'Issue Type', "Other")}]
+                        DisplayMode: =DisplayMode.Edit
+                        FillPortions: =1
+                        FontColor: =EDSColors.Static.Default
+                        Height: =36
+                        Items: |-
+                            =With(
+                                {
+                                    IssueRegistrations: If(
+                                    //rdoIssueReportStatusIRS.Selected.Value
+                                        locIssueReportsStatusFilter = 'Status (Issue Registrations)'.Active,
+                                        Filter(
+                                            'Issue Registrations',
+                                            'Issue Registrations (Views)'.'Active Issue Registrations',
+                                            Installation.PlantGUID = gblActivePlant.PlantGUID
+                                        ),
+                                        Filter(
+                                            'Issue Registrations',
+                                            'Issue Registrations (Views)'.'Inactive Issue Registrations',
+                                            Installation.PlantGUID = gblActivePlant.PlantGUID
+                                        )
+                                    )
+                                },
+                                Distinct(
+                                    IssueRegistrations,
+                                    ThisRecord.'Issue Type'
+                                )
+                            )
+                        LayoutMinHeight: =55
+                        LayoutMinWidth: =150
+                        Size: ='TabList.Size'.Small
+                        Visible: |-
+                            =//CountA(Distinct(Filter('Living Quarter Maintenance Tasks', ThisRecord.'Issue Registration'.IssueRegistrationGUID = locActiveIssueReport.IssueRegistrationGUID), Discipline)) > 1
+                            true
+                        Width: =280
+                        X: =0
+                        Y: =0
                         ZIndex: =1
 
-                        icoDataTableItemCheckboxSelectAllIRS As image:
+                        Value2 As pcfDataField.textualColumn:
+                            FieldDisplayName: ="Value"
+                            FieldName: ="Value"
+                            FieldType: ="s"
+                            FieldVariantName: ="textualColumn"
+                            Order: =1
+                            ZIndex: =14
+
+                    lblIssueRegistrationsHeaderIRS As Text:
+                        Align: ='TextCanvas.Align'.End
+                        DisplayMode: =DisplayMode.Edit
+                        FillPortions: =1
+                        Font: =EDSFonts.Heading.H2.Font
+                        FontColor: =EDSColors.Static.Default
+                        Height: =32
+                        LayoutMinHeight: =32
+                        LayoutMinWidth: =96
+                        Size: =EDSFonts.Heading.H4.Size
+                        Text: |-
+                            =$"{tabIssueRegistrationTypeIRS.Selected.Value} issues: {galIssueRegistrationsIRS.AllItemsCount}"
+                        Weight: =EDSFonts.Heading.H2.Weight
+                        Width: =320
+                        X: =0
+                        Y: =0
+                        ZIndex: =2
+
+                    icoToggleFullScreenIssueRegistrationsIRS As image:
+                        AccessibleLabel: ="Button that toggles fullscreen / focus view for the issue registration list section"
+                        BorderColor: =EDSStyles.Icon.BorderColor
+                        BorderStyle: =EDSStyles.Icon.BorderStyle
+                        BorderThickness: =EDSStyles.Icon.BorderThickness
+                        DisabledBorderColor: =EDSStyles.Icon.DisabledBorderColor
+                        DisabledFill: =EDSStyles.Icon.DisabledFill
+                        Fill: =EDSDefaults.IconBackground
+                        FocusedBorderColor: =EDSStyles.Icon.FocusedBorderColor
+                        FocusedBorderThickness: =EDSStyles.Icon.FocusedBorderThickness
+                        Height: =EDSStyles.Icon.Height
+                        HoverBorderColor: =EDSStyles.Icon.HoverBorderColor
+                        HoverFill: =EDSStyles.Icon.HoverFill
+                        Image: |-
+                            =// Replace below with either a url encoded svg, select from EDSAppIcons object or from what you have added as media to the app.
+                            If(locIssueReportListFocused, EDSIcons.FullscreenExit,  EDSIcons.Fullscreen)
+                        LayoutMinHeight: =EDSStyles.Icon.Height
+                        OnSelect: |-
+                            =UpdateContext({locIssueReportListFocused: !locIssueReportListFocused})
+                        PaddingBottom: =EDSStyles.Icon.PaddingBottom
+                        PaddingLeft: =EDSStyles.Icon.PaddingLeft
+                        PaddingRight: =EDSStyles.Icon.PaddingRight
+                        PaddingTop: =EDSStyles.Icon.PaddingTop
+                        PressedBorderColor: =EDSStyles.Icon.PressedBorderColor
+                        PressedFill: =EDSStyles.Icon.PressedFill
+                        RadiusBottomLeft: =Self.Height/2
+                        RadiusBottomRight: =Self.Height/2
+                        RadiusTopLeft: =Self.Height/2
+                        RadiusTopRight: =Self.Height/2
+                        TabIndex: =0
+                        Width: =Self.Height
+                        ZIndex: =3
+
+                vcoDataTableGalIRS As groupContainer.verticalAutoLayoutContainer:
+                    AlignInContainer: =AlignInContainer.SetByContainer
+                    BorderColor: =EDSColors.Background.Medium
+                    BorderStyle: =BorderStyle.None
+                    BorderThickness: =1
+                    Fill: =EDSColors.Background.Default
+                    Height: |-
+                        =//Max(EDSStyles.Gallery.LayoutMinHeight, (Parent.Height-Self.Y*4))
+                        480
+                    LayoutAlignItems: =LayoutAlignItems.Stretch
+                    LayoutDirection: =LayoutDirection.Vertical
+                    LayoutMinHeight: =100
+                    LayoutMinWidth: =343
+                    LayoutMode: =LayoutMode.Auto
+                    RadiusBottomLeft: =4
+                    RadiusBottomRight: =4
+                    RadiusTopLeft: =4
+                    RadiusTopRight: =4
+                    Width: =343
+                    X: =40
+                    Y: =40
+                    ZIndex: =2
+
+                    hcoIssueRegistrationsTableHeaderItemsIRS As groupContainer.horizontalAutoLayoutContainer:
+                        AlignInContainer: =AlignInContainer.SetByContainer
+                        Fill: =EDSStyles.DataTable.HeadingFill
+                        FillPortions: =0
+                        Height: =EDSStyles.DataTable.HeadingHeight
+                        LayoutAlignItems: =LayoutAlignItems.Center
+                        LayoutMinHeight: =100
+                        LayoutMinWidth: =250
+                        LayoutMode: =LayoutMode.Auto
+                        PaddingBottom: =EDSStyles.Menu.PaddingBottom//
+                        PaddingRight: |-
+                            =//EDSStyles.Menu.PaddingRight
+                            0
+                        PaddingTop: =EDSStyles.Menu.PaddingTop
+                        Width: =galIssueRegistrationsIRS.Width
+                        ZIndex: =1
+
+                        vcoIssueRegistrationsColumnHeaderSelectAllIRS As groupContainer.horizontalAutoLayoutContainer:
+                            AlignInContainer: =AlignInContainer.SetByContainer
+                            FillPortions: =0
+                            Height: =EDSStyles.DataTable.HeadingHeight
+                            LayoutAlignItems: =LayoutAlignItems.Stretch
+                            LayoutDirection: =LayoutDirection.Vertical
+                            LayoutJustifyContent: =LayoutJustifyContent.SpaceBetween
+                            LayoutMinHeight: =EDSStyles.DataTable.HeadingHeight
+                            LayoutMinWidth: =Self.Width
+                            LayoutMode: =LayoutMode.Auto
+                            Visible: =false
+                            Width: =EDSStyles.Menu.IconWidth+EDSStyles.DataTable.PaddingLeft+EDSStyles.DataTable.PaddingRight
+                            ZIndex: =1
+
+                            icoDataTableItemCheckboxSelectAllIRS As image:
+                                AccessibleLabel: ="A checkbox to select or deselect all issue registrations in the issue registration list"
+                                BorderColor: =EDSDefaults.BorderColor
+                                BorderStyle: =BorderStyle.None
+                                BorderThickness: =EDSDefaults.BorderThickness
+                                DisabledFill: =Color.Transparent
+                                FillPortions: =1
+                                FocusedBorderColor: =
+                                Height: =48
+                                HoverFill: =Self.Fill
+                                Image: |
+                                    =/*
+                                    If(
+                                        CountRows(colGallerySelected) = CountRows(galIssueRegistrationsIRS.AllItems),
+                                        EDSIcons.Checkbox,
+                                        EDSIcons.CheckboxOutline
+                                    )
+                                    // TODO: improve all-items check.
+                                    */
+                                LayoutMinHeight: =0
+                                LayoutMinWidth: =Parent.Width
+                                OnSelect: |-
+                                    =/*If(
+                                        CountRows(colGallerySelected) = CountRows(galIssueRegistrationsIRS.AllItems),
+                                        Clear(colGallerySelected),
+                                        ClearCollect(
+                                            colGallerySelected,
+                                            galIssueRegistrationsIRS.AllItems
+                                        )
+                                    )*/
+                                PaddingBottom: =EDSStyles.Menu.IconPaddingBottom
+                                PaddingLeft: =EDSStyles.DataTable.PaddingLeft
+                                PaddingRight: =EDSStyles.DataTable.PaddingRight
+                                PaddingTop: =EDSStyles.Menu.IconPaddingTop
+                                TabIndex: =0
+                                Tooltip: |-
+                                    ="Attention: remember to change the collection to use in the select all!" //"Select all"
+                                Width: =EDSStyles.Menu.IconWidth+Self.PaddingLeft+Self.PaddingRight
+                                X: =EDSStyles.DataTable.PaddingLeft
+                                ZIndex: =1
+
+                            HeaderBorderSelectAllIRS As rectangle:
+                                BorderColor: =RGBA(0, 0, 0, 0)
+                                BorderStyle: =BorderStyle.None
+                                DisabledFill: =RGBA(166, 166, 166, 1)
+                                Fill: |-
+                                    =If(
+                                        false,
+                                        EDSDefaults.BorderColor,
+                                        EDSColors.Background.Medium
+                                    )
+                                FocusedBorderThickness: =4
+                                Height: =EDSStyles.Tabs.BorderThickness
+                                HoverFill: =RGBA(105, 121, 126, 1)
+                                LayoutMinWidth: =Parent.Width
+                                PressedFill: =RGBA(105, 121, 126, 1)
+                                Width: =Parent.Width
+                                ZIndex: =2
+
+                        vcoIssueRegistrationsColumnFunctionalLocationFilterIRS_DISABLED As groupContainer.horizontalAutoLayoutContainer:
+                            AlignInContainer: =AlignInContainer.SetByContainer
+                            FillPortions: =0
+                            Height: =EDSStyles.DataTable.HeadingHeight
+                            LayoutAlignItems: =LayoutAlignItems.Stretch
+                            LayoutDirection: =LayoutDirection.Vertical
+                            LayoutJustifyContent: =LayoutJustifyContent.End
+                            LayoutMinHeight: =EDSStyles.DataTable.HeadingHeight
+                            LayoutMinWidth: =0
+                            LayoutMode: =LayoutMode.Auto
+                            Visible: =false
+                            Width: =150
+                            ZIndex: =2
+
+                            drpIssueRegistrationFunctionalLocationFilterIRS As Dropdown.pcfdataset:
+                                AccessibleLabel: ="Dropdown for filtering issue registrations by functional location"
+                                DisplayMode: =DisplayMode.Edit
+                                FillPortions: =1
+                                Height: =32
+                                Items: |-
+                                    =Distinct(Filter(
+                                                'Issue Registrations',
+                                                'Issue Registrations (Views)'.'Inactive Issue Registrations',
+                                                Installation.PlantGUID = gblActivePlant.PlantGUID
+                                            ), ThisRecord.'Functional location')
+                                LayoutMinHeight: =32
+                                LayoutMinWidth: =320
+                                Width: =100 
+                                X: =0
+                                Y: =0
+                                ZIndex: =1
+
+                            shpIssueRegistrationFunctionalLocationFilterIRS As rectangle:
+                                BorderColor: =RGBA(0, 0, 0, 0)
+                                BorderStyle: =BorderStyle.None
+                                DisabledFill: =RGBA(166, 166, 166, 1)
+                                Fill: |-
+                                    =If(
+                                        false,
+                                        EDSDefaults.BorderColor,
+                                        EDSColors.Background.Medium
+                                    )
+                                FocusedBorderThickness: =4
+                                Height: =EDSStyles.Tabs.BorderThickness
+                                HoverFill: =RGBA(105, 121, 126, 1)
+                                LayoutMinWidth: =Parent.Width
+                                PressedFill: =RGBA(105, 121, 126, 1)
+                                Width: =Parent.Width
+                                ZIndex: =2
+
+                        vcoIssueRegistrationsColumnHeaderEndIRS As groupContainer.horizontalAutoLayoutContainer:
+                            AlignInContainer: =AlignInContainer.SetByContainer
+                            Height: =EDSStyles.DataTable.HeadingHeight
+                            LayoutAlignItems: =LayoutAlignItems.Stretch
+                            LayoutDirection: =LayoutDirection.Vertical
+                            LayoutJustifyContent: =LayoutJustifyContent.End
+                            LayoutMinHeight: =EDSStyles.DataTable.HeadingHeight
+                            LayoutMinWidth: =0
+                            LayoutMode: =LayoutMode.Auto
+                            Width: =EDSStyles.Menu.IconWidth+EDSStyles.DataTable.PaddingLeft+EDSStyles.DataTable.PaddingRight
+                            ZIndex: =3
+
+                            lblColumnHeaderEndTitleIRS As label:
+                                Align: =Align.Center
+                                BorderColor: =EDSStyles.Label.BorderColor
+                                BorderStyle: =EDSStyles.Label.BorderStyle
+                                BorderThickness: =EDSStyles.Label.BorderThickness
+                                Color: =EDSStyles.Label.Color
+                                DisabledBorderColor: =EDSStyles.Label.DisabledBorderColor
+                                DisabledColor: =EDSStyles.Label.DisabledColor
+                                DisabledFill: =EDSStyles.Label.DisabledFill
+                                Fill: =Color.Transparent
+                                FillPortions: =1
+                                FocusedBorderColor: =EDSStyles.Label.FocusedBorderColor
+                                FocusedBorderThickness: =EDSStyles.Label.FocusedBorderThickness
+                                Font: =EDSStyles.DataTable.Heading.Font
+                                FontWeight: =EDSStyles.DataTable.Heading.FontWeight
+                                Height: =EDSStyles.Label.Height
+                                HoverBorderColor: =EDSStyles.Label.HoverBorderColor
+                                HoverColor: =EDSStyles.Label.HoverColor
+                                HoverFill: =EDSStyles.DataTable.HeadingHoverFill
+                                LayoutMinHeight: =EDSStyles.Label.LayoutMinHeight
+                                LayoutMinWidth: =EDSStyles.Label.LayoutMinWidth
+                                LineHeight: =EDSFonts.Heading.H5.LineHeight
+                                PaddingBottom: =EDSStyles.Label.PaddingBottom
+                                PaddingLeft: =EDSStyles.Label.PaddingLeft
+                                PaddingRight: =EDSStyles.Label.PaddingRight
+                                PaddingTop: =EDSStyles.Label.PaddingTop
+                                PressedBorderColor: =EDSStyles.Label.PressedBorderColor
+                                PressedColor: =EDSStyles.Label.PressedColor
+                                PressedFill: =EDSStyles.Label.PressedFill
+                                Size: =EDSStyles.DataTable.Heading.FontSize
+                                Text: ="Issue details"
+                                Width: =EDSStyles.Label.Width
+                                ZIndex: =1
+
+                            shpColumnHeaderBorderEndIRS As rectangle:
+                                BorderColor: =RGBA(0, 0, 0, 0)
+                                BorderStyle: =BorderStyle.None
+                                DisabledFill: =RGBA(166, 166, 166, 1)
+                                Fill: |-
+                                    =If(
+                                        false,
+                                        EDSDefaults.BorderColor,
+                                        EDSColors.Background.Medium
+                                    )
+                                FocusedBorderThickness: =4
+                                Height: =EDSStyles.Tabs.BorderThickness
+                                HoverFill: =RGBA(105, 121, 126, 1)
+                                LayoutMinWidth: =Parent.Width
+                                PressedFill: =RGBA(105, 121, 126, 1)
+                                Width: =Parent.Width
+                                ZIndex: =2
+
+                    galIssueRegistrationsIRS As gallery.galleryVertical:
+                        AccessibleLabel: ="Choose row"
+                        AlignInContainer: =AlignInContainer.SetByContainer
+                        BorderColor: =EDSDefaults.BorderColor
+                        BorderStyle: =EDSDefaults.BorderStyle
+                        BorderThickness: =EDSDefaults.BorderThickness
+                        Default: =locActiveIssueReport
+                        Fill: |-
+                            =//EDSStyles.Menu.Fill
+                            Color.Transparent
+                        FocusedBorderThickness: =EDSDefaults.FocusedBorderThickness
+                        Height: =EDSStyles.Gallery.Height
+                        Items: |-
+                            =Filter(
+                                SortByColumns(
+                                    If(
+                                    //rdoIssueReportStatusIRS.Selected.Value
+                                        locIssueReportsStatusFilter = 'Status (Issue Registrations)'.Active,
+                                        Filter(
+                                            'Issue Registrations',
+                                            'Issue Registrations (Views)'.'Active Issue Registrations',
+                                            Installation.PlantGUID = gblActivePlant.PlantGUID
+                                        ),
+                                        Filter(
+                                            'Issue Registrations',
+                                            'Issue Registrations (Views)'.'Inactive Issue Registrations',
+                                            Installation.PlantGUID = gblActivePlant.PlantGUID
+                                        )
+                                    ),
+                                    "josca_registrationdatetime",
+                                    SortOrder.Ascending
+                                ),
+                                ThisRecord.'Issue Type' = tabIssueRegistrationTypeIRS.Selected.Value
+                            )
+                        Layout: =Layout.Vertical
+                        LayoutMinHeight: |-
+                            =//Min(EDSStyles.Gallery.LayoutMinHeight, Self.TemplateHeight*CountRows(Self.AllItems))
+                            EDSStyles.Gallery.LayoutMinHeight
+                        LayoutMinWidth: =EDSDefaults.LayoutMinWidth
+                        LoadingSpinner: =LoadingSpinner.Data
+                        LoadingSpinnerColor: =EDSDefaults.LoadingSpinnerColor
+                        OnSelect: |-
+                            =UpdateContext(
+                                {
+                                    locIssueReportListFocused: false,
+                                    //locEditIssueRegistration: false,
+                                    locActiveIssueReport: LookUp(
+                                        'Issue Registrations',
+                                        IssueRegistrationGUID = ThisItem.IssueRegistrationGUID
+                                    )
+                                }
+                            );
+                            ViewForm(frmIssueRegistrationIRS)
+                        TabIndex: =0
+                        TemplateFill: |-
+                            =/*
+                            If(
+                                And(ThisItem.IsSelected, locActiveIssueReport.IssueRegistrationGUID = ThisItem.IssueRegistrationGUID),
+                                EDSStyles.Menu.ActiveFill,
+                                Color.Transparent
+                            )
+                            */
+                            EDSColors.Background.Default
+                        TemplatePadding: =8
+                        TemplateSize: =If(locIssueReportListFocused, 300, 250)
+                        Transition: =Transition.Push
+                        Width: =EDSStyles.Gallery.Width
+                        WrapCount: =If(locIssueReportListFocused, 2, 1)
+                        X: =EDSStyles.Menu.Margin
+                        Y: =EDSStyles.Menu.Margin+8
+                        ZIndex: =3
+
+                        hcoIssueRegistrationsItemLayoutIRS As groupContainer.horizontalAutoLayoutContainer:
+                            BorderColor: =EDSColors.Background.Medium
+                            BorderThickness: =1
+                            Fill: |-
+                                =If(
+                                    And(ThisItem.IsSelected, locActiveIssueReport.IssueRegistrationGUID = ThisItem.IssueRegistrationGUID),
+                                    EDSStyles.Menu.ActiveFill,
+                                    Color.Transparent
+                                )
+                            Height: =Parent.TemplateHeight
+                            LayoutAlignItems: =LayoutAlignItems.Center
+                            LayoutMode: =LayoutMode.Auto
+                            PaddingBottom: =EDSStyles.Menu.PaddingBottom//
+                            PaddingLeft: |-
+                                =//icoIssueRegistrationsItemCheckboxIRS.Width
+                                0
+                            PaddingTop: =EDSStyles.Menu.PaddingTop
+                            RadiusBottomLeft: =4
+                            RadiusBottomRight: =4
+                            RadiusTopLeft: =4
+                            RadiusTopRight: =4
+                            Width: =Parent.TemplateWidth-8
+                            ZIndex: =1
+
+                            conIssueRegistrationFieldsIRS As groupContainer.verticalAutoLayoutContainer:
+                                DropShadow: =DropShadow.None
+                                Height: =90
+                                LayoutAlignItems: =LayoutAlignItems.Stretch
+                                LayoutDirection: =LayoutDirection.Vertical
+                                LayoutJustifyContent: =LayoutJustifyContent.Center
+                                LayoutMinHeight: =100
+                                LayoutMinWidth: =100
+                                LayoutMode: =LayoutMode.Auto
+                                RadiusBottomLeft: =0
+                                RadiusBottomRight: =0
+                                RadiusTopLeft: =0
+                                RadiusTopRight: =0
+                                Width: =120
+                                ZIndex: =2
+
+                                conIssueRegistrationItemHeaderFieldsIRS As groupContainer.verticalAutoLayoutContainer:
+                                    AlignInContainer: =AlignInContainer.SetByContainer
+                                    DropShadow: =DropShadow.None
+                                    FillPortions: =0
+                                    Height: =36
+                                    LayoutAlignItems: =LayoutAlignItems.Center
+                                    LayoutJustifyContent: =LayoutJustifyContent.Center
+                                    LayoutMinHeight: =28
+                                    LayoutMinWidth: =100
+                                    LayoutMode: =LayoutMode.Auto
+                                    RadiusBottomLeft: =0
+                                    RadiusBottomRight: =0
+                                    RadiusTopLeft: =0
+                                    RadiusTopRight: =0
+                                    Width: =64
+                                    ZIndex: =1
+
+                                    icoIssueRegistrationTitleIconIRS As image:
+                                        AccessibleLabel: ="Issue registration icon that indicates its status"
+                                        BorderColor: =RGBA(0, 0, 0, 0)
+                                        BorderStyle: =BorderStyle.None
+                                        BorderThickness: =2
+                                        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                        DisabledFill: =RGBA(0, 0, 0, 0)
+                                        DisplayMode: =DisplayMode.View
+                                        FocusedBorderColor: =
+                                        FocusedBorderThickness: =4
+                                        Height: =24
+                                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                                        HoverFill: =RGBA(0, 0, 0, 0)
+                                        Image: =If(ThisItem.Status = 'Status (Issue Registrations)'.Active, EDSIcons.FocusCenter, EDSIcons.Lock)
+                                        LayoutMinHeight: =24
+                                        LayoutMinWidth: =64
+                                        OnSelect: =Select(shpIssueRegistrationsItemOverlayIRS)
+                                        PaddingLeft: =4
+                                        PaddingRight: =4
+                                        PressedBorderColor: =RGBA(0, 0, 0, 0)
+                                        PressedFill: =RGBA(0, 0, 0, 0)
+                                        TabIndex: =0
+                                        Tooltip: |-
+                                            =$"Issue registration status: {ThisItem.Status}"
+                                        Width: =48
+                                        ZIndex: =2
+
+                                    lblIssueRegistrationTitleIRS As Text:
+                                        Align: ='TextCanvas.Align'.Start
+                                        DisplayMode: =DisplayMode.Edit
+                                        FillPortions: =1
+                                        Font: =EDSFonts.Heading.H2.Font
+                                        FontColor: =EDSColors.Static.Default
+                                        Height: =32
+                                        LayoutMinHeight: =32
+                                        LayoutMinWidth: =96
+                                        Size: =EDSFonts.Heading.H3.Size
+                                        Text: |-
+                                            =$"Issue {ThisItem.SubmissionId}"
+                                            //Floor / Funct loc: {Coalesce(ThisItem.'Functional location', ThisItem.Floor)}"
+                                        Weight: =EDSFonts.Heading.H2.Weight
+                                        Width: =320
+                                        X: =0
+                                        Y: =0
+                                        ZIndex: =3
+
+                                    icoIssueRegistrationDateIRS As image:
+                                        AccessibleLabel: |-
+                                            =$"Icon represting issue registration: {lblIssueRegistrationDateIRS.Text}"
+                                        BorderColor: =RGBA(0, 0, 0, 0)
+                                        BorderStyle: =BorderStyle.None
+                                        BorderThickness: =2
+                                        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                        DisabledFill: =RGBA(0, 0, 0, 0)
+                                        DisplayMode: =DisplayMode.View
+                                        FocusedBorderColor: =
+                                        FocusedBorderThickness: =4
+                                        Height: =24
+                                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                                        HoverFill: =RGBA(0, 0, 0, 0)
+                                        Image: =EDSIcons.Calendar
+                                        LayoutMinHeight: =24
+                                        LayoutMinWidth: =64
+                                        OnSelect: =Select(shpIssueRegistrationsItemOverlayIRS)
+                                        PaddingLeft: =4
+                                        PaddingRight: =4
+                                        PressedBorderColor: =RGBA(0, 0, 0, 0)
+                                        PressedFill: =RGBA(0, 0, 0, 0)
+                                        TabIndex: =0
+                                        Tooltip: |-
+                                            =$"Issue registration date: {lblIssueRegistrationDateIRS.Text}"
+                                        Width: =24
+                                        ZIndex: =4
+
+                                    lblIssueRegistrationDateIRS As Text:
+                                        Align: ='TextCanvas.Align'.Center
+                                        DisplayMode: =DisplayMode.Edit
+                                        Font: =EDSFonts.Heading.H2.Font
+                                        FontColor: =EDSColors.Static.Default
+                                        Height: =32
+                                        LayoutMinHeight: =32
+                                        LayoutMinWidth: =64
+                                        Size: =EDSFonts.Heading.H5.Size
+                                        Text: |-
+                                            =$"Registered: {ThisItem.'Registration Date Time'}"
+                                            //Floor / Funct loc: {Coalesce(ThisItem.'Functional location', ThisItem.Floor)}"
+                                        Weight: =EDSFonts.Heading.H2.Weight
+                                        Width: =220
+                                        X: =0
+                                        Y: =0
+                                        ZIndex: =5
+
+                                conIssueRegistrationItemBodyFieldsIRS As groupContainer.verticalAutoLayoutContainer:
+                                    AlignInContainer: =AlignInContainer.SetByContainer
+                                    DropShadow: =DropShadow.None
+                                    Height: =36
+                                    LayoutAlignItems: =LayoutAlignItems.Stretch
+                                    LayoutJustifyContent: =LayoutJustifyContent.Center
+                                    LayoutMinHeight: =28
+                                    LayoutMinWidth: =100
+                                    LayoutMode: =LayoutMode.Auto
+                                    LayoutOverflowY: =LayoutOverflow.Scroll
+                                    RadiusBottomLeft: =0
+                                    RadiusBottomRight: =0
+                                    RadiusTopLeft: =0
+                                    RadiusTopRight: =0
+                                    Width: =64
+                                    ZIndex: =4
+
+                                    icoIssueRegistrationItemBodyIconIRS As image:
+                                        AccessibleLabel: ="Icon representing an issue registration"
+                                        BorderColor: =RGBA(0, 0, 0, 0)
+                                        BorderStyle: =BorderStyle.None
+                                        BorderThickness: =2
+                                        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                        DisabledFill: =RGBA(0, 0, 0, 0)
+                                        Fill: =Color.Transparent
+                                        FocusedBorderColor: =
+                                        FocusedBorderThickness: =4
+                                        Height: =24
+                                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                                        HoverFill: =RGBA(0, 0, 0, 0)
+                                        Image: =EDSIcons.Assignment
+                                        LayoutMinHeight: =24
+                                        LayoutMinWidth: =64
+                                        OnSelect: =Select(shpIssueRegistrationsItemOverlayIRS)
+                                        PaddingLeft: =4
+                                        PaddingRight: =4
+                                        PressedBorderColor: =RGBA(0, 0, 0, 0)
+                                        PressedFill: =RGBA(0, 0, 0, 0)
+                                        TabIndex: =0
+                                        Width: =48
+                                        ZIndex: =1
+
+                                    htmIssueRegistrationItemBodyIRS As htmlViewer:
+                                        BorderColor: =EDSStyles.HtmlText.BorderColor
+                                        BorderStyle: =EDSStyles.HtmlText.BorderStyle
+                                        BorderThickness: =EDSStyles.HtmlText.BorderThickness
+                                        Color: =EDSStyles.HtmlText.Color
+                                        DisabledBorderColor: =EDSStyles.HtmlText.DisabledBorderColor
+                                        DisabledFill: =EDSStyles.HtmlText.DisabledFill
+                                        Fill: =Color.Transparent
+                                        FillPortions: =1
+                                        Font: =EDSStyles.HtmlText.Font
+                                        Height: =68
+                                        HoverBorderColor: =EDSStyles.HtmlText.HoverBorderColor
+                                        HtmlText: |-
+                                            =With(
+                                                {
+                                                    Tag: Substitute(
+                                                        ThisItem.'Functional location',
+                                                        $"{gblActivePlant.sapPlantId}-",
+                                                        ""
+                                                    ),
+                                                    IssueTasks: Filter('Living Quarter Maintenance Tasks', ThisRecord.'Issue Registration'.IssueRegistrationGUID = ThisItem.IssueRegistrationGUID)
+                                                },
+                                                With(
+                                                    {
+                                                        CompletedTaskCount: CountIf(
+                                                            IssueTasks,
+                                                            ThisRecord.Progress = 100
+                                                        ),
+                                                        TasksInProgressCount: CountIf(
+                                                            IssueTasks,
+                                                            ThisRecord.Progress < 100
+                                                        ),
+                                                        LocationValue: Coalesce(
+                                                            ThisItem.'Functional location',
+                                                            $"{ThisItem.Floor}, {ThisItem.'Issue location details'}"
+                                                        ),
+                                                        LocationDetails: ThisItem.'Issue location details',
+                                                        LocationLabel: If(
+                                                            IsBlank(ThisItem.'Functional location'),
+                                                            "Level & location",
+                                                            "Functional location"
+                                                        ),
+                                                        FunctionalLocationUrl: $"{gblNotificationUrl.Base}{gblActivePlant.sapPlantId}/notification-view-tag/{Tag}"
+                                                    },
+                                                    $"
+                                            <b><font color='{EDSColorValues.Interactive.Primary.Resting}'>{LocationLabel}:</font></b><br><a href='{FunctionalLocationUrl}'>{LocationValue}</a><br>
+                                            <b><font color='{EDSColorValues.Interactive.Primary.Resting}'>Type: </font></b><br> {ThisItem.'Issue Type'}<br>
+                                            <b><font color='{EDSColorValues.Interactive.Primary.Resting}'>Details: </font></b><br> {ThisItem.'Registration Details'}
+                                            <center><br><b>Tasks in progress: <font size=4 color='{EDSColorValues.Interactive.Danger.Resting}'>{TasksInProgressCount}</font> | 
+                                            Completed tasks: <font size=4 color='{EDSColorValues.Interactive.Success.Resting}'>{CompletedTaskCount}</font></b></center>
+                                            "
+                                                )
+                                            )
+                                        LayoutMinHeight: =100
+                                        OnSelect: =Select(shpIssueRegistrationsItemOverlayIRS)
+                                        PaddingBottom: =EDSStyles.HtmlText.PaddingBottom
+                                        PaddingLeft: =0
+                                        PaddingRight: =EDSStyles.HtmlText.PaddingRight
+                                        PaddingTop: =EDSStyles.HtmlText.PaddingTop
+                                        Size: =EDSStyles.HtmlText.FontSize
+                                        Tooltip: =PlainText(Self.HtmlText)
+                                        Width: =EDSStyles.HtmlText.Width
+                                        X: =16
+                                        Y: =16
+                                        ZIndex: =2
+
+                        shpIssueRegistrationsItemOverlayIRS As rectangle:
+                            AccessibleLabel: ="Header information for issue" //should contain information about what is below
+                            BorderColor: =RGBA(0, 0, 0, 0)
+                            BorderStyle: =BorderStyle.None
+                            DisabledFill: =Color.Transparent
+                            Fill: =RGBA(0, 0, 0, 0)
+                            FocusedBorderThickness: =4
+                            Height: =conIssueRegistrationItemHeaderFieldsIRS.Height
+                            HoverFill: |-
+                                =//RGBA(0, 0, 0, 0.2)
+                                Self.Fill
+                            OnSelect: |-
+                                =If(icoIssueRegistrationsItemCheckboxIRS_DISABLED.Visible, Select(icoIssueRegistrationsItemCheckboxIRS_DISABLED), Select(Parent))
+                                //Select(Parent)
+                            PressedFill: |-
+                                =//EDSStyles.Menu.PressedFill
+                                Self.Fill
+                            TabIndex: =0
+                            Tooltip: |-
+                                =$"Select issue: {lblIssueRegistrationTitleIRS.Text} {lblIssueRegistrationDateIRS.Text}"
+                            Width: =Parent.TemplateWidth-8
+                            ZIndex: =2
+
+                        icoIssueRegistrationsItemCheckboxIRS_DISABLED As image:
+                            AccessibleLabel: ="A checkbox to include this issue registration in multiselect"
                             BorderColor: =EDSDefaults.BorderColor
                             BorderStyle: =BorderStyle.None
                             BorderThickness: =EDSDefaults.BorderThickness
                             DisabledFill: =Color.Transparent
-                            FillPortions: =1
-                            Height: =48
+                            FocusedBorderColor: =
+                            Height: =Parent.TemplateHeight
                             HoverFill: =Self.Fill
                             Image: |-
-                                =If(
-                                    CountRows(colGallerySelected) = CountRows(galIssueRegistrationsIRS.AllItems),
-                                    EDSIcons.Checkbox,
-                                    EDSIcons.CheckboxOutline
-                                )
-                                
-                                // TODO: improve all-items check.
-                            LayoutMinHeight: =0
-                            LayoutMinWidth: =Parent.Width
-                            OnSelect: |-
-                                =If(
-                                    CountRows(colGallerySelected) = CountRows(galIssueRegistrationsIRS.AllItems),
-                                    Clear(colGallerySelected),
-                                    ClearCollect(
-                                        colGallerySelected,
-                                        galIssueRegistrationsIRS.AllItems
-                                    )
-                                )
+                                =//If(ThisItem.SampleHeading exactin colGallerySelected.SampleHeading, EDSIcons.Checkbox, EDSIcons.CheckboxOutline)
+                                EDSIcons.AddBox
                             PaddingBottom: =EDSStyles.Menu.IconPaddingBottom
                             PaddingLeft: =EDSStyles.DataTable.PaddingLeft
-                            PaddingRight: =EDSStyles.DataTable.PaddingRight
+                            PaddingRight: =EDSStyles.DataTable.PaddingLeft
                             PaddingTop: =EDSStyles.Menu.IconPaddingTop
+                            TabIndex: =0
                             Tooltip: |-
-                                ="Attention: remember to change the collection to use in the select all!" //"Select all"
-                            Width: =EDSStyles.Menu.IconWidth+Self.PaddingLeft+Self.PaddingRight
-                            X: =EDSStyles.DataTable.PaddingLeft
-                            ZIndex: =1
-
-                        HeaderBorderSelectAllIRS As rectangle:
-                            BorderColor: =RGBA(0, 0, 0, 0)
-                            BorderStyle: =BorderStyle.None
-                            DisabledFill: =RGBA(166, 166, 166, 1)
-                            Fill: |-
-                                =If(
-                                    false,
-                                    EDSDefaults.BorderColor,
-                                    EDSColors.Background.Medium
-                                )
-                            FocusedBorderThickness: =4
-                            Height: =EDSStyles.Tabs.BorderThickness
-                            HoverFill: =RGBA(105, 121, 126, 1)
-                            LayoutMinWidth: =Parent.Width
-                            PressedFill: =RGBA(105, 121, 126, 1)
-                            Width: =Parent.Width
-                            ZIndex: =2
-
-                    vcoColumnHeaderEndIRS As groupContainer.horizontalAutoLayoutContainer:
-                        AlignInContainer: =AlignInContainer.SetByContainer
-                        Height: =EDSStyles.DataTable.HeadingHeight
-                        LayoutAlignItems: =LayoutAlignItems.Stretch
-                        LayoutDirection: =LayoutDirection.Vertical
-                        LayoutJustifyContent: =LayoutJustifyContent.End
-                        LayoutMinHeight: =EDSStyles.DataTable.HeadingHeight
-                        LayoutMinWidth: =0
-                        LayoutMode: =LayoutMode.Auto
-                        Width: =EDSStyles.Menu.IconWidth+EDSStyles.DataTable.PaddingLeft+EDSStyles.DataTable.PaddingRight
-                        ZIndex: =5
-
-                        lblColumnHeaderTitleIRS As label:
-                            Align: =Align.Center
-                            BorderColor: =EDSStyles.Label.BorderColor
-                            BorderStyle: =EDSStyles.Label.BorderStyle
-                            BorderThickness: =EDSStyles.Label.BorderThickness
-                            Color: =EDSStyles.Label.Color
-                            DisabledBorderColor: =EDSStyles.Label.DisabledBorderColor
-                            DisabledColor: =EDSStyles.Label.DisabledColor
-                            DisabledFill: =EDSStyles.Label.DisabledFill
-                            Fill: =Color.Transparent
-                            FillPortions: =1
-                            FocusedBorderColor: =EDSStyles.Label.FocusedBorderColor
-                            FocusedBorderThickness: =EDSStyles.Label.FocusedBorderThickness
-                            Font: =EDSStyles.DataTable.Heading.Font
-                            FontWeight: =EDSStyles.DataTable.Heading.FontWeight
-                            Height: =EDSStyles.Label.Height
-                            HoverBorderColor: =EDSStyles.Label.HoverBorderColor
-                            HoverColor: =EDSStyles.Label.HoverColor
-                            HoverFill: =EDSStyles.DataTable.HeadingHoverFill
-                            LayoutMinHeight: =EDSStyles.Label.LayoutMinHeight
-                            LayoutMinWidth: =EDSStyles.Label.LayoutMinWidth
-                            LineHeight: =EDSFonts.Heading.H5.LineHeight
-                            PaddingBottom: =EDSStyles.Label.PaddingBottom
-                            PaddingLeft: =EDSStyles.Label.PaddingLeft
-                            PaddingRight: =EDSStyles.Label.PaddingRight
-                            PaddingTop: =EDSStyles.Label.PaddingTop
-                            PressedBorderColor: =EDSStyles.Label.PressedBorderColor
-                            PressedColor: =EDSStyles.Label.PressedColor
-                            PressedFill: =EDSStyles.Label.PressedFill
-                            Size: =EDSStyles.DataTable.Heading.FontSize
-                            Text: ="Issues"
-                            Width: =EDSStyles.Label.Width
-                            ZIndex: =1
-
-                        shpColumnHeaderBorderEndIRS As rectangle:
-                            BorderColor: =RGBA(0, 0, 0, 0)
-                            BorderStyle: =BorderStyle.None
-                            DisabledFill: =RGBA(166, 166, 166, 1)
-                            Fill: |-
-                                =If(
-                                    false,
-                                    EDSDefaults.BorderColor,
-                                    EDSColors.Background.Medium
-                                )
-                            FocusedBorderThickness: =4
-                            Height: =EDSStyles.Tabs.BorderThickness
-                            HoverFill: =RGBA(105, 121, 126, 1)
-                            LayoutMinWidth: =Parent.Width
-                            PressedFill: =RGBA(105, 121, 126, 1)
-                            Width: =Parent.Width
-                            ZIndex: =2
-
-                galIssueRegistrationsIRS As gallery.galleryVertical:
-                    AccessibleLabel: ="Choose row"
-                    AlignInContainer: =AlignInContainer.SetByContainer
-                    BorderColor: =EDSDefaults.BorderColor
-                    BorderStyle: =EDSDefaults.BorderStyle
-                    BorderThickness: =EDSDefaults.BorderThickness
-                    Fill: |-
-                        =//EDSStyles.Menu.Fill
-                        Color.Transparent
-                    FocusedBorderThickness: =EDSDefaults.FocusedBorderThickness
-                    Height: =EDSStyles.Gallery.Height
-                    Items: ='Issue Registrations'
-                    Layout: =Layout.Vertical
-                    LayoutMinHeight: |-
-                        =//Min(EDSStyles.Gallery.LayoutMinHeight, Self.TemplateHeight*CountRows(Self.AllItems))
-                        EDSStyles.Gallery.LayoutMinHeight
-                    LayoutMinWidth: =EDSDefaults.LayoutMinWidth
-                    LoadingSpinner: =LoadingSpinner.Data
-                    LoadingSpinnerColor: =EDSDefaults.LoadingSpinnerColor
-                    TabIndex: =0
-                    TemplateFill: |-
-                        =If(
-                            ThisItem.IsSelected,
-                            EDSStyles.Menu.ActiveFill,
-                            Color.Transparent
-                        )
-                    TemplatePadding: =0
-                    TemplateSize: |-
-                        =//EDSDefaults.Card.HeaderSubtitleDescription.Height
-                        120
-                    Width: =EDSStyles.Gallery.Width
-                    X: =EDSStyles.Menu.Margin
-                    Y: =EDSStyles.Menu.Margin+8
-                    ZIndex: =3
-
-                    hcoIssueRegistrationsItemLayoutIRS As groupContainer.horizontalAutoLayoutContainer:
-                        Fill: =Color.Transparent
-                        Height: =Parent.TemplateHeight
-                        LayoutAlignItems: =LayoutAlignItems.Center
-                        LayoutMode: =LayoutMode.Auto
-                        PaddingBottom: =EDSStyles.Menu.PaddingBottom//
-                        PaddingLeft: =icoIssueRegistrationsItemCheckboxIRS.Width
-                        PaddingRight: =EDSStyles.Menu.PaddingRight
-                        PaddingTop: =EDSStyles.Menu.PaddingTop
-                        Width: =Parent.TemplateWidth
-                        ZIndex: =1
-
-                        imgIssueRegistrationsImageIRS As image:
-                            BorderColor: =RGBA(0, 0, 0, 0)
-                            BorderStyle: =BorderStyle.None
-                            BorderThickness: =2
-                            DisabledBorderColor: =RGBA(0, 0, 0, 0)
-                            DisabledFill: =RGBA(0, 0, 0, 0)
-                            FocusedBorderThickness: =4
-                            HoverBorderColor: =RGBA(0, 0, 0, 0)
-                            HoverFill: =RGBA(0, 0, 0, 0)
-                            Image: =EDSIcons.AddCircleFilled
-                            PaddingLeft: =4
-                            PaddingRight: =4
-                            PressedBorderColor: =RGBA(0, 0, 0, 0)
-                            PressedFill: =RGBA(0, 0, 0, 0)
-                            ZIndex: =1
-
-                        lblIssueRegistrationsTitleIRS As label:
-                            Align: =Align.Center
-                            AutoHeight: =true
-                            BorderColor: =EDSStyles.Label.BorderColor
-                            BorderStyle: =EDSStyles.Label.BorderStyle
-                            BorderThickness: =EDSStyles.Label.BorderThickness
-                            Color: =EDSStyles.Label.Color
-                            DisabledBorderColor: =EDSStyles.Label.DisabledBorderColor
-                            DisabledColor: =EDSStyles.Label.DisabledColor
-                            DisabledFill: =EDSStyles.Label.DisabledFill
-                            DisplayMode: =DisplayMode.View
-                            Fill: =Color.Transparent
-                            FocusedBorderColor: =EDSStyles.Label.FocusedBorderColor
-                            FocusedBorderThickness: =EDSStyles.Label.FocusedBorderThickness
-                            Font: =EDSStyles.Label.Font
-                            FontWeight: =EDSFonts.Heading.H4.Weight
-                            Height: =EDSStyles.Label.Height
-                            HoverBorderColor: =EDSStyles.Label.HoverBorderColor
-                            HoverColor: =EDSStyles.Label.HoverColor
-                            HoverFill: =EDSStyles.Label.HoverFill
-                            LineHeight: =EDSFonts.Heading.H4.LineHeight
-                            PaddingBottom: =EDSStyles.Label.PaddingBottom
-                            PaddingLeft: =EDSStyles.Label.PaddingLeft
-                            PaddingRight: =EDSStyles.Label.PaddingRight
-                            PaddingTop: =EDSStyles.Label.PaddingTop
-                            PressedBorderColor: =EDSStyles.Label.PressedBorderColor
-                            PressedColor: =EDSStyles.Label.PressedColor
-                            PressedFill: =EDSStyles.Label.PressedFill
-                            Size: =EDSFonts.Heading.H4.Size
-                            Text: =ThisItem.'Functional location'
-                            VerticalAlign: =VerticalAlign.Top
-                            Width: |-
-                                =//DataTableHeaderItemWidthAdjustableIRS.ColumnWidth
-                                EDSStyles.Label.Width/2
-                            X: =16
-                            Y: =16
-                            ZIndex: =2
-
-                        lblIssueRegistrationsDescriptionIRS As label:
-                            BorderColor: =EDSStyles.Label.BorderColor
-                            BorderStyle: =EDSStyles.Label.BorderStyle
-                            BorderThickness: =EDSStyles.Label.BorderThickness
-                            Color: =EDSStyles.Label.Color
-                            DisabledBorderColor: =EDSStyles.Label.DisabledBorderColor
-                            DisabledColor: =EDSStyles.Label.DisabledColor
-                            DisabledFill: =EDSStyles.Label.DisabledFill
-                            DisplayMode: =DisplayMode.View
-                            Fill: =Color.Transparent
-                            FillPortions: =1
-                            FocusedBorderColor: =EDSStyles.Label.FocusedBorderColor
-                            FocusedBorderThickness: =EDSStyles.Label.FocusedBorderThickness
-                            Font: =EDSStyles.Label.Font
-                            FontWeight: =EDSStyles.Label.FontWeight
-                            Height: =EDSStyles.Label.Height
-                            HoverBorderColor: =EDSStyles.Label.HoverBorderColor
-                            HoverColor: =EDSStyles.Label.HoverColor
-                            HoverFill: =EDSStyles.Label.HoverFill
-                            LayoutMinWidth: =295
-                            PaddingBottom: =EDSStyles.Label.PaddingBottom
-                            PaddingLeft: =EDSStyles.Label.PaddingLeft
-                            PaddingRight: =EDSStyles.Label.PaddingRight
-                            PaddingTop: =EDSStyles.Label.PaddingTop
-                            PressedBorderColor: =EDSStyles.Label.PressedBorderColor
-                            PressedColor: =EDSStyles.Label.PressedColor
-                            PressedFill: =EDSStyles.Label.PressedFill
-                            Size: =EDSStyles.Label.FontSize
-                            Text: =ThisItem.Comment
-                            Width: =EDSStyles.Label.Width
-                            X: =16
-                            Y: =16
+                                ="Attention: remember to change the collection to use for multiselection!"
+                            Visible: =false
+                            Width: =1
                             ZIndex: =3
 
-                    shpIssueRegistrationsItemOverlayIRS As rectangle:
-                        BorderColor: =RGBA(0, 0, 0, 0)
-                        BorderStyle: =BorderStyle.None
-                        DisabledFill: =Color.Transparent
-                        Fill: =RGBA(0, 0, 0, 0)
-                        FocusedBorderThickness: =4
-                        Height: =Parent.TemplateHeight
-                        HoverFill: =RGBA(0, 0, 0, 0.2)
-                        OnSelect: =If(icoIssueRegistrationsItemCheckboxIRS.Visible, Select(icoIssueRegistrationsItemCheckboxIRS), Select(Parent))
-                        PressedFill: =EDSStyles.Menu.PressedFill
-                        Width: =Parent.TemplateWidth
-                        ZIndex: =2
-
-                    icoIssueRegistrationsItemCheckboxIRS As image:
-                        BorderColor: =EDSDefaults.BorderColor
-                        BorderStyle: =BorderStyle.None
-                        BorderThickness: =EDSDefaults.BorderThickness
-                        DisabledFill: =Color.Transparent
-                        Height: =Parent.TemplateHeight
-                        HoverFill: =Self.Fill
-                        Image: |-
-                            =//If(ThisItem.SampleHeading exactin colGallerySelected.SampleHeading, EDSIcons.Checkbox, EDSIcons.CheckboxOutline)
-                            EDSIcons.AddBox
-                        PaddingBottom: =EDSStyles.Menu.IconPaddingBottom
-                        PaddingLeft: =EDSStyles.DataTable.PaddingLeft
-                        PaddingRight: =EDSStyles.DataTable.PaddingLeft
-                        PaddingTop: =EDSStyles.Menu.IconPaddingTop
-                        Tooltip: |-
-                            ="Attention: remember to change the collection to use for multiselection!"
-                        Width: =48
+                    lblIssueRegistrationsFooterSelectionInformationIRS As label:
+                        BorderColor: =EDSStyles.Label.BorderColor
+                        BorderStyle: =EDSStyles.Label.BorderStyle
+                        BorderThickness: =EDSStyles.Label.BorderThickness
+                        Color: =EDSStyles.Label.Color
+                        DisabledBorderColor: =EDSStyles.Label.DisabledBorderColor
+                        DisabledColor: =EDSStyles.Label.DisabledColor
+                        DisabledFill: =EDSStyles.Label.DisabledFill
+                        DisplayMode: =DisplayMode.View
+                        Fill: =EDSStyles.Label.Fill
+                        FocusedBorderColor: =EDSStyles.Label.FocusedBorderColor
+                        FocusedBorderThickness: =EDSStyles.Label.FocusedBorderThickness
+                        Font: =EDSStyles.Label.Font
+                        FontWeight: =FontWeight.Lighter
+                        Height: =EDSStyles.Label.Height
+                        HoverBorderColor: =EDSStyles.Label.HoverBorderColor
+                        HoverColor: =EDSStyles.Label.HoverColor
+                        HoverFill: =EDSStyles.Label.HoverFill
+                        PaddingBottom: =EDSStyles.Label.PaddingBottom
+                        PaddingLeft: =EDSStyles.Label.PaddingLeft
+                        PaddingRight: =EDSStyles.Label.PaddingRight
+                        PaddingTop: =EDSStyles.Label.PaddingTop
+                        PressedBorderColor: =EDSStyles.Label.PressedBorderColor
+                        PressedColor: =EDSStyles.Label.PressedColor
+                        PressedFill: =EDSStyles.Label.PressedFill
+                        Size: =EDSStyles.Label.FontSize
+                        Text: |-
+                            =If(vcoIssueRegistrationsColumnHeaderSelectAllIRS.Visible,
+                            //$"{CountRows(colGallerySelected)} of {CountRows(galIssueRegistrationsIRS.AllItems)} issues selected",
+                            $"{CountRows(galIssueRegistrationsIRS.AllItems)} issues")
+                            //"" & CountRows(colGallerySelected) & " of " & CountRows(galIssueRegistrationsIRS.AllItems) & " items selected"
+                        Visible: =!IsBlank(Self.Text)
+                        Width: =Parent.Width
+                        X: =16
+                        Y: =16
                         ZIndex: =4
 
-                lblGallerySelectionInformationIRS As label:
-                    BorderColor: =EDSStyles.Label.BorderColor
-                    BorderStyle: =EDSStyles.Label.BorderStyle
-                    BorderThickness: =EDSStyles.Label.BorderThickness
-                    Color: =EDSStyles.Label.Color
-                    DisabledBorderColor: =EDSStyles.Label.DisabledBorderColor
-                    DisabledColor: =EDSStyles.Label.DisabledColor
-                    DisabledFill: =EDSStyles.Label.DisabledFill
-                    DisplayMode: =DisplayMode.View
-                    Fill: =EDSStyles.Label.Fill
-                    FocusedBorderColor: =EDSStyles.Label.FocusedBorderColor
-                    FocusedBorderThickness: =EDSStyles.Label.FocusedBorderThickness
-                    Font: =EDSStyles.Label.Font
-                    FontWeight: =FontWeight.Lighter
-                    Height: =EDSStyles.Label.Height
-                    HoverBorderColor: =EDSStyles.Label.HoverBorderColor
-                    HoverColor: =EDSStyles.Label.HoverColor
-                    HoverFill: =EDSStyles.Label.HoverFill
-                    PaddingBottom: =EDSStyles.Label.PaddingBottom
-                    PaddingLeft: =EDSStyles.Label.PaddingLeft
-                    PaddingRight: =EDSStyles.Label.PaddingRight
-                    PaddingTop: =EDSStyles.Label.PaddingTop
-                    PressedBorderColor: =EDSStyles.Label.PressedBorderColor
-                    PressedColor: =EDSStyles.Label.PressedColor
-                    PressedFill: =EDSStyles.Label.PressedFill
-                    Size: =EDSStyles.Label.FontSize
-                    Text: ="" & CountRows(colGallerySelected) & " of "&CountRows(galIssueRegistrationsIRS.AllItems) &" items selected"
-                    Width: =Parent.Width
-                    X: =16
-                    Y: =16
-                    ZIndex: =4
+                    shpIssueRegistrationsFooterBorderIRS As rectangle:
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        BorderStyle: =BorderStyle.None
+                        DisabledFill: =RGBA(166, 166, 166, 1)
+                        Fill: |-
+                            =If(
+                                false,
+                                EDSDefaults.BorderColor,
+                                EDSColors.Background.Medium
+                            )
+                        FocusedBorderThickness: =4
+                        Height: =EDSStyles.Tabs.BorderThickness
+                        HoverFill: =RGBA(105, 121, 126, 1)
+                        LayoutMinWidth: =Parent.Width
+                        PressedFill: =RGBA(105, 121, 126, 1)
+                        Width: =Parent.Width
+                        ZIndex: =5
 
-            vcoIssueAssignmentAndTasksIRS As groupContainer.verticalAutoLayoutContainer:
+                conIssueRegistrationFooterFiltersIRS As groupContainer.horizontalAutoLayoutContainer:
+                    AlignInContainer: =AlignInContainer.SetByContainer
+                    DropShadow: =DropShadow.None
+                    FillPortions: =0
+                    Height: =50
+                    LayoutAlignItems: =LayoutAlignItems.Center
+                    LayoutGap: =8
+                    LayoutJustifyContent: =LayoutJustifyContent.Center
+                    LayoutMinHeight: =100
+                    LayoutMinWidth: =250
+                    LayoutMode: =LayoutMode.Auto
+                    PaddingLeft: =1
+                    PaddingRight: =1
+                    ZIndex: =3
+
+                    rdoIssueRegistrationStatusFilterIRS As Radio.pcfdataset:
+                        AccessibleLabel: ="Radio choice for switching between active or inactive issue registrations"
+                        BasePaletteColor: =EDSColors.Interactive.Primary.Resting
+                        DefaultSelectedItems: |-
+                            =//[locIssueReportsStatusFilter]
+                            Choices('Status (Issue Registrations)')
+                        DisplayMode: =DisplayMode.Edit
+                        FontColor: =EDSColors.Static.Default
+                        Height: =48
+                        Items: =Choices('Status (Issue Registrations)')
+                        Layout: ='RadioGroupCanvas.Layout'.Horizontal
+                        LayoutMinHeight: =48
+                        LayoutMinWidth: =320
+                        OnChange: |-
+                            =UpdateContext({locIssueReportsStatusFilter: Self.Selected.Value});
+                            Reset(galIssueRegistrationsIRS)
+                        Width: =200
+                        X: =0
+                        Y: =0
+                        ZIndex: =5
+
+                        valIssueRegistrationStatusIRS As pcfDataField.textualColumn:
+                            FieldDisplayName: ="Value"
+                            FieldName: ="Value"
+                            FieldType: ="l"
+                            FieldVariantName: ="textualColumn"
+                            Order: =1
+                            ZIndex: =10
+
+            vcoIssueRegistrationSectionIRS As groupContainer.verticalAutoLayoutContainer:
+                AlignInContainer: =AlignInContainer.SetByContainer
+                BorderColor: =EDSColors.Background.Medium
+                BorderThickness: =1
+                Fill: =EDSColors.Background.Default
                 Height: |-
                     =//Max(EDSStyles.Gallery.LayoutMinHeight, (Parent.Height-Self.Y*4))
                     480
                 LayoutAlignItems: =LayoutAlignItems.Stretch
                 LayoutDirection: =LayoutDirection.Vertical
+                LayoutGap: =4
                 LayoutMinHeight: =100
-                LayoutMinWidth: =250
+                LayoutMinWidth: =343
                 LayoutMode: =LayoutMode.Auto
-                Width: =375
+                PaddingBottom: =8
+                PaddingLeft: =8
+                PaddingRight: =8
+                PaddingTop: =8
+                RadiusBottomLeft: =4
+                RadiusBottomRight: =4
+                RadiusTopLeft: =4
+                RadiusTopRight: =4
+                Visible: |-
+                    =And(
+                        !locIssueReportListFocused,
+                        !IsBlank(locActiveIssueReport.IssueRegistrationGUID)
+                    )
+                Width: =343
                 X: =40
                 Y: =40
-                ZIndex: =3
+                ZIndex: =2
 
-                vcoIssueDetailsIRS As groupContainer.verticalAutoLayoutContainer:
-                    AlignInContainer: =AlignInContainer.Center
+                conIssueRegistrationHeaderActionsIRS As groupContainer.horizontalAutoLayoutContainer:
+                    AlignInContainer: =AlignInContainer.SetByContainer
+                    DropShadow: =DropShadow.None
                     FillPortions: =0
-                    Height: =120
-                    LayoutAlignItems: =LayoutAlignItems.Stretch
-                    LayoutDirection: =LayoutDirection.Vertical
-                    LayoutJustifyContent: =LayoutJustifyContent.SpaceBetween
+                    Height: =48
+                    LayoutAlignItems: =LayoutAlignItems.Center
+                    LayoutGap: =8
+                    LayoutJustifyContent: =LayoutJustifyContent.End
                     LayoutMinHeight: =100
                     LayoutMinWidth: =250
                     LayoutMode: =LayoutMode.Auto
+                    PaddingLeft: =1
+                    PaddingRight: =1
                     ZIndex: =1
 
-                    htmIssueDetailsIRS As htmlViewer:
-                        AlignInContainer: =AlignInContainer.Stretch
+                    icoRegisterNewIssueIRS As image:
+                        AccessibleLabel: ="Icon button that initiates registration of a new issue"
+                        BorderColor: =EDSStyles.Icon.BorderColor
+                        BorderStyle: =EDSStyles.Icon.BorderStyle
+                        BorderThickness: =EDSStyles.Icon.BorderThickness
+                        DisabledBorderColor: =EDSStyles.Icon.DisabledBorderColor
+                        DisabledFill: =EDSStyles.Icon.DisabledFill
+                        Fill: =EDSDefaults.IconBackground
+                        FocusedBorderColor: =
+                        FocusedBorderThickness: =EDSStyles.Icon.FocusedBorderThickness
+                        Height: =EDSStyles.Icon.Height
+                        HoverBorderColor: =EDSStyles.Icon.HoverBorderColor
+                        HoverFill: =EDSStyles.Icon.HoverFill
+                        Image: =EDSIcons.AddCircleFilled
+                        LayoutMinHeight: =EDSStyles.Icon.Height
+                        OnSelect: =NewForm(frmIssueRegistrationIRS)
+                        PaddingBottom: =EDSStyles.Icon.PaddingBottom
+                        PaddingLeft: =EDSStyles.Icon.PaddingLeft
+                        PaddingRight: =EDSStyles.Icon.PaddingRight
+                        PaddingTop: =EDSStyles.Icon.PaddingTop
+                        PressedBorderColor: =EDSStyles.Icon.PressedBorderColor
+                        PressedFill: =EDSStyles.Icon.PressedFill
+                        RadiusBottomLeft: =Self.Height/2
+                        RadiusBottomRight: =Self.Height/2
+                        RadiusTopLeft: =Self.Height/2
+                        RadiusTopRight: =Self.Height/2
+                        TabIndex: =0
+                        Tooltip: ="Register a new issue"
+                        Visible: =DataSourceInfo('Issue Registrations', DataSourceInfo.CreatePermission)
+                        Width: =Self.Height
+                        ZIndex: =3
+
+                    icoEditIssueRegistrationIRS As image:
+                        AccessibleLabel: ="Icon button that enables editing mode of the slected issue"
+                        BorderColor: =EDSStyles.Icon.BorderColor
+                        BorderStyle: =EDSStyles.Icon.BorderStyle
+                        BorderThickness: =EDSStyles.Icon.BorderThickness
+                        DisabledBorderColor: =EDSStyles.Icon.DisabledBorderColor
+                        DisabledFill: =EDSStyles.Icon.DisabledFill
+                        Fill: =EDSDefaults.IconBackground
+                        FocusedBorderColor: =
+                        FocusedBorderThickness: =EDSStyles.Icon.FocusedBorderThickness
+                        Height: =EDSStyles.Icon.Height
+                        HoverBorderColor: =EDSStyles.Icon.HoverBorderColor
+                        HoverFill: =EDSStyles.Icon.HoverFill
+                        Image: =EDSIcons.Edit
+                        LayoutMinHeight: =EDSStyles.Icon.Height
+                        OnSelect: |-
+                            =//UpdateContext({locEditIssueRegistration: !locEditIssueRegistration});
+                            EditForm(frmIssueRegistrationIRS);
+                        PaddingBottom: =EDSStyles.Icon.PaddingBottom
+                        PaddingLeft: =EDSStyles.Icon.PaddingLeft
+                        PaddingRight: =EDSStyles.Icon.PaddingRight
+                        PaddingTop: =EDSStyles.Icon.PaddingTop
+                        PressedBorderColor: =EDSStyles.Icon.PressedBorderColor
+                        PressedFill: =EDSStyles.Icon.PressedFill
+                        RadiusBottomLeft: =Self.Height/2
+                        RadiusBottomRight: =Self.Height/2
+                        RadiusTopLeft: =Self.Height/2
+                        RadiusTopRight: =Self.Height/2
+                        TabIndex: =0
+                        Tooltip: ="Edit issue"
+                        Width: =Self.Height
+                        ZIndex: =4
+
+                    lblIssueRegistrationsHeaderTitleIRS As Text:
+                        Align: ='TextCanvas.Align'.Center
+                        DisplayMode: =DisplayMode.Edit
+                        FillPortions: =1
+                        Font: =EDSFonts.Heading.H2.Font
+                        FontColor: =EDSColors.Interactive.Primary.Resting
+                        Height: =32
+                        LayoutMinHeight: =32
+                        LayoutMinWidth: =96
+                        Size: =EDSFonts.Heading.H2.Size
+                        Text: |-
+                            =$"Issue {locActiveIssueReport.SubmissionId}"
+                            /*
+                            If(
+                                locShowIssueReportTaskForm,
+                                $"Task: {locActiveIssueReportTask.Title} ({If(
+                                    frmIssueRegistrationTaskIRS.Mode = FormMode.New,
+                                    "New",
+                                    locActiveIssueReportTask.Discipline
+                                )})",
+                                $"Issue {locActiveIssueReport.SubmissionId}"
+                            )
+                            */
+                        Weight: ='TextCanvas.Weight'.Bold
+                        Width: =320
+                        X: =0
+                        Y: =0
+                        ZIndex: =5
+
+                    icoToggleFullScreenIssueRegistrationIRS As image:
+                        AccessibleLabel: ="Button that toggles fullscreen / focus view for the selected issue registration section"
+                        BorderColor: =EDSStyles.Icon.BorderColor
+                        BorderStyle: =EDSStyles.Icon.BorderStyle
+                        BorderThickness: =EDSStyles.Icon.BorderThickness
+                        DisabledBorderColor: =EDSStyles.Icon.DisabledBorderColor
+                        DisabledFill: =EDSStyles.Icon.DisabledFill
+                        Fill: =EDSDefaults.IconBackground
+                        FocusedBorderColor: =
+                        FocusedBorderThickness: =EDSStyles.Icon.FocusedBorderThickness
+                        Height: =EDSStyles.Icon.Height
+                        HoverBorderColor: =EDSStyles.Icon.HoverBorderColor
+                        HoverFill: =EDSStyles.Icon.HoverFill
+                        Image: |-
+                            =// Replace below with either a url encoded svg, select from EDSAppIcons object or from what you have added as media to the app.
+                            If(locIssueReportFocused, EDSIcons.FullscreenExit,  EDSIcons.Fullscreen)
+                        LayoutMinHeight: =EDSStyles.Icon.Height
+                        OnSelect: |-
+                            =UpdateContext({locIssueReportFocused: !locIssueReportFocused})
+                        PaddingBottom: =EDSStyles.Icon.PaddingBottom
+                        PaddingLeft: =EDSStyles.Icon.PaddingLeft
+                        PaddingRight: =EDSStyles.Icon.PaddingRight
+                        PaddingTop: =EDSStyles.Icon.PaddingTop
+                        PressedBorderColor: =EDSStyles.Icon.PressedBorderColor
+                        PressedFill: =EDSStyles.Icon.PressedFill
+                        RadiusBottomLeft: =Self.Height/2
+                        RadiusBottomRight: =Self.Height/2
+                        RadiusTopLeft: =Self.Height/2
+                        RadiusTopRight: =Self.Height/2
+                        TabIndex: =0
+                        Width: =Self.Height
+                        ZIndex: =6
+
+                vcoIssueRegistrationFormAndDetailsIRS As groupContainer.verticalAutoLayoutContainer:
+                    AlignInContainer: =AlignInContainer.SetByContainer
+                    DropShadow: =DropShadow.None
+                    Height: =130
+                    LayoutAlignItems: =LayoutAlignItems.Stretch
+                    LayoutDirection: =LayoutDirection.Vertical
+                    LayoutJustifyContent: =LayoutJustifyContent.SpaceBetween
+                    LayoutMinHeight: =130
+                    LayoutMinWidth: =250
+                    LayoutMode: =LayoutMode.Auto
+                    LayoutOverflowY: =LayoutOverflow.Scroll
+                    PaddingBottom: =4
+                    PaddingTop: =4
+                    Visible: |-
+                        =//!locShowIssueReportTaskForm
+                        true
+                    ZIndex: =2
+
+                    htmIssueDetailsIRS_DISABLED As htmlViewer:
+                        AutoHeight: =true
                         BorderColor: =EDSStyles.HtmlText.BorderColor
                         BorderStyle: =EDSStyles.HtmlText.BorderStyle
                         BorderThickness: =EDSStyles.HtmlText.BorderThickness
@@ -877,366 +1646,929 @@
                         Fill: =EDSStyles.HtmlText.Fill
                         FillPortions: =1
                         Font: =EDSStyles.HtmlText.Font
-                        Height: =68
+                        Height: =150
                         HoverBorderColor: =EDSStyles.HtmlText.HoverBorderColor
-                        HtmlText: =$"Assigned to discipline <b><font color='{EDSColorValues.Interactive.Primary.Resting}'>{Concat(galIssueRegistrationsIRS.Selected.Discipline, ThisRecord.Value)}</font></b>"
+                        HtmlText: |-
+                            =With(
+                                {
+                                    IssueTasks: Filter(
+                                        'Living Quarter Maintenance Tasks',
+                                        ThisRecord.'Issue Registration'.IssueRegistrationGUID = locActiveIssueReport.IssueRegistrationGUID
+                                    ),
+                                    Tag: Substitute(
+                                        locActiveIssueReport.'Functional location',
+                                        $"{gblActivePlant.sapPlantId}-",
+                                        ""
+                                    )
+                                },
+                                With(
+                                    {
+                                        CompletedTaskCount: CountIf(
+                                            IssueTasks,
+                                            ThisRecord.Progress = 100
+                                        ),
+                                        TasksInProgressCount: CountIf(
+                                            IssueTasks,
+                                            ThisRecord.Progress < 100
+                                        ),
+                                        IssueDisciplines: Concat(
+                                            Distinct(IssueTasks, ThisRecord.Discipline),
+                                            ThisRecord.Value, ", "
+                                        ),
+                                        FunctionalLocation: locActiveIssueReport.'Functional location',
+                                        FunctionalLocationUrl: $"{gblNotificationUrl.Base}{gblActivePlant.sapPlantId}/notification-view-tag/{Tag}"
+                                    },
+                                    $"<center>
+                            Assigned to discipline(s): <b><font color='{EDSColorValues.Interactive.Primary.Resting}'>{IssueDisciplines}</font></b><br>
+                            Functional Location: <b><font color='{EDSColorValues.Interactive.Primary.Resting}'><a href='{FunctionalLocationUrl}'>{FunctionalLocation}</a></font></b><br><br>
+                            Issue Details:<br> {locActiveIssueReport.'Registration Details'}
+                            <br><br><br><hr>
+                            <b>Tasks in progress: <font size=4 color='{EDSColorValues.Interactive.Danger.Resting}'>{TasksInProgressCount}</font> | 
+                            Completed tasks: <font size=4 color='{EDSColorValues.Interactive.Success.Resting}'>{CompletedTaskCount}</font></b>
+                            </center>
+                            "
+                                )
+                            )
+                        LayoutMinHeight: =100
                         PaddingBottom: =EDSStyles.HtmlText.PaddingBottom
                         PaddingLeft: =EDSStyles.HtmlText.PaddingLeft
                         PaddingRight: =EDSStyles.HtmlText.PaddingRight
                         PaddingTop: =EDSStyles.HtmlText.PaddingTop
                         Size: =EDSStyles.HtmlText.FontSize
+                        Visible: |
+                            =false
+                            //!locEditIssueRegistration
                         Width: =EDSStyles.HtmlText.Width
                         X: =16
                         Y: =16
                         ZIndex: =1
 
-                hcoIssueTaskTableHeaderItemsIRS As groupContainer.horizontalAutoLayoutContainer:
+                    frmIssueRegistrationIRS As form.PowerApps_CoreControls_Form:
+                        AlignInContainer: =AlignInContainer.SetByContainer
+                        DataSource: ='Issue Registrations'
+                        Item: =locActiveIssueReport
+                        LayoutMinHeight: =580
+                        LayoutMinWidth: =400
+                        OnSuccess: |-
+                            =UpdateContext(
+                                {
+                                    // locEditIssueRegistration: false,
+                                    locActiveIssueReport: Self.LastSubmit
+                                }
+                            );
+                            ViewForm(Self)
+                        UseFluentV9Cards: =true
+                        X: =80
+                        Y: =185
+                        ZIndex: =3
+
+                        "'Functional location_DataCard1' As typedDataCard.fluentV9TextualEditCard":
+                            BorderStyle: =BorderStyle.Solid
+                            DataField: ="josca_functionallocation"
+                            Default: =ThisItem.'Functional location'
+                            DisplayMode: =Parent.DisplayMode
+                            DisplayName: =DataSourceInfo([@'Issue Registrations'],DataSourceInfo.DisplayName,"josca_functionallocation")
+                            Fill: =RGBA(0, 0, 0, 0)
+                            Height: =70
+                            MaxLength: =DataSourceInfo([@'Issue Registrations'], DataSourceInfo.MaxLength, "josca_functionallocation")
+                            Required: =false
+                            Update: =DataCardValue12.Value
+                            Width: =Parent.Width/ If(locIssueReportFocused, 3, 2)
+                            X: =0
+                            Y: =0
+                            ZIndex: =1
+
+                            DataCardKey15 As Text:
+                                DisplayMode: =DisplayMode.Edit
+                                FontColor: =
+                                Height: =22
+                                Text: =Parent.DisplayName
+                                Weight: ='TextCanvas.Weight'.Semibold
+                                Width: =Parent.Width - 48
+                                Wrap: =false
+                                X: =24
+                                Y: =10
+                                ZIndex: =1
+
+                            "DataCardValue12 As 'Text input'":
+                                AccessibleLabel: =Parent.DisplayName
+                                BasePaletteColor: =
+                                DisplayMode: =Parent.DisplayMode
+                                FontColor: =
+                                Height: =32
+                                Mode: ="'TextInputCanvas.Mode'.TextInputModeSingleLine"
+                                Required: =Parent.Required
+                                ValidationState: =If(IsBlank(Parent.Error), "None", "Error")
+                                Value: =Parent.Default
+                                Width: =Parent.Width - 48
+                                X: =24
+                                Y: =DataCardKey15.Y + DataCardKey15.Height + 4
+                                ZIndex: =2
+
+                            ErrorMessage14 As Text:
+                                DisplayMode: =DisplayMode.Edit
+                                FontColor: =
+                                Height: =30
+                                Text: =Parent.Error
+                                Visible: =And(!IsBlank(Parent.Error), Parent.DisplayMode=DisplayMode.Edit)
+                                Width: =Parent.Width - 48
+                                Wrap: =true
+                                X: =24
+                                Y: =DataCardValue12.Y + DataCardValue12.Height
+                                ZIndex: =3
+
+                            StarVisible14 As Text:
+                                Align: ='TextCanvas.Align'.Center
+                                DisplayMode: =DisplayMode.Edit
+                                FontColor: =
+                                Height: =30
+                                Text: ="*"
+                                Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                                Width: =30
+                                X: =0
+                                Y: =DataCardKey15.Y
+                                ZIndex: =4
+
+                            "InfoButtonCanvas3 As 'Information button'":
+                                AccessibleLabel: =$"Information button for displaying information about {Parent.DisplayName}"
+                                BasePaletteColor: =EDSColors.Interactive.Primary.Resting
+                                Content: ="Be careful when changing functional location when there are ongoing taks, these tasks and notifications may be linked the current functional location!"
+                                DisplayMode: =DisplayMode.Edit
+                                FontColor: =EDSColors.Interactive.Danger.Resting
+                                Height: =32
+                                Width: =32
+                                X: =Parent.Width - 48
+                                Y: =5
+                                ZIndex: =5
+
+                        FailureReport_DataCard1 As typedDataCard.fluentV9TextualEditCard:
+                            BorderStyle: =BorderStyle.Solid
+                            DataField: ="josca_failurereport"
+                            Default: =ThisItem.FailureReport
+                            DisplayMode: =Parent.DisplayMode
+                            DisplayName: =DataSourceInfo([@'Issue Registrations'],DataSourceInfo.DisplayName,"josca_failurereport")
+                            Fill: =RGBA(0, 0, 0, 0)
+                            Height: =70
+                            MaxLength: =DataSourceInfo([@'Issue Registrations'], DataSourceInfo.MaxLength, "josca_failurereport")
+                            Required: =false
+                            Update: =DataCardValue10.Value
+                            Width: =Parent.Width/ If(locIssueReportFocused, 3, 2)
+                            X: =321.5
+                            Y: =0
+                            ZIndex: =1
+
+                            DataCardKey13 As Text:
+                                DisplayMode: =DisplayMode.Edit
+                                FontColor: =
+                                Height: =22
+                                Text: |-
+                                    =Switch(
+                                        gblDisplayLanguageSetting.Language,
+                                        "no-NO",
+                                    "M2 Notifikasjonsnummer",
+                                        "M2 Notification number"
+                                    )
+                                Weight: ='TextCanvas.Weight'.Semibold
+                                Width: =Parent.Width - 48
+                                Wrap: =false
+                                X: =24
+                                Y: =10
+                                ZIndex: =1
+
+                            ErrorMessage12 As Text:
+                                DisplayMode: =DisplayMode.Edit
+                                FontColor: =
+                                Height: =30
+                                Text: =Parent.Error
+                                Visible: =And(!IsBlank(Parent.Error), Parent.DisplayMode=DisplayMode.Edit)
+                                Width: =Parent.Width - 48
+                                Wrap: =true
+                                X: =24
+                                Y: =DataCardValue10.Y + DataCardValue10.Height
+                                ZIndex: =3
+
+                            StarVisible12 As Text:
+                                Align: ='TextCanvas.Align'.Center
+                                DisplayMode: =DisplayMode.Edit
+                                FontColor: =
+                                Height: =30
+                                Text: ="*"
+                                Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                                Width: =30
+                                X: =0
+                                Y: =DataCardKey13.Y
+                                ZIndex: =4
+
+                            "DataCardValue10 As 'Text input'":
+                                AccessibleLabel: =Parent.DisplayName
+                                BasePaletteColor: =
+                                DisplayMode: =Parent.DisplayMode
+                                FontColor: =
+                                Height: =32
+                                Mode: ="'TextInputCanvas.Mode'.TextInputModeSingleLine"
+                                Required: =Parent.Required
+                                Type: ='TextInputCanvas.Type'.Text
+                                ValidationState: =If(IsBlank(Parent.Error), "None", "Error")
+                                Value: =Parent.Default
+                                Width: =Parent.Width - 144
+                                X: =24
+                                Y: =DataCardKey13.Y + DataCardKey13.Height + 4
+                                ZIndex: =5
+
+                            btnCreateOrViewFailureReportIRS As Button:
+                                AccessibleLabel: ="A button that opens the notification service (external) for the functional location associated with the selected issue registration."
+                                Appearance: ='ButtonCanvas.Appearance'.Primary
+                                BasePaletteColor: =
+                                DisplayMode: =DisplayMode.Edit
+                                FontColor: =
+                                Height: =32
+                                OnSelect: |-
+                                    =With(
+                                        {
+                                            Tag: Substitute(
+                                                Upper(locActiveIssueReport.'Functional location'),
+                                                $"{gblActivePlant.sapPlantId}-",
+                                                ""
+                                            ),
+                                            FailureReportId: Upper(Text(DataCardValue10.Value))
+                                        },
+                                        If(
+                                            IsBlank(FailureReportId),
+                                            // $"https://notifications.equinor.com/{gblActivePlant.sapPlantId}/notification-view-tag/{Tag}
+                                            Launch($"{gblNotificationUrl.Base}{gblActivePlant.sapPlantId}/{gblNotificationUrl.FunctionalLocation}/{Tag}"),
+                                            Launch($"{gblNotificationUrl.Base}{gblActivePlant.sapPlantId}/{gblNotificationUrl.Notification}/m2/{FailureReportId}")
+                                        )
+                                    )
+                                Text: =$"{If(IsBlank(DataCardValue10.Value), "Create", "View")}  M2"
+                                Width: =96
+                                X: =DataCardValue10.Width+DataCardValue10.X
+                                Y: =DataCardValue10.Y
+                                ZIndex: =6
+
+                            "InfoButtonCanvas3_3 As 'Information button'":
+                                AccessibleLabel: =$"Information button for displaying information about {Parent.DisplayName}"
+                                BasePaletteColor: =EDSColors.Interactive.Primary.Resting
+                                Content: ="Please update this value with the number when creating a new M2 Notification! (Future versions aim to have proper integration with SAP)"
+                                DisplayMode: =DisplayMode.Edit
+                                FontColor: =EDSColors.Static.Default
+                                Height: =32
+                                Width: =32
+                                X: =Parent.Width - 48
+                                Y: =5
+                                ZIndex: =7
+
+                        "'Issue Type_DataCard1' As typedDataCard.fluentV9TextualEditCard":
+                            BorderStyle: =BorderStyle.Solid
+                            DataField: ="josca_issuetype"
+                            Default: =ThisItem.'Issue Type'
+                            DisplayMode: =Parent.DisplayMode
+                            DisplayName: =DataSourceInfo([@'Issue Registrations'],DataSourceInfo.DisplayName,"josca_issuetype")
+                            Fill: =RGBA(0, 0, 0, 0)
+                            Height: =70
+                            MaxLength: =DataSourceInfo([@'Issue Registrations'], DataSourceInfo.MaxLength, "josca_issuetype")
+                            Required: =false
+                            Update: =DataCardValue14.Value
+                            Width: =Parent.Width/ If(locIssueReportFocused, 3, 2)
+                            X: =0
+                            Y: =2
+                            ZIndex: =1
+
+                            DataCardKey17 As Text:
+                                DisplayMode: =DisplayMode.Edit
+                                FontColor: =
+                                Height: =22
+                                Text: |-
+                                    =Switch(
+                                        gblDisplayLanguageSetting.Language,
+                                        "no-NO",
+                                        "Feiltype",
+                                        Parent.DisplayName
+                                    )
+                                Weight: ='TextCanvas.Weight'.Semibold
+                                Width: =Parent.Width - 48
+                                Wrap: =false
+                                X: =24
+                                Y: =10
+                                ZIndex: =1
+
+                            "DataCardValue14 As 'Text input'":
+                                AccessibleLabel: =Parent.DisplayName
+                                BasePaletteColor: =
+                                DisplayMode: =Parent.DisplayMode
+                                FontColor: =
+                                Height: =32
+                                Mode: ="'TextInputCanvas.Mode'.TextInputModeSingleLine"
+                                Required: =Parent.Required
+                                ValidationState: =If(IsBlank(Parent.Error), "None", "Error")
+                                Value: =Parent.Default
+                                Width: =Parent.Width - 48
+                                X: =24
+                                Y: =DataCardKey17.Y + DataCardKey17.Height + 4
+                                ZIndex: =2
+
+                            ErrorMessage16 As Text:
+                                DisplayMode: =DisplayMode.Edit
+                                FontColor: =
+                                Height: =30
+                                Text: =Parent.Error
+                                Visible: =And(!IsBlank(Parent.Error), Parent.DisplayMode=DisplayMode.Edit)
+                                Width: =Parent.Width - 48
+                                Wrap: =true
+                                X: =24
+                                Y: =DataCardValue14.Y + DataCardValue14.Height
+                                ZIndex: =3
+
+                            StarVisible16 As Text:
+                                Align: ='TextCanvas.Align'.Center
+                                DisplayMode: =DisplayMode.Edit
+                                FontColor: =
+                                Height: =30
+                                Text: ="*"
+                                Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                                Width: =30
+                                X: =0
+                                Y: =DataCardKey17.Y
+                                ZIndex: =4
+
+                            "infRegisteredIssueTypeIRS As 'Information button'":
+                                AccessibleLabel: =$"Information button for displaying information about {Parent.DisplayName}"
+                                BasePaletteColor: =EDSColors.Interactive.Primary.Resting
+                                Content: ="This is the type as specified by the person that reported the issue."
+                                DisplayMode: =DisplayMode.Edit
+                                FontColor: =EDSColors.Static.Default
+                                Height: =32
+                                Width: =32
+                                X: =Parent.Width - 48
+                                Y: =5
+                                ZIndex: =5
+
+                        "'Registration Details_DataCard1' As typedDataCard.fluentV9TextualMultiLineEditCard":
+                            BorderStyle: =BorderStyle.Solid
+                            DataField: ="josca_registrationdetails"
+                            Default: =ThisItem.'Registration Details'
+                            DisplayMode: =Parent.DisplayMode
+                            DisplayName: =DataSourceInfo([@'Issue Registrations'],DataSourceInfo.DisplayName,"josca_registrationdetails")
+                            Fill: =RGBA(0, 0, 0, 0)
+                            Height: =166
+                            Required: =true
+                            Update: =DataCardValue15.Value
+                            Width: =Parent.Width
+                            X: =0
+                            Y: =5
+                            ZIndex: =1
+
+                            DataCardKey18 As Text:
+                                DisplayMode: =DisplayMode.Edit
+                                FontColor: =
+                                Height: =22
+                                Text: |-
+                                    =Switch(
+                                        gblDisplayLanguageSetting.Language,
+                                        "no-NO",
+                                        "Detaljer om innmeldt feil",
+                                        Parent.DisplayName
+                                    )
+                                Weight: ='TextCanvas.Weight'.Semibold
+                                Width: =Parent.Width - 48
+                                Wrap: =false
+                                X: =24
+                                Y: =10
+                                ZIndex: =1
+
+                            "DataCardValue15 As 'Text input'":
+                                AccessibleLabel: =Parent.DisplayName
+                                BasePaletteColor: =
+                                DisplayMode: =Parent.DisplayMode
+                                FontColor: =
+                                Height: =144
+                                Mode: ='TextInputCanvas.Mode'.Multiline
+                                Required: =Parent.Required
+                                ValidationState: =If(IsBlank(Parent.Error), "None", "Error")
+                                Value: =Parent.Default
+                                Width: =Parent.Width - 48
+                                X: =24
+                                Y: =DataCardKey18.Y + DataCardKey18.Height + 4
+                                ZIndex: =2
+
+                            ErrorMessage17 As Text:
+                                DisplayMode: =DisplayMode.Edit
+                                FontColor: =
+                                Height: =30
+                                Text: =Parent.Error
+                                Visible: =And(!IsBlank(Parent.Error), Parent.DisplayMode=DisplayMode.Edit)
+                                Width: =Parent.Width - 48
+                                Wrap: =true
+                                X: =24
+                                Y: =DataCardValue15.Y + DataCardValue15.Height
+                                ZIndex: =3
+
+                            StarVisible17 As Text:
+                                Align: ='TextCanvas.Align'.Center
+                                DisplayMode: =DisplayMode.Edit
+                                FontColor: =
+                                Height: =30
+                                Text: ="*"
+                                Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                                Width: =30
+                                X: =0
+                                Y: =DataCardKey18.Y
+                                ZIndex: =4
+
+                            "InfoButtonCanvas3_2 As 'Information button'":
+                                AccessibleLabel: =$"Information button for displaying information about {Parent.DisplayName}"
+                                BasePaletteColor: =EDSColors.Interactive.Primary.Resting
+                                Content: ="Details provided by the the person that reported the issue."
+                                DisplayMode: =DisplayMode.Edit
+                                FontColor: =EDSColors.Static.Default
+                                Height: =32
+                                Width: =32
+                                X: =Parent.Width - 48
+                                Y: =5
+                                ZIndex: =5
+
+                        Comment_DataCard1 As typedDataCard.fluentV9TextualMultiLineEditCard:
+                            BorderStyle: =BorderStyle.Solid
+                            DataField: ="josca_comment"
+                            Default: =ThisItem.Comment
+                            DisplayMode: =Parent.DisplayMode
+                            DisplayName: =DataSourceInfo([@'Issue Registrations'],DataSourceInfo.DisplayName,"josca_comment")
+                            Fill: =RGBA(0, 0, 0, 0)
+                            Height: =166
+                            Required: =false
+                            Update: =DataCardValue9.Value
+                            Width: =Parent.Width
+                            X: =0
+                            Y: =6
+                            ZIndex: =1
+
+                            DataCardKey12 As Text:
+                                DisplayMode: =DisplayMode.Edit
+                                FontColor: =
+                                Height: =22
+                                Text: |-
+                                    =Switch(
+                                        gblDisplayLanguageSetting.Language,
+                                        "no-NO",
+                                        "Forpleiningsleder kommentar",
+                                        "Accommodation and Catering management comment"
+                                    )
+                                Weight: ='TextCanvas.Weight'.Semibold
+                                Width: =Parent.Width - 48
+                                Wrap: =false
+                                X: =24
+                                Y: =10
+                                ZIndex: =1
+
+                            "DataCardValue9 As 'Text input'":
+                                AccessibleLabel: =Parent.DisplayName
+                                BasePaletteColor: =
+                                DisplayMode: =Parent.DisplayMode
+                                FontColor: =
+                                Height: =144
+                                Mode: ='TextInputCanvas.Mode'.Multiline
+                                Required: =Parent.Required
+                                ValidationState: =If(IsBlank(Parent.Error), "None", "Error")
+                                Value: =Parent.Default
+                                Width: =Parent.Width - 48
+                                X: =24
+                                Y: =DataCardKey12.Y + DataCardKey12.Height + 4
+                                ZIndex: =2
+
+                            ErrorMessage11 As Text:
+                                DisplayMode: =DisplayMode.Edit
+                                FontColor: =
+                                Height: =30
+                                Text: =Parent.Error
+                                Visible: =And(!IsBlank(Parent.Error), Parent.DisplayMode=DisplayMode.Edit)
+                                Width: =Parent.Width - 48
+                                Wrap: =true
+                                X: =24
+                                Y: =DataCardValue9.Y + DataCardValue9.Height
+                                ZIndex: =3
+
+                            StarVisible11 As Text:
+                                Align: ='TextCanvas.Align'.Center
+                                DisplayMode: =DisplayMode.Edit
+                                FontColor: =
+                                Height: =30
+                                Text: ="*"
+                                Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                                Width: =30
+                                X: =0
+                                Y: =DataCardKey12.Y
+                                ZIndex: =4
+
+                            "InfoButtonCanvas3_4 As 'Information button'":
+                                AccessibleLabel: =$"Information button for displaying information about {Parent.DisplayName}"
+                                BasePaletteColor: =EDSColors.Interactive.Primary.Resting
+                                Content: ="A comment from the compli that can be helpful for the discipline managers"
+                                DisplayMode: =DisplayMode.Edit
+                                FontColor: =EDSColors.Static.Default
+                                Height: =32
+                                Width: =32
+                                X: =Parent.Width - 48
+                                Y: =5
+                                ZIndex: =5
+
+                        Floor_DataCard1 As typedDataCard.fluentV9TextualEditCard:
+                            BorderStyle: =BorderStyle.Solid
+                            DataField: ="josca_floor"
+                            Default: =ThisItem.Floor
+                            DisplayMode: =Parent.DisplayMode
+                            DisplayName: =DataSourceInfo([@'Issue Registrations'],DataSourceInfo.DisplayName,"josca_floor")
+                            Fill: =RGBA(0, 0, 0, 0)
+                            Height: =70
+                            MaxLength: =DataSourceInfo([@'Issue Registrations'], DataSourceInfo.MaxLength, "josca_floor")
+                            Required: =false
+                            Update: =DataCardValue11.Value
+                            Width: =Parent.Width/ If(locIssueReportFocused, 3, 2)
+                            X: =0
+                            Y: =500
+                            ZIndex: =1
+
+                            DataCardKey14 As Text:
+                                DisplayMode: =DisplayMode.Edit
+                                FontColor: =
+                                Height: =22
+                                Text: |-
+                                    =Switch(
+                                        gblDisplayLanguageSetting.Language,
+                                        "no-NO",
+                                        "Etasje",
+                                        Parent.DisplayName
+                                    )
+                                Weight: ='TextCanvas.Weight'.Semibold
+                                Width: =Parent.Width - 48
+                                Wrap: =false
+                                X: =24
+                                Y: =10
+                                ZIndex: =1
+
+                            "DataCardValue11 As 'Text input'":
+                                AccessibleLabel: =Parent.DisplayName
+                                BasePaletteColor: =
+                                DisplayMode: =Parent.DisplayMode
+                                FontColor: =
+                                Height: =32
+                                Mode: ="'TextInputCanvas.Mode'.TextInputModeSingleLine"
+                                Required: =Parent.Required
+                                ValidationState: =If(IsBlank(Parent.Error), "None", "Error")
+                                Value: =Parent.Default
+                                Width: =Parent.Width - 48
+                                X: =24
+                                Y: =DataCardKey14.Y + DataCardKey14.Height + 4
+                                ZIndex: =2
+
+                            ErrorMessage13 As Text:
+                                DisplayMode: =DisplayMode.Edit
+                                FontColor: =
+                                Height: =30
+                                Text: =Parent.Error
+                                Visible: =And(!IsBlank(Parent.Error), Parent.DisplayMode=DisplayMode.Edit)
+                                Width: =Parent.Width - 48
+                                Wrap: =true
+                                X: =24
+                                Y: =DataCardValue11.Y + DataCardValue11.Height
+                                ZIndex: =3
+
+                            StarVisible13 As Text:
+                                Align: ='TextCanvas.Align'.Center
+                                DisplayMode: =DisplayMode.Edit
+                                FontColor: =
+                                Height: =30
+                                Text: ="*"
+                                Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                                Width: =30
+                                X: =0
+                                Y: =DataCardKey14.Y
+                                ZIndex: =4
+
+                        "'Issue location details_DataCard1' As typedDataCard.fluentV9TextualEditCard":
+                            BorderStyle: =BorderStyle.Solid
+                            DataField: ="josca_issuelocationdetails"
+                            Default: =ThisItem.'Issue location details'
+                            DisplayMode: =Parent.DisplayMode
+                            DisplayName: =DataSourceInfo([@'Issue Registrations'],DataSourceInfo.DisplayName,"josca_issuelocationdetails")
+                            Fill: =RGBA(0, 0, 0, 0)
+                            Height: =70
+                            MaxLength: =DataSourceInfo([@'Issue Registrations'], DataSourceInfo.MaxLength, "josca_issuelocationdetails")
+                            Required: =false
+                            Update: =DataCardValue13.Value
+                            Width: =Parent.Width/ If(locIssueReportFocused, 3, 2)
+                            X: =0
+                            Y: =500
+                            ZIndex: =1
+
+                            DataCardKey16 As Text:
+                                DisplayMode: =DisplayMode.Edit
+                                FontColor: =
+                                Height: =22
+                                Text: |-
+                                    =Switch(
+                                        gblDisplayLanguageSetting.Language,
+                                        "no-NO",
+                                        "Detaljer om feilens plassering",
+                                        Parent.DisplayName
+                                    )
+                                Weight: ='TextCanvas.Weight'.Semibold
+                                Width: =Parent.Width - 48
+                                Wrap: =false
+                                X: =24
+                                Y: =10
+                                ZIndex: =1
+
+                            "DataCardValue13 As 'Text input'":
+                                AccessibleLabel: =Parent.DisplayName
+                                BasePaletteColor: =
+                                DisplayMode: =Parent.DisplayMode
+                                FontColor: =
+                                Height: =32
+                                Mode: ="'TextInputCanvas.Mode'.TextInputModeSingleLine"
+                                Required: =Parent.Required
+                                ValidationState: =If(IsBlank(Parent.Error), "None", "Error")
+                                Value: =Parent.Default
+                                Width: =Parent.Width - 48
+                                X: =24
+                                Y: =DataCardKey16.Y + DataCardKey16.Height + 4
+                                ZIndex: =2
+
+                            ErrorMessage15 As Text:
+                                DisplayMode: =DisplayMode.Edit
+                                FontColor: =
+                                Height: =30
+                                Text: =Parent.Error
+                                Visible: =And(!IsBlank(Parent.Error), Parent.DisplayMode=DisplayMode.Edit)
+                                Width: =Parent.Width - 48
+                                Wrap: =true
+                                X: =24
+                                Y: =DataCardValue13.Y + DataCardValue13.Height
+                                ZIndex: =3
+
+                            StarVisible15 As Text:
+                                Align: ='TextCanvas.Align'.Center
+                                DisplayMode: =DisplayMode.Edit
+                                FontColor: =
+                                Height: =30
+                                Text: ="*"
+                                Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                                Width: =30
+                                X: =0
+                                Y: =DataCardKey16.Y
+                                ZIndex: =4
+
+                conIssueRegistrationFooterActionsIRS As groupContainer.horizontalAutoLayoutContainer:
                     AlignInContainer: =AlignInContainer.SetByContainer
-                    Fill: =EDSStyles.DataTable.HeadingFill
+                    DropShadow: =DropShadow.None
                     FillPortions: =0
-                    Height: =EDSStyles.DataTable.HeadingHeight
+                    Height: =48
                     LayoutAlignItems: =LayoutAlignItems.Center
+                    LayoutGap: =16
+                    LayoutJustifyContent: =LayoutJustifyContent.Center
                     LayoutMinHeight: =100
                     LayoutMinWidth: =250
                     LayoutMode: =LayoutMode.Auto
-                    PaddingBottom: =EDSStyles.Menu.PaddingBottom//
-                    PaddingRight: |-
-                        =//EDSStyles.Menu.PaddingRight
-                        0
-                    PaddingTop: =EDSStyles.Menu.PaddingTop
-                    Width: =galIssueTasksIRS.Width
-                    ZIndex: =2
-
-                    vcoIssueTasksColumnHeaderSelectAllIRS As groupContainer.horizontalAutoLayoutContainer:
-                        AlignInContainer: =AlignInContainer.SetByContainer
-                        FillPortions: =0
-                        Height: =EDSStyles.DataTable.HeadingHeight
-                        LayoutAlignItems: =LayoutAlignItems.Stretch
-                        LayoutDirection: =LayoutDirection.Vertical
-                        LayoutJustifyContent: =LayoutJustifyContent.SpaceBetween
-                        LayoutMinHeight: =EDSStyles.DataTable.HeadingHeight
-                        LayoutMinWidth: =Self.Width
-                        LayoutMode: =LayoutMode.Auto
-                        Width: =EDSStyles.Menu.IconWidth+EDSStyles.DataTable.PaddingLeft+EDSStyles.DataTable.PaddingRight
-                        ZIndex: =1
-
-                        icoIssueTasksTableItemCheckboxSelectAllIRS As image:
-                            BorderColor: =EDSDefaults.BorderColor
-                            BorderStyle: =BorderStyle.None
-                            BorderThickness: =EDSDefaults.BorderThickness
-                            DisabledFill: =Color.Transparent
-                            FillPortions: =1
-                            Height: =48
-                            HoverFill: =Self.Fill
-                            Image: |-
-                                =If(
-                                    CountRows(colGallerySelected) = CountRows(galIssueTasksIRS.AllItems),
-                                    EDSIcons.Checkbox,
-                                    EDSIcons.CheckboxOutline
-                                )
-                                
-                                // TODO: improve all-items check.
-                            LayoutMinHeight: =0
-                            LayoutMinWidth: =Parent.Width
-                            OnSelect: |-
-                                =If(
-                                    CountRows(colGallerySelected) = CountRows(galIssueTasksIRS.AllItems),
-                                    Clear(colGallerySelected),
-                                    ClearCollect(
-                                        colGallerySelected,
-                                        galIssueTasksIRS.AllItems
-                                    )
-                                )
-                            PaddingBottom: =EDSStyles.Menu.IconPaddingBottom
-                            PaddingLeft: =EDSStyles.DataTable.PaddingLeft
-                            PaddingRight: =EDSStyles.DataTable.PaddingRight
-                            PaddingTop: =EDSStyles.Menu.IconPaddingTop
-                            Tooltip: |-
-                                ="Attention: remember to change the collection to use in the select all!" //"Select all"
-                            Width: =EDSStyles.Menu.IconWidth+Self.PaddingLeft+Self.PaddingRight
-                            X: =EDSStyles.DataTable.PaddingLeft
-                            ZIndex: =1
-
-                        shpIssueTaskHeaderBorderSelectAllIRS As rectangle:
-                            BorderColor: =RGBA(0, 0, 0, 0)
-                            BorderStyle: =BorderStyle.None
-                            DisabledFill: =RGBA(166, 166, 166, 1)
-                            Fill: |-
-                                =If(
-                                    false,
-                                    EDSDefaults.BorderColor,
-                                    EDSColors.Background.Medium
-                                )
-                            FocusedBorderThickness: =4
-                            Height: =EDSStyles.Tabs.BorderThickness
-                            HoverFill: =RGBA(105, 121, 126, 1)
-                            LayoutMinWidth: =Parent.Width
-                            PressedFill: =RGBA(105, 121, 126, 1)
-                            Width: =Parent.Width
-                            ZIndex: =2
-
-                    vcoIssueTaskColumnHeaderEndIRS As groupContainer.horizontalAutoLayoutContainer:
-                        AlignInContainer: =AlignInContainer.SetByContainer
-                        Height: =EDSStyles.DataTable.HeadingHeight
-                        LayoutAlignItems: =LayoutAlignItems.Stretch
-                        LayoutDirection: =LayoutDirection.Vertical
-                        LayoutJustifyContent: =LayoutJustifyContent.End
-                        LayoutMinHeight: =EDSStyles.DataTable.HeadingHeight
-                        LayoutMinWidth: =0
-                        LayoutMode: =LayoutMode.Auto
-                        Width: =EDSStyles.Menu.IconWidth+EDSStyles.DataTable.PaddingLeft+EDSStyles.DataTable.PaddingRight
-                        ZIndex: =5
-
-                        lblIssueTaskColumnHeaderTitleIRS As label:
-                            Align: =Align.Center
-                            BorderColor: =EDSStyles.Label.BorderColor
-                            BorderStyle: =EDSStyles.Label.BorderStyle
-                            BorderThickness: =EDSStyles.Label.BorderThickness
-                            Color: =EDSStyles.Label.Color
-                            DisabledBorderColor: =EDSStyles.Label.DisabledBorderColor
-                            DisabledColor: =EDSStyles.Label.DisabledColor
-                            DisabledFill: =EDSStyles.Label.DisabledFill
-                            Fill: =Color.Transparent
-                            FillPortions: =1
-                            FocusedBorderColor: =EDSStyles.Label.FocusedBorderColor
-                            FocusedBorderThickness: =EDSStyles.Label.FocusedBorderThickness
-                            Font: =EDSStyles.DataTable.Heading.Font
-                            FontWeight: =EDSStyles.DataTable.Heading.FontWeight
-                            Height: =EDSStyles.Label.Height
-                            HoverBorderColor: =EDSStyles.Label.HoverBorderColor
-                            HoverColor: =EDSStyles.Label.HoverColor
-                            HoverFill: =EDSStyles.DataTable.HeadingHoverFill
-                            LayoutMinHeight: =EDSStyles.Label.LayoutMinHeight
-                            LayoutMinWidth: =EDSStyles.Label.LayoutMinWidth
-                            LineHeight: =EDSFonts.Heading.H5.LineHeight
-                            PaddingBottom: =EDSStyles.Label.PaddingBottom
-                            PaddingLeft: =EDSStyles.Label.PaddingLeft
-                            PaddingRight: =EDSStyles.Label.PaddingRight
-                            PaddingTop: =EDSStyles.Label.PaddingTop
-                            PressedBorderColor: =EDSStyles.Label.PressedBorderColor
-                            PressedColor: =EDSStyles.Label.PressedColor
-                            PressedFill: =EDSStyles.Label.PressedFill
-                            Size: =EDSStyles.DataTable.Heading.FontSize
-                            Text: ="Tasks"
-                            Width: =EDSStyles.Label.Width
-                            ZIndex: =1
-
-                        shpIssueTaskColumnHeaderBorderEndIRS As rectangle:
-                            BorderColor: =RGBA(0, 0, 0, 0)
-                            BorderStyle: =BorderStyle.None
-                            DisabledFill: =RGBA(166, 166, 166, 1)
-                            Fill: |-
-                                =If(
-                                    false,
-                                    EDSDefaults.BorderColor,
-                                    EDSColors.Background.Medium
-                                )
-                            FocusedBorderThickness: =4
-                            Height: =EDSStyles.Tabs.BorderThickness
-                            HoverFill: =RGBA(105, 121, 126, 1)
-                            LayoutMinWidth: =Parent.Width
-                            PressedFill: =RGBA(105, 121, 126, 1)
-                            Width: =Parent.Width
-                            ZIndex: =2
-
-                galIssueTasksIRS As gallery.galleryVertical:
-                    AccessibleLabel: ="Choose row"
-                    AlignInContainer: =AlignInContainer.SetByContainer
-                    BorderColor: =EDSDefaults.BorderColor
-                    BorderStyle: =EDSDefaults.BorderStyle
-                    BorderThickness: =EDSDefaults.BorderThickness
-                    Fill: |-
-                        =//EDSStyles.Menu.Fill
-                        Color.Transparent
-                    FocusedBorderThickness: =EDSDefaults.FocusedBorderThickness
-                    Height: =EDSStyles.Gallery.Height
-                    Items: ='Issue Registrations'
-                    Layout: =Layout.Vertical
-                    LayoutMinHeight: |-
-                        =//Min(EDSStyles.Gallery.LayoutMinHeight, Self.TemplateHeight*CountRows(Self.AllItems))
-                        EDSStyles.Gallery.LayoutMinHeight
-                    LayoutMinWidth: =EDSDefaults.LayoutMinWidth
-                    LoadingSpinner: =LoadingSpinner.Data
-                    LoadingSpinnerColor: =EDSDefaults.LoadingSpinnerColor
-                    TabIndex: =0
-                    TemplateFill: |-
-                        =If(
-                            ThisItem.IsSelected,
-                            EDSStyles.Menu.ActiveFill,
-                            Color.Transparent
-                        )
-                    TemplatePadding: =0
-                    TemplateSize: |-
-                        =//EDSDefaults.Card.HeaderSubtitleDescription.Height
-                        120
-                    Width: =EDSStyles.Gallery.Width
-                    X: =EDSStyles.Menu.Margin
-                    Y: =EDSStyles.Menu.Margin+8
                     ZIndex: =3
 
-                    hcoIssueTaskItemLayoutIRS As groupContainer.horizontalAutoLayoutContainer:
-                        Fill: =Color.Transparent
-                        Height: =Parent.TemplateHeight
-                        LayoutAlignItems: =LayoutAlignItems.Center
-                        LayoutMode: =LayoutMode.Auto
-                        PaddingBottom: =EDSStyles.Menu.PaddingBottom//
-                        PaddingLeft: =icoIssueTaskItemCheckboxIRS.Width
-                        PaddingRight: =EDSStyles.Menu.PaddingRight
-                        PaddingTop: =EDSStyles.Menu.PaddingTop
-                        Width: =Parent.TemplateWidth
+                    btnNavToIssueRegistrationTasksIRS As button:
+                        BorderColor: =EDSStyles.Button.BorderColor
+                        BorderStyle: =EDSStyles.OutlinedButton.BorderStyle
+                        BorderThickness: =EDSStyles.Button.BorderThickness
+                        Color: =EDSStyles.OutlinedButton.Color
+                        DisabledBorderColor: =EDSStyles.OutlinedButton.DisabledBorderColor
+                        DisabledColor: =EDSStyles.Button.DisabledColor
+                        DisabledFill: =EDSStyles.OutlinedButton.DisabledFill
+                        DisplayMode: |-
+                            =//If(locActiveIssueReport.Status = 'Status (Issue Registrations)'.Active,  DisplayMode.Edit, DisplayMode.Disabled)
+                            DisplayMode.Edit
+                        Fill: =EDSStyles.OutlinedButton.Fill
+                        FocusedBorderColor: =EDSStyles.OutlinedButton.FocusedBorderColor
+                        FocusedBorderThickness: =EDSStyles.Button.FocusedBorderThickness
+                        Font: =EDSStyles.Button.Font
+                        FontWeight: =EDSStyles.Button.FontWeight
+                        Height: =EDSStyles.Button.Height
+                        HoverBorderColor: =EDSStyles.Button.HoverBorderColor
+                        HoverColor: =EDSStyles.OutlinedButton.HoverColor
+                        HoverFill: =EDSStyles.OutlinedButton.HoverFill
+                        OnSelect: |-
+                            =//Navigate('Maintenance Task Screen', ScreenTransition.None, {locShowIssueReportTaskForm: true});
+                            Navigate(
+                                'Maintenance Task Screen',
+                                ScreenTransition.None,
+                                {locActiveIssueReport: locActiveIssueReport}
+                            )
+                            /*
+                            NewForm(frmIssueRegistrationTaskIRS)
+                            Patch(
+                                'Living Quarter Maintenance Tasks',
+                                Defaults('Living Quarter Maintenance Tasks'),
+                                {
+                                    Title: $"{tabIssueTaskDisciplinesIRS.Selected.Value} activity",
+                                    Description: locActiveIssueReport.'Registration Details',
+                                    'Start Date': Today(),
+                                    'End Date': DateAdd(
+                                        Today(),
+                                        10,
+                                        TimeUnit.Days
+                                    ),
+                                    Priority: 'Priority (Living Quarter Maintenance Tasks)'.Normal,
+                                    Technician: LookUp(Users, ThisRecord.'Azure AD Object ID' = User().EntraObjectId),
+                                    Issue: locActiveIssueReport
+                                }
+                            )
+                            */
+                        PaddingBottom: =EDSStyles.Button.PaddingBottom
+                        PaddingLeft: =EDSStyles.Button.PaddingLeft
+                        PaddingRight: =EDSStyles.Button.PaddingRight
+                        PaddingTop: =EDSStyles.Button.PaddingTop
+                        PressedBorderColor: =EDSStyles.Button.PressedBorderColor
+                        PressedColor: =EDSStyles.OutlinedButton.PressedColor
+                        PressedFill: =EDSStyles.OutlinedButton.PressedFill
+                        RadiusBottomLeft: =EDSStyles.Button.RadiusBottomLeft
+                        RadiusBottomRight: =EDSStyles.Button.RadiusBottomRight
+                        RadiusTopLeft: =EDSStyles.Button.RadiusTopLeft
+                        RadiusTopRight: =EDSStyles.Button.RadiusTopRight
+                        Size: =EDSStyles.Button.FontSize
+                        Text: |-
+                            =Switch(
+                                gblDisplayLanguageSetting.Language,
+                                "no-NO",
+                                "Gå til oppgaver",
+                                "Go to issue tasks"
+                            )
+                        Visible: |-
+                            =//!locShowIssueReportTaskForm
+                            frmIssueRegistrationIRS.Mode = FormMode.View
+                        Width: =200
+                        X: =16
+                        Y: =16
                         ZIndex: =1
 
-                        imgIssueTaskImageIRS As image:
-                            BorderColor: =RGBA(0, 0, 0, 0)
-                            BorderStyle: =BorderStyle.None
-                            BorderThickness: =2
-                            DisabledBorderColor: =RGBA(0, 0, 0, 0)
-                            DisabledFill: =RGBA(0, 0, 0, 0)
-                            FocusedBorderThickness: =4
-                            HoverBorderColor: =RGBA(0, 0, 0, 0)
-                            HoverFill: =RGBA(0, 0, 0, 0)
-                            Image: =EDSIcons.AddCircleFilled
-                            PaddingLeft: =4
-                            PaddingRight: =4
-                            PressedBorderColor: =RGBA(0, 0, 0, 0)
-                            PressedFill: =RGBA(0, 0, 0, 0)
-                            ZIndex: =1
-
-                        lblIssueTaskTitleIRS As label:
-                            Align: =Align.Center
-                            AutoHeight: =true
-                            BorderColor: =EDSStyles.Label.BorderColor
-                            BorderStyle: =EDSStyles.Label.BorderStyle
-                            BorderThickness: =EDSStyles.Label.BorderThickness
-                            Color: =EDSStyles.Label.Color
-                            DisabledBorderColor: =EDSStyles.Label.DisabledBorderColor
-                            DisabledColor: =EDSStyles.Label.DisabledColor
-                            DisabledFill: =EDSStyles.Label.DisabledFill
-                            DisplayMode: =DisplayMode.View
-                            Fill: =Color.Transparent
-                            FocusedBorderColor: =EDSStyles.Label.FocusedBorderColor
-                            FocusedBorderThickness: =EDSStyles.Label.FocusedBorderThickness
-                            Font: =EDSStyles.Label.Font
-                            FontWeight: =EDSFonts.Heading.H4.Weight
-                            Height: =EDSStyles.Label.Height
-                            HoverBorderColor: =EDSStyles.Label.HoverBorderColor
-                            HoverColor: =EDSStyles.Label.HoverColor
-                            HoverFill: =EDSStyles.Label.HoverFill
-                            LineHeight: =EDSFonts.Heading.H4.LineHeight
-                            PaddingBottom: =EDSStyles.Label.PaddingBottom
-                            PaddingLeft: =EDSStyles.Label.PaddingLeft
-                            PaddingRight: =EDSStyles.Label.PaddingRight
-                            PaddingTop: =EDSStyles.Label.PaddingTop
-                            PressedBorderColor: =EDSStyles.Label.PressedBorderColor
-                            PressedColor: =EDSStyles.Label.PressedColor
-                            PressedFill: =EDSStyles.Label.PressedFill
-                            Size: =EDSFonts.Heading.H4.Size
-                            Text: =ThisItem.'Functional location'
-                            VerticalAlign: =VerticalAlign.Top
-                            Width: |-
-                                =//DataTableHeaderItemWidthAdjustableIRS.ColumnWidth
-                                EDSStyles.Label.Width/2
-                            X: =16
-                            Y: =16
-                            ZIndex: =2
-
-                        lblIssueTaskDescriptionIRS As label:
-                            BorderColor: =EDSStyles.Label.BorderColor
-                            BorderStyle: =EDSStyles.Label.BorderStyle
-                            BorderThickness: =EDSStyles.Label.BorderThickness
-                            Color: =EDSStyles.Label.Color
-                            DisabledBorderColor: =EDSStyles.Label.DisabledBorderColor
-                            DisabledColor: =EDSStyles.Label.DisabledColor
-                            DisabledFill: =EDSStyles.Label.DisabledFill
-                            DisplayMode: =DisplayMode.View
-                            Fill: =Color.Transparent
-                            FillPortions: =1
-                            FocusedBorderColor: =EDSStyles.Label.FocusedBorderColor
-                            FocusedBorderThickness: =EDSStyles.Label.FocusedBorderThickness
-                            Font: =EDSStyles.Label.Font
-                            FontWeight: =EDSStyles.Label.FontWeight
-                            Height: =EDSStyles.Label.Height
-                            HoverBorderColor: =EDSStyles.Label.HoverBorderColor
-                            HoverColor: =EDSStyles.Label.HoverColor
-                            HoverFill: =EDSStyles.Label.HoverFill
-                            LayoutMinWidth: =295
-                            PaddingBottom: =EDSStyles.Label.PaddingBottom
-                            PaddingLeft: =EDSStyles.Label.PaddingLeft
-                            PaddingRight: =EDSStyles.Label.PaddingRight
-                            PaddingTop: =EDSStyles.Label.PaddingTop
-                            PressedBorderColor: =EDSStyles.Label.PressedBorderColor
-                            PressedColor: =EDSStyles.Label.PressedColor
-                            PressedFill: =EDSStyles.Label.PressedFill
-                            Size: =EDSStyles.Label.FontSize
-                            Text: =ThisItem.Comment
-                            Width: =EDSStyles.Label.Width
-                            X: =16
-                            Y: =16
-                            ZIndex: =3
-
-                    shpIssueTaskItemOverlayIRS As rectangle:
-                        BorderColor: =RGBA(0, 0, 0, 0)
-                        BorderStyle: =BorderStyle.None
-                        DisabledFill: =Color.Transparent
-                        Fill: =RGBA(0, 0, 0, 0)
-                        FocusedBorderThickness: =4
-                        Height: =Parent.TemplateHeight
-                        HoverFill: =RGBA(0, 0, 0, 0.2)
-                        OnSelect: =If(icoIssueTaskItemCheckboxIRS.Visible, Select(icoIssueTaskItemCheckboxIRS), Select(Parent))
-                        PressedFill: =EDSStyles.Menu.PressedFill
-                        Width: =Parent.TemplateWidth
+                    btnToggleIssueRegistrationStatusIRS As button:
+                        BorderColor: =EDSStyles.Button.BorderColor
+                        BorderStyle: =EDSStyles.OutlinedButton.BorderStyle
+                        BorderThickness: =EDSStyles.Button.BorderThickness
+                        Color: =EDSStyles.OutlinedButton.Color
+                        DisabledBorderColor: =EDSStyles.OutlinedButton.DisabledBorderColor
+                        DisabledColor: =EDSStyles.Button.DisabledColor
+                        DisabledFill: =EDSStyles.OutlinedButton.DisabledFill
+                        DisplayMode: |-
+                            =If(
+                                Or(
+                                    CountIf(
+                                        'Living Quarter Maintenance Tasks',
+                                        ThisRecord.'Issue Registration'.IssueRegistrationGUID = locActiveIssueReport.IssueRegistrationGUID,
+                                        ThisRecord.Progress < 100
+                                    ) = 0,
+                                    locActiveIssueReport.Status = 'Status (Issue Registrations)'.Inactive
+                                ),
+                                DisplayMode.Edit,
+                                DisplayMode.Disabled
+                            )
+                        Fill: =EDSStyles.OutlinedButton.Fill
+                        FocusedBorderColor: =EDSStyles.OutlinedButton.FocusedBorderColor
+                        FocusedBorderThickness: =EDSStyles.Button.FocusedBorderThickness
+                        Font: =EDSStyles.Button.Font
+                        FontWeight: =EDSStyles.Button.FontWeight
+                        Height: =EDSStyles.Button.Height
+                        HoverBorderColor: =EDSStyles.Button.HoverBorderColor
+                        HoverColor: =EDSStyles.OutlinedButton.HoverColor
+                        HoverFill: =EDSStyles.OutlinedButton.HoverFill
+                        OnSelect: |-
+                            =Patch(
+                                'Issue Registrations',
+                                locActiveIssueReport,
+                                {
+                                    Status: If(
+                                        locActiveIssueReport.Status = 'Status (Issue Registrations)'.Active,
+                                        'Status (Issue Registrations)'.Inactive,
+                                        'Status (Issue Registrations)'.Active
+                                    )
+                                }
+                            );
+                            UpdateContext({locActiveIssueReport: LookUp('Issue Registrations', ThisRecord.IssueRegistrationGUID = locActiveIssueReport.IssueRegistrationGUID)});
+                            //Reset(rdoIssueReportStatusIRS); // does not work at the moment
+                        PaddingBottom: =EDSStyles.Button.PaddingBottom
+                        PaddingLeft: =EDSStyles.Button.PaddingLeft
+                        PaddingRight: =EDSStyles.Button.PaddingRight
+                        PaddingTop: =EDSStyles.Button.PaddingTop
+                        PressedBorderColor: =EDSStyles.Button.PressedBorderColor
+                        PressedColor: =EDSStyles.OutlinedButton.PressedColor
+                        PressedFill: =EDSStyles.OutlinedButton.PressedFill
+                        RadiusBottomLeft: =EDSStyles.Button.RadiusBottomLeft
+                        RadiusBottomRight: =EDSStyles.Button.RadiusBottomRight
+                        RadiusTopLeft: =EDSStyles.Button.RadiusTopLeft
+                        RadiusTopRight: =EDSStyles.Button.RadiusTopRight
+                        Size: =EDSStyles.Button.FontSize
+                        Text: |-
+                            =If(
+                                locActiveIssueReport.Status = 'Status (Issue Registrations)'.Active,
+                                Switch(
+                                    gblDisplayLanguageSetting.Language,
+                                    "no-NO",
+                                    "Avslutt sak",
+                                    "Close issue"
+                                ),
+                                Switch(
+                                    gblDisplayLanguageSetting.Language,
+                                    "no-NO",
+                                    "Gjenåpne sak",
+                                    "Reopen issue"
+                                )
+                            )
+                        Visible: |-
+                            =//!locShowIssueReportTaskForm
+                            And(frmIssueRegistrationIRS.Mode = FormMode.View, DataSourceInfo('Issue Registrations', DataSourceInfo.EditPermission))
+                        Width: =200
+                        X: =16
+                        Y: =16
                         ZIndex: =2
 
-                    icoIssueTaskItemCheckboxIRS As image:
-                        BorderColor: =EDSDefaults.BorderColor
-                        BorderStyle: =BorderStyle.None
-                        BorderThickness: =EDSDefaults.BorderThickness
-                        DisabledFill: =Color.Transparent
-                        Height: =Parent.TemplateHeight
-                        HoverFill: =Self.Fill
-                        Image: |-
-                            =//If(ThisItem.SampleHeading exactin colGallerySelected.SampleHeading, EDSIcons.Checkbox, EDSIcons.CheckboxOutline)
-                            EDSIcons.AddBox
-                        PaddingBottom: =EDSStyles.Menu.IconPaddingBottom
-                        PaddingLeft: =EDSStyles.DataTable.PaddingLeft
-                        PaddingRight: =EDSStyles.DataTable.PaddingLeft
-                        PaddingTop: =EDSStyles.Menu.IconPaddingTop
-                        Tooltip: |-
-                            ="Attention: remember to change the collection to use for multiselection!"
-                        Width: =1
-                        ZIndex: =4
+                    btnEditSaveIssueRegistrationIRS As button:
+                        BorderColor: =EDSStyles.Button.BorderColor
+                        BorderStyle: =EDSStyles.OutlinedButton.BorderStyle
+                        BorderThickness: =EDSStyles.Button.BorderThickness
+                        Color: =EDSStyles.OutlinedButton.Color
+                        DisabledBorderColor: =EDSStyles.OutlinedButton.DisabledBorderColor
+                        DisabledColor: =EDSStyles.Button.DisabledColor
+                        DisabledFill: =EDSStyles.OutlinedButton.DisabledFill
+                        DisplayMode: =If(locActiveIssueReport.Status = 'Status (Issue Registrations)'.Active,  DisplayMode.Edit, DisplayMode.Disabled)
+                        Fill: =EDSStyles.OutlinedButton.Fill
+                        FocusedBorderColor: =EDSStyles.OutlinedButton.FocusedBorderColor
+                        FocusedBorderThickness: =EDSStyles.Button.FocusedBorderThickness
+                        Font: =EDSStyles.Button.Font
+                        FontWeight: =EDSStyles.Button.FontWeight
+                        Height: =EDSStyles.Button.Height
+                        HoverBorderColor: =EDSStyles.Button.HoverBorderColor
+                        HoverColor: =EDSStyles.OutlinedButton.HoverColor
+                        HoverFill: =EDSStyles.OutlinedButton.HoverFill
+                        OnSelect: |
+                            =If(
+                                //locEditIssueRegistration,
+                                Or(frmIssueRegistrationIRS.Mode = FormMode.Edit, frmIssueRegistrationIRS.Mode = FormMode.New),
+                                SubmitForm(frmIssueRegistrationIRS),
+                                //UpdateContext({locEditIssueRegistration: true});
+                                EditForm(frmIssueRegistrationIRS)
+                            );
+                        PaddingBottom: =EDSStyles.Button.PaddingBottom
+                        PaddingLeft: =EDSStyles.Button.PaddingLeft
+                        PaddingRight: =EDSStyles.Button.PaddingRight
+                        PaddingTop: =EDSStyles.Button.PaddingTop
+                        PressedBorderColor: =EDSStyles.Button.PressedBorderColor
+                        PressedColor: =EDSStyles.OutlinedButton.PressedColor
+                        PressedFill: =EDSStyles.OutlinedButton.PressedFill
+                        RadiusBottomLeft: =EDSStyles.Button.RadiusBottomLeft
+                        RadiusBottomRight: =EDSStyles.Button.RadiusBottomRight
+                        RadiusTopLeft: =EDSStyles.Button.RadiusTopLeft
+                        RadiusTopRight: =EDSStyles.Button.RadiusTopRight
+                        Size: =EDSStyles.Button.FontSize
+                        Text: |-
+                            =Switch(
+                                gblDisplayLanguageSetting.Language,
+                                "no-NO",
+                                If(
+                                    //locEditIssueRegistration,
+                                    frmIssueRegistrationIRS.Mode <> FormMode.View,
+                                    "Lagre",
+                                    "Redigere"
+                                ),
+                                If(
+                                    frmIssueRegistrationIRS.Mode <> FormMode.View,
+                                    "Save",
+                                    "Edit"
+                                )
+                            )
+                        Visible: |-
+                            =//!locShowIssueReportTaskForm
+                            DataSourceInfo('Issue Registrations', DataSourceInfo.EditPermission)
+                        Width: =200
+                        X: =16
+                        Y: =16
+                        ZIndex: =3
 
-                lblIssueTaskGallerySelectionInformationIRS As label:
-                    BorderColor: =EDSStyles.Label.BorderColor
-                    BorderStyle: =EDSStyles.Label.BorderStyle
-                    BorderThickness: =EDSStyles.Label.BorderThickness
-                    Color: =EDSStyles.Label.Color
-                    DisabledBorderColor: =EDSStyles.Label.DisabledBorderColor
-                    DisabledColor: =EDSStyles.Label.DisabledColor
-                    DisabledFill: =EDSStyles.Label.DisabledFill
-                    DisplayMode: =DisplayMode.View
-                    Fill: =EDSStyles.Label.Fill
-                    FocusedBorderColor: =EDSStyles.Label.FocusedBorderColor
-                    FocusedBorderThickness: =EDSStyles.Label.FocusedBorderThickness
-                    Font: =EDSStyles.Label.Font
-                    FontWeight: =FontWeight.Lighter
-                    Height: =EDSStyles.Label.Height
-                    HoverBorderColor: =EDSStyles.Label.HoverBorderColor
-                    HoverColor: =EDSStyles.Label.HoverColor
-                    HoverFill: =EDSStyles.Label.HoverFill
-                    PaddingBottom: =EDSStyles.Label.PaddingBottom
-                    PaddingLeft: =EDSStyles.Label.PaddingLeft
-                    PaddingRight: =EDSStyles.Label.PaddingRight
-                    PaddingTop: =EDSStyles.Label.PaddingTop
-                    PressedBorderColor: =EDSStyles.Label.PressedBorderColor
-                    PressedColor: =EDSStyles.Label.PressedColor
-                    PressedFill: =EDSStyles.Label.PressedFill
-                    Size: =EDSStyles.Label.FontSize
-                    Text: ="" & CountRows(colGallerySelected) & " of "&CountRows(galIssueTasksIRS.AllItems) &" items selected"
-                    Width: =Parent.Width
-                    X: =16
-                    Y: =16
-                    ZIndex: =4
+                    btnCancelRegistrationEditIRS As Button:
+                        AccessibleLabel: ="Selecting will exit issue editing/registration mode"
+                        Appearance: ='ButtonCanvas.Appearance'.Outline
+                        BasePaletteColor: =EDSColors.Interactive.Danger.Resting
+                        DisplayMode: =DisplayMode.Edit
+                        Font: =Font.Lato
+                        FontColor: =EDSColors.Interactive.Danger.Resting
+                        FontWeight: =FontWeight.Semibold
+                        Height: =36
+                        LayoutMinHeight: =32
+                        LayoutMinWidth: =96
+                        OnSelect: =ViewForm(frmIssueRegistrationIRS)
+                        Text: |-
+                            =Switch(
+                                gblDisplayLanguageSetting.Language,
+                                "no-NO",
+                                "Avbryt",
+                                "Cancel"
+                            )
+                        Visible: =frmIssueRegistrationIRS.Mode <> FormMode.View
+                        Width: =96
+                        X: =DataCardValue10.Width+DataCardValue10.X
+                        Y: =DataCardValue10.Y
+                        ZIndex: =4
 
     grpAppMenuIRS As group:
         Height: =5
@@ -1409,6 +2741,7 @@
                         BorderStyle: =BorderStyle.None
                         BorderThickness: =EDSStyles.Menu.BorderThickness
                         DisabledFill: =Color.Transparent
+                        FocusedBorderColor: =
                         Height: |-
                             =//EDSDataTable.Styling.Menu.IconHeight
                             Parent.Height

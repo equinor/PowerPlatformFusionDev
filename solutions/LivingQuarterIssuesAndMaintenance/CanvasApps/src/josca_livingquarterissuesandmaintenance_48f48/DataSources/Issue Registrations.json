@@ -6,6 +6,7 @@
     "IsSampleData": false,
     "IsWritable": true,
     "LogicalName": "josca_issueregistration",
+    "MaxGetRowsCount": 500,
     "Name": "Issue Registrations",
     "NativeCDSDataSourceInfoNameMapping": {
       "_ownerid_value": "Owner",
@@ -16,8 +17,10 @@
       "importsequencenumber": "Import Sequence Number",
       "josca_comment": "Comment",
       "josca_discipline": "Discipline",
+      "josca_failurereport": "FailureReport",
       "josca_floor": "Floor",
       "josca_functionallocation": "Functional location",
+      "josca_issuelocationdetails": "Issue location details",
       "josca_issueregistration_ActivityPointers": "Activities",
       "josca_issueregistration_adx_inviteredemptions": "Invite Redemptions",
       "josca_issueregistration_adx_portalcomments": "Portal Comments",
@@ -46,12 +49,13 @@
       "josca_issueregistration_SyncErrors": "Sync Errors",
       "josca_IssueRegistration_Task": "Living Quarter Maintenance Tasks (josca_IssueRegistration_Task)",
       "josca_issueregistration_Tasks": "MaintEngTasks",
-      "josca_issueregistrationid": "Issue Registration",
+      "josca_issueregistrationid": "IssueRegistrationGUID",
+      "josca_issuetype": "Issue Type",
       "josca_name": "SubmissionId",
-      "josca_Plant": "Plant",
       "josca_registrationdatetime": "Registration Date Time",
       "josca_registrationdetails": "Registration Details",
       "josca_registrationlanguage": "Registration Language",
+      "josca_STIDPlant": "Installation",
       "modifiedby": "Modified By",
       "modifiedon": "Modified On",
       "modifiedonbehalfby": "Modified By (Delegate)",
@@ -126,10 +130,12 @@
     "DisplayName": "Maintenance Discipline",
     "Name": "josca_maintenancediscipline",
     "OptionSetInfoNameMapping": {
-      "459480000": "Electro",
-      "459480001": "Mechanic",
+      "459480000": "Electrical",
+      "459480001": "Mechanical",
       "459480002": "Automation",
-      "459480003": "Accommodation"
+      "459480003": "Accommodation",
+      "459480004": "Kitchen",
+      "459480005": "Hotel"
     },
     "OptionSetIsBooleanValued": false,
     "OptionSetIsGlobal": true,
@@ -137,6 +143,10 @@
       "OptionSetReferenceItem0": {
         "OptionSetReferenceColumnName": "josca_discipline",
         "OptionSetReferenceEntityName": "Issue Registrations"
+      },
+      "OptionSetReferenceItem1": {
+        "OptionSetReferenceColumnName": "josca_discipline",
+        "OptionSetReferenceEntityName": "Living Quarter Maintenance Tasks"
       }
     },
     "OptionSetTypeKey": "MultiSelectPicklistType",

@@ -10,9 +10,10 @@
     <layoutxml>
       <grid name="josca_stidplants" jump="josca_plant" select="1" icon="1" preview="0">
         <row name="josca_stidplant" id="josca_stidplantid">
-          <cell name="josca_plant" width="109" />
-          <cell name="josca_description" width="300" />
-          <cell name="josca_businessarea" width="300" />
+          <cell name="josca_plant" width="171" />
+          <cell name="josca_description" width="239" />
+          <cell name="josca_businessarea" width="264" />
+          <cell name="josca_camanagementemail" width="260" />
         </row>
       </grid>
     </layoutxml>
@@ -29,12 +30,13 @@
           </filter>
           <attribute name="josca_description" />
           <attribute name="josca_businessarea" />
+          <attribute name="josca_camanagementemail" />
         </entity>
       </fetch>
     </fetchxml>
     <IntroducedVersion>1.0</IntroducedVersion>
     <LocalizedNames>
-      <LocalizedName description="STID Plant Lookup View" languagecode="1033" />
+      <LocalizedName description="Installation Lookup View" languagecode="1033" />
     </LocalizedNames>
   </savedquery>
 </savedqueries>

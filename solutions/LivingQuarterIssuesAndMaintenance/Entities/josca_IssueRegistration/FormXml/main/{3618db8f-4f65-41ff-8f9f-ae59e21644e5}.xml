@@ -35,6 +35,22 @@
                         <control id="ownerid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="ownerid" />
                       </cell>
                     </row>
+                    <row>
+                      <cell id="{81894bf6-75b5-40e5-9520-c2e33a095710}" locklevel="0" rowspan="1" colspan="1">
+                        <labels>
+                          <label description="Issue location details" languagecode="1033" />
+                        </labels>
+                        <control id="josca_issuelocationdetails" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="josca_issuelocationdetails" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{5f0e0e59-86d6-4480-ae83-fa02c7715831}" locklevel="0" rowspan="1" colspan="1">
+                        <labels>
+                          <label description="FailureReport" languagecode="1033" />
+                        </labels>
+                        <control id="josca_failurereport" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="josca_failurereport" disabled="false" />
+                      </cell>
+                    </row>
                   </rows>
                 </section>
               </sections>
@@ -42,6 +58,51 @@
           </columns>
         </tab>
       </tabs>
+      <header id="{f9d37998-9545-4717-afe5-4baed62601cb}" celllabelposition="Top" columns="111" labelwidth="115" celllabelalignment="Left">
+        <rows>
+          <row>
+            <cell id="{c176f6b6-84e7-4bdc-b8b5-8722c9053d6f}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+            <cell id="{3bdd3922-1074-4664-a7bc-693de883a179}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+            <cell id="{d0172800-1234-45ce-9fab-d07edc4d2820}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+          </row>
+        </rows>
+      </header>
+      <footer id="{f7f8b3a1-c8ba-4f02-ba14-c4a90d77657a}" celllabelposition="Top" columns="111" labelwidth="115" celllabelalignment="Left">
+        <rows>
+          <row>
+            <cell id="{90232f81-6131-4870-8f6b-f403f24b0ff5}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+            <cell id="{fe4dd57f-39ea-4657-8889-c176ebe61611}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+            <cell id="{84c131f8-5a12-479a-a7ca-4551920b9862}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+          </row>
+        </rows>
+      </footer>
+      <DisplayConditions Order="0" FallbackForm="true">
+        <Everyone />
+      </DisplayConditions>
     </form>
     <IsCustomizable>1</IsCustomizable>
     <CanBeDeleted>1</CanBeDeleted>

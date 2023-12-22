@@ -10,8 +10,14 @@
     <layoutxml>
       <grid name="josca_issueregistrations" jump="josca_name" select="1" icon="1" preview="0">
         <row name="josca_issueregistration" id="josca_issueregistrationid">
-          <cell name="josca_name" width="300" />
-          <cell name="createdon" width="125" />
+          <cell name="josca_name" width="113" />
+          <cell name="josca_functionallocation" width="149" />
+          <cell name="josca_issuetype" width="101" />
+          <cell name="josca_registrationdetails" width="300" />
+          <cell name="josca_failurereport" width="118" />
+          <cell name="josca_issuelocationdetails" width="158" />
+          <cell name="josca_floor" width="100" />
+          <cell name="josca_comment" width="300" />
         </row>
       </grid>
     </layoutxml>
@@ -21,10 +27,16 @@
         <entity name="josca_issueregistration">
           <attribute name="josca_issueregistrationid" />
           <attribute name="josca_name" />
-          <attribute name="createdon" />
           <filter type="and">
             <condition attribute="statecode" operator="eq" value="0" />
           </filter>
+          <attribute name="josca_functionallocation" />
+          <attribute name="josca_floor" />
+          <attribute name="josca_failurereport" />
+          <attribute name="josca_issuetype" />
+          <attribute name="josca_registrationdetails" />
+          <attribute name="josca_comment" />
+          <attribute name="josca_issuelocationdetails" />
         </entity>
       </fetch>
     </fetchxml>

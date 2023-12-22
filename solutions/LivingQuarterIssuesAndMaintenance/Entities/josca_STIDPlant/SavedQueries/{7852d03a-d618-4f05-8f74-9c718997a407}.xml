@@ -10,14 +10,21 @@
     <layoutxml>
       <grid name="josca_stidplants" jump="josca_plant" select="1" icon="1" preview="1">
         <row name="josca_stidplant" id="josca_stidplantid">
-          <cell name="josca_plant" width="300" />
-          <cell name="createdon" width="125" />
-          <cell name="josca_instcode" width="100" />
-          <cell name="josca_sapplantid" width="100" />
-          <cell name="josca_stidplantid" width="104" />
-          <cell name="josca_description" width="103" />
-          <cell name="josca_businessarea" width="115" />
-          <cell name="josca_camanagementemail" width="173" />
+          <cell name="josca_stidplantid" width="242" />
+          <cell name="josca_plant" width="230" />
+          <cell name="josca_instcode" width="113" />
+          <cell name="josca_sapplantid" width="98" />
+          <cell name="josca_description" width="259" />
+          <cell name="josca_businessarea" width="279" />
+          <cell name="josca_camanagementemail" width="179" />
+          <cell name="modifiedon" width="130" />
+          <cell name="modifiedby" width="129" />
+          <cell name="josca_hotel" width="100" />
+          <cell name="josca_electrical" width="100" />
+          <cell name="josca_kitchen" width="100" />
+          <cell name="josca_mechanical" width="106" />
+          <cell name="josca_automation" width="107" />
+          <cell name="statecode" width="100" />
         </row>
       </grid>
     </layoutxml>
@@ -27,7 +34,6 @@
         <entity name="josca_stidplant">
           <attribute name="josca_stidplantid" />
           <attribute name="josca_plant" />
-          <attribute name="createdon" />
           <order attribute="josca_plant" descending="false" />
           <filter type="and">
             <condition attribute="statecode" operator="eq" value="0" />
@@ -37,12 +43,20 @@
           <attribute name="josca_description" />
           <attribute name="josca_businessarea" />
           <attribute name="josca_camanagementemail" />
+          <attribute name="modifiedon" />
+          <attribute name="modifiedby" />
+          <attribute name="josca_hotel" />
+          <attribute name="josca_electrical" />
+          <attribute name="josca_kitchen" />
+          <attribute name="josca_mechanical" />
+          <attribute name="josca_automation" />
+          <attribute name="statecode" />
         </entity>
       </fetch>
     </fetchxml>
     <IntroducedVersion>1.0</IntroducedVersion>
     <LocalizedNames>
-      <LocalizedName description="STID Plant Associated View" languagecode="1033" />
+      <LocalizedName description="Installation Associated View" languagecode="1033" />
     </LocalizedNames>
   </savedquery>
 </savedqueries>

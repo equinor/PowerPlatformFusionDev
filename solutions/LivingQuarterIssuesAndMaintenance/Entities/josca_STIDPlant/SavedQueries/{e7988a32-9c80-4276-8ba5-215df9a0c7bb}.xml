@@ -15,6 +15,12 @@
           <cell name="josca_instcode" width="135" />
           <cell name="josca_businessarea" width="262" />
           <cell name="josca_camanagementemail" width="224" />
+          <cell name="josca_hotel" width="100" />
+          <cell name="josca_electrical" width="100" />
+          <cell name="josca_kitchen" width="100" />
+          <cell name="josca_mechanical" width="106" />
+          <cell name="josca_automation" width="107" />
+          <cell name="statecode" width="100" />
         </row>
       </grid>
     </layoutxml>
@@ -36,12 +42,21 @@
             <condition attribute="josca_businessarea" operator="not-like" value="TDI%" />
           </filter>
           <order attribute="josca_description" descending="false" />
+          <attribute name="josca_hotel" />
+          <attribute name="josca_electrical" />
+          <attribute name="josca_kitchen" />
+          <attribute name="josca_mechanical" />
+          <attribute name="josca_automation" />
+          <attribute name="statecode" />
         </entity>
       </fetch>
     </fetchxml>
     <IntroducedVersion>1.0</IntroducedVersion>
     <LocalizedNames>
-      <LocalizedName description="Active STID Plants" languagecode="1033" />
+      <LocalizedName description="Active Installations" languagecode="1033" />
     </LocalizedNames>
+    <Descriptions>
+      <Description description="Only enabled installations with accommodation" languagecode="1033" />
+    </Descriptions>
   </savedquery>
 </savedqueries>

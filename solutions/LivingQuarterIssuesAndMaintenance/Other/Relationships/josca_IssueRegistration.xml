@@ -38,7 +38,7 @@
     <ReferencingAttributeName>josca_Issue</ReferencingAttributeName>
     <RelationshipDescription>
       <Descriptions>
-        <Description description="" languagecode="1033" />
+        <Description description="The LQ issue registration this task belongs to" languagecode="1033" />
       </Descriptions>
     </RelationshipDescription>
     <EntityRelationshipRoles>

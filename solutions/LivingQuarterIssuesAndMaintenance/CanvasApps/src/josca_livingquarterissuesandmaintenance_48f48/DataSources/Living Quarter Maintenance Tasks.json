@@ -1,0 +1,373 @@
+[
+  {
+    "CdsFCBContext": "{\"FileType\":true,\"ImageExternalStorage\":true}",
+    "EntitySetName": "josca_livingquartermaintenancetasks",
+    "IsHidden": false,
+    "IsSampleData": false,
+    "IsWritable": true,
+    "LogicalName": "josca_livingquartermaintenancetask",
+    "MaxGetRowsCount": 500,
+    "Name": "Living Quarter Maintenance Tasks",
+    "NativeCDSDataSourceInfoNameMapping": {
+      "_ownerid_value": "Owner",
+      "_regardingobjectid_value": "Account",
+      "{Attachments}": "Attachments",
+      "activityadditionalparams": "Activity Additional Parameters",
+      "activityid": "ActivityGUID",
+      "activitytypecode": "Activity Type",
+      "actualdurationminutes": "Actual Duration",
+      "actualend": "Actual End",
+      "actualstart": "Actual Start",
+      "community": "Social Channel",
+      "createdby_josca_livingquartermaintenancetask": "Created By",
+      "createdon": "Date Created",
+      "createdonbehalfby_josca_livingquartermaintenancetask": "Created By (Delegate)",
+      "deliverylastattemptedon": "Date Delivery Last Attempted",
+      "deliveryprioritycode": "Delivery Priority",
+      "description": "Description",
+      "exchangeitemid": "Exchange Item ID",
+      "exchangerate": "Exchange Rate",
+      "exchangeweblink": "Exchange WebLink",
+      "importsequencenumber": "Import Sequence Number",
+      "instancetypecode": "Recurring Instance Type",
+      "isbilled": "Is Billed",
+      "ismapiprivate": "Is Private",
+      "isregularactivity": "Is Regular Activity",
+      "isworkflowcreated": "Is Workflow Created",
+      "josca_activityreport": "M3",
+      "josca_discipline": "Discipline",
+      "josca_disciplinemanagercomment": "Discipline Manager Comment",
+      "josca_disciplinetechniciancomment": "Discipline Technician Comment",
+      "josca_failurereport": "M2",
+      "josca_Issue_josca_LivingQuarterMaintenanceTask": "Issue Registration",
+      "josca_livingquartermaintenancetask_ActionCards": "Action Cards",
+      "josca_livingquartermaintenancetask_Annotations": "Notes",
+      "josca_livingquartermaintenancetask_AsyncOperations": "System Jobs",
+      "josca_livingquartermaintenancetask_BulkDeleteFailures": "Bulk Delete Failures",
+      "josca_livingquartermaintenancetask_connections1": "Connections (josca_livingquartermaintenancetask_connections1)",
+      "josca_livingquartermaintenancetask_connections2": "Connections (josca_livingquartermaintenancetask_connections2)",
+      "josca_livingquartermaintenancetask_DuplicateBaseRecord": "Duplicate Records (josca_livingquartermaintenancetask_DuplicateBaseRecord)",
+      "josca_livingquartermaintenancetask_DuplicateMatchingRecord": "Duplicate Records (josca_livingquartermaintenancetask_DuplicateMatchingRecord)",
+      "josca_livingquartermaintenancetask_Feedback": "Feedback",
+      "josca_livingquartermaintenancetask_MailboxTrackingFolders": "Mailbox Auto Tracking Folders",
+      "josca_livingquartermaintenancetask_PrincipalObjectAttributeAccesses": "Field Sharing",
+      "josca_livingquartermaintenancetask_ProcessSession": "Process Sessions",
+      "josca_livingquartermaintenancetask_QueueItems": "Queue Items",
+      "josca_livingquartermaintenancetask_SyncErrors": "Sync Errors",
+      "josca_livingquartermaintenancetask_Teams": "Teams",
+      "josca_progress": "Progress",
+      "josca_Technician_josca_LivingQuarterMaintenanceTask": "Technician",
+      "lastonholdtime": "Last On Hold Time",
+      "leftvoicemail": "Left Voice Mail",
+      "modifiedby_josca_livingquartermaintenancetask": "Modified By",
+      "modifiedon": "Last Updated",
+      "modifiedonbehalfby_josca_livingquartermaintenancetask": "Modified By (Delegate)",
+      "onholdtime": "On Hold Time (Minutes)",
+      "overriddencreatedon": "Record Created On",
+      "owningbusinessunit_josca_livingquartermaintenancetask": "Owning Business Unit",
+      "owningteam_josca_livingquartermaintenancetask": "Owning Team",
+      "owninguser_josca_livingquartermaintenancetask": "Owning User",
+      "postponeactivityprocessinguntil": "Delay activity processing until",
+      "prioritycode": "Priority",
+      "processid": "Process",
+      "scheduleddurationminutes": "Scheduled Duration",
+      "scheduledend": "End Date",
+      "scheduledstart": "Start Date",
+      "sendermailboxid_josca_livingquartermaintenancetask": "Sender's Mailbox",
+      "senton": "Date Sent",
+      "seriesid": "Series Id",
+      "sortdate": "Sort Date",
+      "stageid": "(Deprecated) Process Stage",
+      "statecode": "Activity Status",
+      "statuscode": "Status Reason",
+      "subject": "Title",
+      "timezoneruleversionnumber": "Time Zone Rule Version Number",
+      "transactioncurrencyid_josca_livingquartermaintenancetask": "Currency",
+      "traversedpath": "(Deprecated) Traversed Path",
+      "utcconversiontimezonecode": "UTC Conversion Time Zone Code",
+      "versionnumber": "Version Number"
+    },
+    "PreferredName": "Living Quarter Maintenance Tasks",
+    "Type": "NativeCDSDataSourceInfo"
+  },
+  {
+    "DisplayName": "Living Quarter Maintenance Tasks (Views)",
+    "Name": "_josca_livingquartermaintenancetask_views",
+    "RelatedEntityName": "Living Quarter Maintenance Tasks",
+    "TrimmedViewName": true,
+    "Type": "ViewInfo",
+    "ViewInfoNameMapping": {
+      "1fd8b399-87cd-405b-8c01-bba8b365a083": "All Living Quarter Maintenance Tasks (1fd8b399-87cd-405b-8c01-bba8b365a083)",
+      "2c154bf8-b5fe-412c-840c-e00c554cb8ae": "My Open Living Quarter Maintenance Tasks",
+      "34929f84-609a-4db9-8aa0-e9f4df6b6d08": "Closed Living Quarter Maintenance Tasks",
+      "6a56cb2f-7571-4963-9f68-00dfb84e549b": "Living Quarter Maintenance Task Lookup View",
+      "7c8490e3-949a-ee11-be37-000d3a2d6797": "All Living Quarter Maintenance Tasks (7c8490e3-949a-ee11-be37-000d3a2d6797)",
+      "aaa1fc9f-02ce-42a6-b9b6-92f4842c59aa": "Living Quarter Maintenance Task Advanced Find View",
+      "c0cd0775-58b8-46a5-9913-b34f665169a3": "Living Quarter Maintenance Task Associated View"
+    }
+  },
+  {
+    "DisplayName": "Activity Type",
+    "Name": "activitypointer_activitytypecode",
+    "OptionSetInfoNameMapping": {
+      "10258": "Activity record for the Teams chat",
+      "10265": "LicenceMeetingProcess",
+      "10756": "AVMTRUsage",
+      "11041": "Customer Voice alert",
+      "11051": "Customer Voice survey invite",
+      "11053": "Customer Voice survey response",
+      "11295": "Invite Redemption",
+      "11296": "Portal Comment",
+      "11627": "Living Quarter Maintenance Task",
+      "4201": "Appointment",
+      "4202": "Email",
+      "4204": "Fax",
+      "4207": "Letter",
+      "4210": "Phone Call",
+      "4212": "MaintEngTask",
+      "4251": "Recurring Appointment"
+    },
+    "OptionSetIsBooleanValued": false,
+    "OptionSetIsGlobal": true,
+    "OptionSetReference": {
+      "OptionSetReferenceItem0": {
+        "OptionSetReferenceColumnName": "activitytypecode",
+        "OptionSetReferenceEntityName": "Living Quarter Maintenance Tasks"
+      }
+    },
+    "OptionSetTypeKey": "EntityNameType",
+    "RelatedColumnInvariantName": "activitytypecode",
+    "RelatedEntityName": "Living Quarter Maintenance Tasks",
+    "Type": "OptionSetInfo"
+  },
+  {
+    "DisplayName": "Delivery Priority",
+    "Name": "activitypointer_deliveryprioritycode",
+    "OptionSetInfoNameMapping": {
+      "0": "Low",
+      "1": "Normal",
+      "2": "High"
+    },
+    "OptionSetIsBooleanValued": false,
+    "OptionSetIsGlobal": true,
+    "OptionSetReference": {
+      "OptionSetReferenceItem0": {
+        "OptionSetReferenceColumnName": "deliveryprioritycode",
+        "OptionSetReferenceEntityName": "Living Quarter Maintenance Tasks"
+      }
+    },
+    "OptionSetTypeKey": "PicklistType",
+    "RelatedColumnInvariantName": "deliveryprioritycode",
+    "RelatedEntityName": "Living Quarter Maintenance Tasks",
+    "Type": "OptionSetInfo"
+  },
+  {
+    "DisplayName": "Is Regular Activity",
+    "Name": "activitypointer_isregularactivity",
+    "OptionSetInfoNameMapping": {
+      "0": "No",
+      "1": "Yes"
+    },
+    "OptionSetIsBooleanValued": true,
+    "OptionSetIsGlobal": true,
+    "OptionSetReference": {
+      "OptionSetReferenceItem0": {
+        "OptionSetReferenceColumnName": "isregularactivity",
+        "OptionSetReferenceEntityName": "Living Quarter Maintenance Tasks"
+      }
+    },
+    "OptionSetTypeKey": "BooleanType",
+    "RelatedColumnInvariantName": "isregularactivity",
+    "RelatedEntityName": "Living Quarter Maintenance Tasks",
+    "Type": "OptionSetInfo"
+  },
+  {
+    "DisplayName": "Recurring Instance Type (Living Quarter Maintenance Tasks)",
+    "Name": "josca_livingquartermaintenancetask_instancetypecode",
+    "OptionSetInfoNameMapping": {
+      "0": "Not Recurring",
+      "1": "Recurring Master",
+      "2": "Recurring Instance",
+      "3": "Recurring Exception",
+      "4": "Recurring Future Exception"
+    },
+    "OptionSetIsBooleanValued": false,
+    "OptionSetIsGlobal": false,
+    "OptionSetReference": {
+      "OptionSetReferenceItem0": {
+        "OptionSetReferenceColumnName": "instancetypecode",
+        "OptionSetReferenceEntityName": "Living Quarter Maintenance Tasks"
+      }
+    },
+    "OptionSetTypeKey": "PicklistType",
+    "RelatedColumnInvariantName": "instancetypecode",
+    "RelatedEntityName": "Living Quarter Maintenance Tasks",
+    "Type": "OptionSetInfo"
+  },
+  {
+    "DisplayName": "Is Billed (Living Quarter Maintenance Tasks)",
+    "Name": "josca_livingquartermaintenancetask_isbilled",
+    "OptionSetInfoNameMapping": {
+      "0": "No",
+      "1": "Yes"
+    },
+    "OptionSetIsBooleanValued": true,
+    "OptionSetIsGlobal": false,
+    "OptionSetReference": {
+      "OptionSetReferenceItem0": {
+        "OptionSetReferenceColumnName": "isbilled",
+        "OptionSetReferenceEntityName": "Living Quarter Maintenance Tasks"
+      }
+    },
+    "OptionSetTypeKey": "BooleanType",
+    "RelatedColumnInvariantName": "isbilled",
+    "RelatedEntityName": "Living Quarter Maintenance Tasks",
+    "Type": "OptionSetInfo"
+  },
+  {
+    "DisplayName": "Is Private (Living Quarter Maintenance Tasks)",
+    "Name": "josca_livingquartermaintenancetask_ismapiprivate",
+    "OptionSetInfoNameMapping": {
+      "0": "No",
+      "1": "Yes"
+    },
+    "OptionSetIsBooleanValued": true,
+    "OptionSetIsGlobal": false,
+    "OptionSetReference": {
+      "OptionSetReferenceItem0": {
+        "OptionSetReferenceColumnName": "ismapiprivate",
+        "OptionSetReferenceEntityName": "Living Quarter Maintenance Tasks"
+      }
+    },
+    "OptionSetTypeKey": "BooleanType",
+    "RelatedColumnInvariantName": "ismapiprivate",
+    "RelatedEntityName": "Living Quarter Maintenance Tasks",
+    "Type": "OptionSetInfo"
+  },
+  {
+    "DisplayName": "Is Workflow Created (Living Quarter Maintenance Tasks)",
+    "Name": "josca_livingquartermaintenancetask_isworkflowcreated",
+    "OptionSetInfoNameMapping": {
+      "0": "No",
+      "1": "Yes"
+    },
+    "OptionSetIsBooleanValued": true,
+    "OptionSetIsGlobal": false,
+    "OptionSetReference": {
+      "OptionSetReferenceItem0": {
+        "OptionSetReferenceColumnName": "isworkflowcreated",
+        "OptionSetReferenceEntityName": "Living Quarter Maintenance Tasks"
+      }
+    },
+    "OptionSetTypeKey": "BooleanType",
+    "RelatedColumnInvariantName": "isworkflowcreated",
+    "RelatedEntityName": "Living Quarter Maintenance Tasks",
+    "Type": "OptionSetInfo"
+  },
+  {
+    "DisplayName": "Left Voice Mail (Living Quarter Maintenance Tasks)",
+    "Name": "josca_livingquartermaintenancetask_leftvoicemail",
+    "OptionSetInfoNameMapping": {
+      "0": "No",
+      "1": "Yes"
+    },
+    "OptionSetIsBooleanValued": true,
+    "OptionSetIsGlobal": false,
+    "OptionSetReference": {
+      "OptionSetReferenceItem0": {
+        "OptionSetReferenceColumnName": "leftvoicemail",
+        "OptionSetReferenceEntityName": "Living Quarter Maintenance Tasks"
+      }
+    },
+    "OptionSetTypeKey": "BooleanType",
+    "RelatedColumnInvariantName": "leftvoicemail",
+    "RelatedEntityName": "Living Quarter Maintenance Tasks",
+    "Type": "OptionSetInfo"
+  },
+  {
+    "DisplayName": "Priority (Living Quarter Maintenance Tasks)",
+    "Name": "josca_livingquartermaintenancetask_prioritycode",
+    "OptionSetInfoNameMapping": {
+      "0": "Low",
+      "1": "Normal",
+      "2": "High"
+    },
+    "OptionSetIsBooleanValued": false,
+    "OptionSetIsGlobal": false,
+    "OptionSetReference": {
+      "OptionSetReferenceItem0": {
+        "OptionSetReferenceColumnName": "prioritycode",
+        "OptionSetReferenceEntityName": "Living Quarter Maintenance Tasks"
+      }
+    },
+    "OptionSetTypeKey": "PicklistType",
+    "RelatedColumnInvariantName": "prioritycode",
+    "RelatedEntityName": "Living Quarter Maintenance Tasks",
+    "Type": "OptionSetInfo"
+  },
+  {
+    "DisplayName": "Activity Status (Living Quarter Maintenance Tasks)",
+    "Name": "josca_livingquartermaintenancetask_statecode",
+    "OptionSetInfoNameMapping": {
+      "0": "Open",
+      "1": "Completed",
+      "2": "Canceled",
+      "3": "Scheduled"
+    },
+    "OptionSetIsBooleanValued": false,
+    "OptionSetIsGlobal": false,
+    "OptionSetReference": {
+      "OptionSetReferenceItem0": {
+        "OptionSetReferenceColumnName": "statecode",
+        "OptionSetReferenceEntityName": "Living Quarter Maintenance Tasks"
+      }
+    },
+    "OptionSetTypeKey": "StateType",
+    "RelatedColumnInvariantName": "statecode",
+    "RelatedEntityName": "Living Quarter Maintenance Tasks",
+    "Type": "OptionSetInfo"
+  },
+  {
+    "DisplayName": "Status Reason (Living Quarter Maintenance Tasks)",
+    "Name": "josca_livingquartermaintenancetask_statuscode",
+    "OptionSetInfoNameMapping": {
+      "1": "Open",
+      "2": "Completed",
+      "3": "Canceled",
+      "4": "Scheduled"
+    },
+    "OptionSetIsBooleanValued": false,
+    "OptionSetIsGlobal": false,
+    "OptionSetReference": {
+      "OptionSetReferenceItem0": {
+        "OptionSetReferenceColumnName": "statuscode",
+        "OptionSetReferenceEntityName": "Living Quarter Maintenance Tasks"
+      }
+    },
+    "OptionSetTypeKey": "StatusType",
+    "RelatedColumnInvariantName": "statuscode",
+    "RelatedEntityName": "Living Quarter Maintenance Tasks",
+    "Type": "OptionSetInfo"
+  },
+  {
+    "DisplayName": "Social Channel",
+    "Name": "socialprofile_community",
+    "OptionSetInfoNameMapping": {
+      "0": "Other",
+      "1": "Facebook",
+      "2": "Twitter"
+    },
+    "OptionSetIsBooleanValued": false,
+    "OptionSetIsGlobal": true,
+    "OptionSetReference": {
+      "OptionSetReferenceItem0": {
+        "OptionSetReferenceColumnName": "community",
+        "OptionSetReferenceEntityName": "Living Quarter Maintenance Tasks"
+      }
+    },
+    "OptionSetTypeKey": "PicklistType",
+    "RelatedColumnInvariantName": "community",
+    "RelatedEntityName": "Living Quarter Maintenance Tasks",
+    "Type": "OptionSetInfo"
+  }
+]

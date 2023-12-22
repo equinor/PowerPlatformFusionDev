@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ImportExportXml version="9.2.23111.236" SolutionPackageVersion="9.2" languagecode="1033" generatedBy="CrmLive" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<ImportExportXml version="9.2.23112.216" SolutionPackageVersion="9.2" languagecode="1033" generatedBy="CrmLive" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <SolutionManifest>
     <UniqueName>LivingQuarterIssuesAndMaintenance</UniqueName>
     <LocalizedNames>
@@ -85,12 +85,11 @@
       <RootComponent type="1" schemaName="josca_issueregistration" behavior="0" />
       <RootComponent type="1" schemaName="josca_livingquartermaintenancetask" behavior="0" />
       <RootComponent type="1" schemaName="josca_stidplant" behavior="0" />
-      <RootComponent type="1" schemaName="systemuser" behavior="1" />
+      <RootComponent type="20" id="{46f4e0a2-5d9e-ee11-be37-000d3a2c61d8}" behavior="0" />
       <RootComponent type="20" id="{4c1cc225-8899-ee11-be37-000d3a2d6687}" behavior="0" />
       <RootComponent type="20" id="{de59ba43-1298-ee11-be37-0022488b6bbf}" behavior="0" />
       <RootComponent type="29" id="{5b895750-de98-ee11-be37-000d3a2c6d1c}" behavior="0" />
       <RootComponent type="300" schemaName="josca_livingquarterissuesandmaintenance_48f48" behavior="0" />
-      <RootComponent type="61" schemaName="msnfp_/images/workitem_svg" behavior="0" />
       <RootComponent type="62" schemaName="josca_LQIaMInstallationconfiguration" behavior="0" />
       <RootComponent type="80" schemaName="josca_LQIaMInstallationconfiguration" behavior="0" />
       <RootComponent type="9" schemaName="josca_maintenancediscipline" behavior="0" />
@@ -101,22 +100,8 @@
         <Dependent type="80" schemaName="josca_LQIaMInstallationconfiguration" displayName="LQ IaM Installation configuration" />
       </MissingDependency>
       <MissingDependency>
-        <Required type="61" schemaName="msnfp_/images/workitem_svg" displayName="msnfp_/images/workitem_svg" solution="NonprofitCore (3.0.3.6)">
-          <package>NonprofitCoreAnchor (3.0.3.6)</package>
-        </Required>
-        <Dependent type="61" schemaName="msnfp_/images/workitem_svg" displayName="msnfp_/images/workitem_svg" />
-      </MissingDependency>
-      <MissingDependency>
-        <Required type="connectionreference" displayName="eds_sharedapprovals_0f66c" solution="Active" id.connectionreferencelogicalname="eds_sharedapprovals_0f66c" />
-        <Dependent type="29" displayName="Manage Submitted Issue Reports For Living Quarters" id="{5b895750-de98-ee11-be37-000d3a2c6d1c}" />
-      </MissingDependency>
-      <MissingDependency>
-        <Required type="connectionreference" displayName="eds_sharedcommondataserviceforapps_ebeeb" solution="Active" id.connectionreferencelogicalname="eds_sharedcommondataserviceforapps_ebeeb" />
-        <Dependent type="29" displayName="Manage Submitted Issue Reports For Living Quarters" id="{5b895750-de98-ee11-be37-000d3a2c6d1c}" />
-      </MissingDependency>
-      <MissingDependency>
-        <Required type="connectionreference" displayName="hof_sharedmicrosoftforms_7251f" solution="Active" id.connectionreferencelogicalname="hof_sharedmicrosoftforms_7251f" />
-        <Dependent type="29" displayName="Manage Submitted Issue Reports For Living Quarters" id="{5b895750-de98-ee11-be37-000d3a2c6d1c}" />
+        <Required type="66" schemaName="MscrmControls.Grid.GridControl" displayName="MscrmControls.Grid.GridControl" solution="BaseCustomControlsCore (9.0.2311.2019)" />
+        <Dependent type="26" schemaName="Active Issue Registrations" displayName="Active Issue Registrations" parentSchemaName="josca_issueregistration" parentDisplayName="Issue Registration" id="{f7041fda-e146-4f4f-8a72-d451811c31b7}" />
       </MissingDependency>
     </MissingDependencies>
   </SolutionManifest>

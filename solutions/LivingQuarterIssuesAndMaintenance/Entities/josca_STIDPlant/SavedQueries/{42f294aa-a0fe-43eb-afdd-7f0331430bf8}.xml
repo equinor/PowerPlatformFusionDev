@@ -16,8 +16,14 @@
           <cell name="josca_sapplantid" width="100" />
           <cell name="josca_stidplantid" width="104" />
           <cell name="josca_description" width="103" />
-          <cell name="josca_businessarea" width="115" />
+          <cell name="josca_businessarea" width="245" />
           <cell name="josca_camanagementemail" width="173" />
+          <cell name="josca_hotel" width="100" />
+          <cell name="josca_electrical" width="100" />
+          <cell name="josca_kitchen" width="100" />
+          <cell name="josca_mechanical" width="106" />
+          <cell name="josca_automation" width="107" />
+          <cell name="statecode" width="100" />
         </row>
       </grid>
     </layoutxml>
@@ -40,12 +46,21 @@
           <attribute name="josca_description" />
           <attribute name="josca_businessarea" />
           <attribute name="josca_camanagementemail" />
+          <attribute name="josca_hotel" />
+          <attribute name="josca_electrical" />
+          <attribute name="josca_kitchen" />
+          <attribute name="josca_mechanical" />
+          <attribute name="josca_automation" />
+          <attribute name="statecode" />
         </entity>
       </fetch>
     </fetchxml>
     <IntroducedVersion>1.0</IntroducedVersion>
     <LocalizedNames>
-      <LocalizedName description="Quick Find Active STID Plants" languagecode="1033" />
+      <LocalizedName description="Quick Find Active Installations" languagecode="1033" />
     </LocalizedNames>
+    <Descriptions>
+      <Description description="Including installations without configuration " languagecode="1033" />
+    </Descriptions>
   </savedquery>
 </savedqueries>

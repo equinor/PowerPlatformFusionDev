@@ -12,6 +12,8 @@
         <row name="result" id="josca_issueregistrationid">
           <cell name="josca_name" width="300" />
           <cell name="createdon" width="125" />
+          <cell name="josca_issuelocationdetails" width="158" />
+          <cell name="josca_failurereport" width="118" />
         </row>
       </grid>
     </layoutxml>
@@ -23,6 +25,8 @@
           <attribute name="josca_name" />
           <attribute name="createdon" />
           <order attribute="josca_name" descending="false" />
+          <attribute name="josca_issuelocationdetails" />
+          <attribute name="josca_failurereport" />
         </entity>
       </fetch>
     </fetchxml>

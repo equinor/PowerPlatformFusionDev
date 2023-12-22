@@ -10,13 +10,21 @@
     <layoutxml>
       <grid name="resultset" jump="subject" select="1" icon="1" preview="1">
         <row name="result" id="activityid">
-          <cell name="subject" width="300" />
-          <cell name="createdon" width="125" />
+          <cell name="subject" width="205" />
           <cell name="description" width="106" />
+          <cell name="josca_disciplinemanagercomment" width="210" />
           <cell name="scheduledend" width="100" />
-          <cell name="isregularactivity" width="148" />
           <cell name="regardingobjectid" width="100" />
           <cell name="prioritycode" width="100" />
+          <cell name="josca_progress" width="100" />
+          <cell name="josca_technician" width="188" />
+          <cell name="josca_discipline" width="100" />
+          <cell name="josca_disciplinetechniciancomment" width="221" />
+          <cell name="activityid" width="121" />
+          <cell name="actualdurationminutes" width="131" />
+          <cell name="josca_issue" width="100" />
+          <cell name="josca_failurereport" width="100" />
+          <cell name="josca_activityreport" width="100" />
         </row>
       </grid>
     </layoutxml>
@@ -26,16 +34,23 @@
         <entity name="josca_livingquartermaintenancetask">
           <attribute name="activityid" />
           <attribute name="subject" />
-          <attribute name="createdon" />
           <order attribute="subject" descending="false" />
           <filter type="and">
             <condition attribute="statecode" operator="not-null" />
           </filter>
           <attribute name="description" />
           <attribute name="scheduledend" />
-          <attribute name="isregularactivity" />
           <attribute name="regardingobjectid" />
           <attribute name="prioritycode" />
+          <attribute name="josca_technician" />
+          <attribute name="josca_progress" />
+          <attribute name="josca_disciplinemanagercomment" />
+          <attribute name="josca_discipline" />
+          <attribute name="josca_disciplinetechniciancomment" />
+          <attribute name="actualdurationminutes" />
+          <attribute name="josca_issue" />
+          <attribute name="josca_failurereport" />
+          <attribute name="josca_activityreport" />
         </entity>
       </fetch>
     </fetchxml>

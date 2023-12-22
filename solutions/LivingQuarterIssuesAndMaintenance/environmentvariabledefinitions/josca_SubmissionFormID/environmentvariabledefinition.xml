@@ -1,0 +1,14 @@
+<environmentvariabledefinition schemaname="josca_SubmissionFormID">
+  <defaultvalue>NaKkOuK21UiRlX_PBbRZsH7KSaHb7PlMq-3bpeEdFCxUQUFSVDVKVlhNS05LRVlZRFZaVFVIMklMVSQlQCN0PWcu</defaultvalue>
+  <description default="Microsoft Form ID for submission ">
+    <label description="Microsoft Form ID for submission " languagecode="1033" />
+  </description>
+  <displayname default="SubmissionFormID">
+    <label description="SubmissionFormID" languagecode="1033" />
+  </displayname>
+  <introducedversion>0.1.0.0</introducedversion>
+  <iscustomizable>1</iscustomizable>
+  <isrequired>0</isrequired>
+  <secretstore>0</secretstore>
+  <type>100000000</type>
+</environmentvariabledefinition>

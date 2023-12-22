@@ -16,6 +16,11 @@
           <cell name="josca_camanagementemail" width="235" />
           <cell name="josca_sapplantid" width="100" />
           <cell name="josca_businessarea" width="115" />
+          <cell name="josca_hotel" width="100" />
+          <cell name="josca_electrical" width="100" />
+          <cell name="josca_kitchen" width="100" />
+          <cell name="josca_mechanical" width="106" />
+          <cell name="josca_automation" width="107" />
         </row>
       </grid>
     </layoutxml>
@@ -34,6 +39,11 @@
           <attribute name="josca_instcode" />
           <attribute name="josca_sapplantid" />
           <attribute name="josca_businessarea" />
+          <attribute name="josca_hotel" />
+          <attribute name="josca_electrical" />
+          <attribute name="josca_kitchen" />
+          <attribute name="josca_mechanical" />
+          <attribute name="josca_automation" />
         </entity>
       </fetch>
     </fetchxml>

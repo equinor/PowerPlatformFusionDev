@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<savedqueries xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <savedquery>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <isquickfindquery>0</isquickfindquery>
+    <isprivate>0</isprivate>
+    <isdefault>0</isdefault>
+    <savedqueryid>{7c8490e3-949a-ee11-be37-000d3a2d6797}</savedqueryid>
+    <layoutxml>
+      <grid name="resultset" jump="subject" select="1" icon="1" preview="1">
+        <row name="result" id="activityid">
+          <cell name="subject" width="176" />
+          <cell name="josca_issue" width="168" />
+          <cell name="description" width="214" />
+          <cell name="josca_discipline" width="148" />
+          <cell name="josca_disciplinemanagercomment" width="210" />
+          <cell name="prioritycode" width="100" />
+          <cell name="josca_progress" width="100" />
+          <cell name="scheduledend" width="100" />
+          <cell name="josca_technician" width="165" />
+          <cell name="josca_disciplinetechniciancomment" width="221" />
+          <cell name="activityid" width="273" />
+        </row>
+      </grid>
+    </layoutxml>
+    <querytype>0</querytype>
+    <fetchxml>
+      <fetch version="1.0" mapping="logical">
+        <entity name="josca_livingquartermaintenancetask">
+          <attribute name="activityid" />
+          <attribute name="subject" />
+          <order attribute="subject" descending="false" />
+          <filter type="and">
+            <condition attribute="statecode" operator="not-null" />
+          </filter>
+          <attribute name="description" />
+          <attribute name="scheduledend" />
+          <attribute name="prioritycode" />
+          <attribute name="josca_progress" />
+          <attribute name="josca_disciplinemanagercomment" />
+          <attribute name="josca_discipline" />
+          <attribute name="josca_disciplinetechniciancomment" />
+          <attribute name="josca_technician" />
+          <attribute name="josca_issue" />
+        </entity>
+      </fetch>
+    </fetchxml>
+    <IntroducedVersion>0.1.0.0</IntroducedVersion>
+    <LocalizedNames>
+      <LocalizedName description="All Living Quarter Maintenance Tasks" languagecode="1033" />
+    </LocalizedNames>
+  </savedquery>
+</savedqueries>

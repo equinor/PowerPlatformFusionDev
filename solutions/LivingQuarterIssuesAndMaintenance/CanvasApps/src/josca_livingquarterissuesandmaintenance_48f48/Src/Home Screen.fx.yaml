@@ -1,4 +1,5 @@
 "'Home Screen' As screen":
+    OnVisible: =//Reset(tabLanguageSelectionHS)
 
     vcoMainHS As groupContainer.verticalAutoLayoutContainer:
         Height: =Parent.Height
@@ -33,6 +34,7 @@
             ZIndex: =1
 
             icoTopBarMenuToggleHS As image:
+                AccessibleLabel: ="Toggles visibility of main menu dropdown"
                 BorderColor: =RGBA(0, 0, 0, 0)
                 BorderStyle: =BorderStyle.Dashed
                 DisabledBorderColor: =RGBA(0, 0, 0, 0)
@@ -59,9 +61,42 @@
                 PaddingTop: =12
                 PressedBorderColor: =RGBA(0, 0, 0, 0)
                 PressedFill: =RGBA(0, 0, 0, 0)
-                TabIndex: =1
+                TabIndex: =0
                 Width: =EDSStyles.IconMenu.TemplateSize
                 ZIndex: =1
+
+            "tabUserDisplayLanguageSettingHS As 'Tab list'.pcfdataset":
+                AccessibleLabel: ="Switch between English and Norwegian display language for the application."
+                DefaultSelectedItems: =[gblDisplayLanguageSetting]
+                DisplayMode: =DisplayMode.Edit
+                Height: =36
+                Items: |-
+                    =[
+                        {
+                            Title: "EN",
+                            Language: "en-GB"
+                        },
+                        {
+                            Title: "NO",
+                            Language: "no-NO"
+                        }
+                    ]
+                LayoutMinHeight: =55
+                LayoutMinWidth: =280
+                OnChange: =Set(gblDisplayLanguageSetting, Self.Selected)
+                Size: ='TabList.Size'.Small
+                Width: =100
+                X: =0
+                Y: =0
+                ZIndex: =2
+
+                Title1 As pcfDataField.textualColumn:
+                    FieldDisplayName: ="Title"
+                    FieldName: ="Title"
+                    FieldType: ="s"
+                    FieldVariantName: ="textualColumn"
+                    Order: =1
+                    ZIndex: =13
 
             lblTopBarAppScreenNameHS As label:
                 AutoHeight: =true
@@ -73,19 +108,28 @@
                 FillPortions: =1
                 FocusedBorderThickness: =4
                 Font: =EDSDefaults.Font
+                FontWeight: =EDSFonts.Heading.H1.Weight
                 Height: =Self.Size*Self.LineHeight * 1.75
                 LayoutMinHeight: =EDSDefaults.Height
                 LayoutMinWidth: =64
-                LineHeight: =1
+                LineHeight: =EDSFonts.Heading.H1.LineHeight
                 PaddingBottom: =0
                 PaddingLeft: =0
                 PaddingRight: =0
                 PaddingTop: =0
-                Size: =EDSDefaults.FontSize
-                Text: =Concatenate("App Name", " - ", App.ActiveScreen.Name)
+                Size: =EDSFonts.Heading.H1.Size
+                Text: |-
+                    =Switch(
+                        gblDisplayLanguageSetting.Language,
+                        "no-NO",
+                        //"LQ Feil & Vedlikehold",
+                        "Hjem",
+                        "Home"
+                        //"LQ Issues & Maintenance"
+                    )
                 Visible: =hcoTopBarHS.Width > (icoTopBarMenuToggleHS.Width + galTopBarHorizontalMenuHS.Width+shpTopBarMenuDividerHS.Width+1+(Parent.LayoutGap*4))
                 Width: =EDSStyles.Label.Width
-                ZIndex: =2
+                ZIndex: =3
 
             shpTopBarMenuSpacerHS As rectangle:
                 BorderColor: =Color.Transparent
@@ -99,7 +143,7 @@
                     =//Self.Width<10
                     !lblTopBarAppScreenNameHS.Visible
                 Width: =0
-                ZIndex: =3
+                ZIndex: =4
 
             galTabsTopBarHS As gallery.galleryHorizontal:
                 AccessibleLabel: =$"Tab selection"
@@ -107,6 +151,7 @@
                 BorderColor: =Color.Transparent
                 BorderStyle: =EDSDefaults.BorderStyle
                 BorderThickness: =EDSStyles.Tabs.BorderThickness
+                DisplayMode: =If(IsBlank(gblActivePlant.PlantGUID), DisplayMode.View, DisplayMode.Edit)
                 Fill: =EDSStyles.Tabs.Fill
                 FillPortions: =0
                 FocusedBorderThickness: =EDSDefaults.FocusedBorderThickness
@@ -240,7 +285,13 @@
                         RadiusTopLeft: =EDSStyles.Tabs.RadiusTopLeft
                         RadiusTopRight: =EDSStyles.Tabs.RadiusTopRight
                         Size: =EDSStyles.Tabs.Font.Size
-                        Text: =ThisItem.Title
+                        Text: |-
+                            =Switch(
+                                gblDisplayLanguageSetting.Language,
+                                "no-NO",
+                                ThisItem.NO_Title,
+                                ThisItem.Title
+                            )
                         Tooltip: =ThisItem.SubTitle
                         Width: =galTabsTopBarHS.TemplateWidth -(Self.FocusedBorderThickness)
                         ZIndex: =1
@@ -302,6 +353,7 @@
                 ZIndex: =6
 
             galTopBarHorizontalMenuHS As gallery.galleryHorizontal:
+                AccessibleLabel: ="Menu with links to common external resources and back button for app navigation."
                 AlignInContainer: =AlignInContainer.SetByContainer
                 BorderColor: =EDSDefaults.BorderColor
                 BorderStyle: =EDSDefaults.BorderStyle
@@ -403,9 +455,8 @@
                         FillPortions: =1
                         FocusedBorderColor: =EDSDefaults.FocusedBorderColor
                         Height: =EDSStyles.Icon.Height
-                        HoverBorderColor: |-
+                        HoverBorderColor: |
                             =//EDSDataTable.Styling.Defaults.HoverBorderColor
-                            Self.BorderColor
                         HoverFill: =EDSDefaults.IconHoverFill
                         Image: =ThisItem.Icon
                         LayoutMinHeight: =0
@@ -467,8 +518,9 @@
             Height: =225
             LayoutAlignItems: =LayoutAlignItems.Center
             LayoutGap: =EDSDefaults.LayoutGap
+            LayoutJustifyContent: =LayoutJustifyContent.Center
             LayoutMinHeight: =EDSDefaults.LayoutMinHeight
-            LayoutMinWidth: =EDSDefaults.LayoutMinWidth
+            LayoutMinWidth: =375
             LayoutMode: =LayoutMode.Auto
             LayoutOverflowX: =LayoutOverflow.Scroll
             LayoutOverflowY: =LayoutOverflow.Scroll
@@ -477,6 +529,574 @@
             PaddingRight: =EDSDefaults.PaddingRight
             PaddingTop: =EDSDefaults.PaddingTop
             ZIndex: =3
+
+            conInfographicsHS As groupContainer.horizontalAutoLayoutContainer:
+                BorderColor: =EDSColors.Background.Medium
+                BorderThickness: =1
+                DropShadow: =DropShadow.Semilight
+                LayoutAlignItems: =LayoutAlignItems.Center
+                LayoutDirection: =LayoutDirection.Vertical
+                LayoutGap: =16
+                LayoutJustifyContent: =LayoutJustifyContent.Center
+                LayoutMinHeight: =100
+                LayoutMinWidth: =360
+                LayoutMode: =LayoutMode.Auto
+                ZIndex: =1
+
+                drpPlantSelectionHS As Dropdown.pcfdataset:
+                    AccessibleLabel: ="Selection of plant"
+                    BasePaletteColor: =EDSColors.Interactive.Primary.Resting
+                    DefaultSelectedItems: =gblActivePlant
+                    DisplayMode: =DisplayMode.Edit
+                    FontSize: =EDSFonts.Heading.H3.Size
+                    Height: =48
+                    Items: =Filter(Installations, 'Installations (Views)'.'Active Installations')
+                    LayoutMinHeight: =32
+                    LayoutMinWidth: =320
+                    OnChange: |-
+                        =//UpdateContext({locIssueCount: CountIf('Issue Registrations',
+                        Set(
+                            gblActivePlant,
+                            Self.Selected
+                        )
+                    Required: =true
+                    Width: =320
+                    X: =20
+                    Y: =423
+                    ZIndex: =1
+
+                    sapPlantId1 As pcfDataField.textualColumn:
+                        FieldDisplayName: ="sapPlantId"
+                        FieldName: ="josca_sapplantid"
+                        FieldType: ="s"
+                        FieldVariantName: ="textualColumn"
+                        Order: =3
+                        ZIndex: =8
+
+                    description1 As pcfDataField.textualColumn:
+                        FieldDisplayName: ="description"
+                        FieldName: ="josca_description"
+                        FieldType: ="s"
+                        FieldVariantName: ="textualColumn"
+                        Order: =1
+                        ZIndex: =9
+
+                    instCode1 As pcfDataField.textualColumn:
+                        FieldDisplayName: ="instCode"
+                        FieldName: ="josca_instcode"
+                        FieldType: ="s"
+                        FieldVariantName: ="textualColumn"
+                        Order: =4
+                        ZIndex: =10
+
+                    businessArea1 As pcfDataField.textualColumn:
+                        FieldDisplayName: ="businessArea"
+                        FieldName: ="josca_businessarea"
+                        FieldType: ="s"
+                        FieldVariantName: ="textualColumn"
+                        Order: =5
+                        ZIndex: =11
+
+                    "'CA Management Email1' As pcfDataField.textualColumn":
+                        FieldDisplayName: ="CA Management Email"
+                        FieldName: ="josca_camanagementemail"
+                        FieldType: ="s"
+                        FieldVariantName: ="textualColumn"
+                        Order: =2
+                        ZIndex: =12
+
+                conInstallationInfographicHS As groupContainer.manualLayoutContainer:
+                    AlignInContainer: =AlignInContainer.SetByContainer
+                    DropShadow: =DropShadow.None
+                    FillPortions: =0
+                    Height: =360
+                    LayoutMinHeight: =100
+                    LayoutMinWidth: =250
+                    Width: =360
+                    ZIndex: =2
+
+                    imgInstallationGraphicHS As image:
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        BorderStyle: =BorderStyle.None
+                        BorderThickness: =2
+                        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                        DisabledFill: =RGBA(0, 0, 0, 0)
+                        FocusedBorderThickness: =4
+                        Height: =Parent.Height
+                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                        HoverFill: =RGBA(0, 0, 0, 0)
+                        Image: =Platform
+                        PressedBorderColor: =RGBA(0, 0, 0, 0)
+                        PressedFill: =RGBA(0, 0, 0, 0)
+                        Width: =Parent.Width
+                        ZIndex: =1
+
+                    icoToggleFacilityStatsHS_DISABLED As image:
+                        AccessibleLabel: ="Button that shows the statistics view for the selected installation."
+                        BorderColor: =If(locShowFacilityStats, EDSColors.Interactive.Primary.Resting, EDSStyles.Icon.BorderColor)
+                        BorderStyle: =If(locShowFacilityStats, BorderStyle.Solid, EDSStyles.Icon.BorderStyle)
+                        BorderThickness: =2
+                        DisabledBorderColor: =EDSStyles.Icon.DisabledBorderColor
+                        DisabledFill: =EDSStyles.Icon.DisabledFill
+                        Fill: =If(locShowFacilityStats, Self.HoverFill, EDSDefaults.IconBackground)
+                        FocusedBorderColor: =
+                        FocusedBorderThickness: =EDSStyles.Icon.FocusedBorderThickness
+                        Height: =Self.Width
+                        HoverBorderColor: =EDSStyles.Icon.HoverBorderColor
+                        HoverFill: =EDSStyles.Icon.HoverFill
+                        Image: =EDSIcons.MultilineChart
+                        OnSelect: |-
+                            =UpdateContext({locShowFacilityStats: !locShowFacilityStats})
+                        PaddingBottom: =EDSStyles.Icon.PaddingBottom
+                        PaddingLeft: =EDSStyles.Icon.PaddingLeft
+                        PaddingRight: =EDSStyles.Icon.PaddingRight
+                        PaddingTop: =EDSStyles.Icon.PaddingTop
+                        PressedBorderColor: =EDSStyles.Icon.PressedBorderColor
+                        PressedFill: =EDSStyles.Icon.PressedFill
+                        RadiusBottomLeft: =Self.Height/2
+                        RadiusBottomRight: =Self.Height/2
+                        RadiusTopLeft: =Self.Height/2
+                        RadiusTopRight: =Self.Height/2
+                        TabIndex: =0
+                        Width: =64
+                        X: =280
+                        Y: =280
+                        ZIndex: =4
+
+                    grpInstallationActiveIssueReportCountHS As group:
+                        Height: =5
+                        Width: =5
+                        X: =40
+                        Y: =40
+                        ZIndex: =5
+
+                        shpInstallationActiveIssueReportCountHS As circle:
+                            BorderColor: =EDSDefaults.BorderColor
+                            Fill: =EDSColors.Interactive.Danger.Resting
+                            Height: =48
+                            Width: =48
+                            X: =255
+                            Y: =30
+                            ZIndex: =2
+
+                        lblInstallationActiveIssueReportCountHS As Text:
+                            Align: ='TextCanvas.Align'.Center
+                            DisplayMode: =DisplayMode.Edit
+                            Font: =EDSFonts.Paragraph.BodyLong.Font
+                            FontColor: =EDSColors.Static.PrimaryWhite
+                            Height: =48
+                            Size: =14
+                            Text: |-
+                                =$"{
+                                    CountIf(
+                                        'Issue Registrations',
+                                        ThisRecord.Installation.PlantGUID = drpPlantSelectionHS.Selected.PlantGUID, 
+                                        Status = 'Status (Issue Registrations)'.Active    
+                                    )
+                                }"
+                            Weight: ='TextCanvas.Weight'.Bold
+                            Width: =48
+                            X: =255
+                            Y: =30
+                            ZIndex: =3
+
+                lblCateringAndAccommodationResponsibleEmailHS As Text:
+                    Align: ='TextCanvas.Align'.Center
+                    AlignInContainer: =AlignInContainer.Center
+                    DisplayMode: =DisplayMode.Edit
+                    Font: =EDSFonts.Paragraph.BodyLong.Font
+                    FontColor: =EDSColors.Static.Default
+                    Height: =32
+                    LayoutMinHeight: =32
+                    LayoutMinWidth: =96
+                    Size: =EDSFonts.Paragraph.BodyLong.Size
+                    Text: =$"{drpPlantSelectionHS.Selected.'CA Management Email'}"
+                    Weight: =EDSFonts.Paragraph.BodyLong.Weight
+                    Width: =320
+                    X: =0
+                    Y: =0
+                    ZIndex: =3
+
+                btnGoToInstallationIssueReportsHS As Button:
+                    AccessibleLabel: ="A button that opens the issue reports screen for the selected installation"
+                    Appearance: ='ButtonCanvas.Appearance'.Outline
+                    BasePaletteColor: =EDSColors.Interactive.Primary.Resting
+                    DisplayMode: =If(IsBlank(gblActivePlant.PlantGUID), DisplayMode.Disabled, DisplayMode.Edit)
+                    FontColor: =EDSColors.Static.Default
+                    Height: =32
+                    LayoutMinHeight: =32
+                    LayoutMinWidth: =96
+                    OnSelect: |
+                        =Navigate('Issue Report Screen', ScreenTransition.None)
+                    Text: |-
+                        =Switch(
+                            gblDisplayLanguageSetting.Language,
+                            "no-NO",
+                            "Gå til innmeldte feil",
+                            "Go to issue reports"
+                        )
+                    Width: =180
+                    X: =80
+                    Y: =80
+                    ZIndex: =4
+
+            conFacilityTrendsAndDistributionsHS As groupContainer.verticalAutoLayoutContainer:
+                BorderColor: =EDSColors.Background.Medium
+                BorderThickness: =1
+                DropShadow: =DropShadow.Semilight
+                Fill: =EDSColors.Background.Default
+                Height: |-
+                    =//Max(EDSStyles.Gallery.LayoutMinHeight, (Parent.Height-Self.Y*4))
+                    480
+                LayoutAlignItems: =LayoutAlignItems.Stretch
+                LayoutDirection: =LayoutDirection.Vertical
+                LayoutGap: =4
+                LayoutMinHeight: =100
+                LayoutMinWidth: =360
+                LayoutMode: =LayoutMode.Auto
+                PaddingBottom: =8
+                PaddingLeft: =8
+                PaddingRight: =8
+                PaddingTop: =8
+                RadiusBottomLeft: =4
+                RadiusBottomRight: =4
+                RadiusTopLeft: =4
+                RadiusTopRight: =4
+                Visible: =locShowFacilityStats
+                Width: =343
+                X: =40
+                Y: =40
+                ZIndex: =3
+
+                conFacilityTrendsAndDistributionsHeaderHS As groupContainer.horizontalAutoLayoutContainer:
+                    AlignInContainer: =AlignInContainer.SetByContainer
+                    DropShadow: =DropShadow.None
+                    FillPortions: =0
+                    Height: =50
+                    LayoutAlignItems: =LayoutAlignItems.Center
+                    LayoutGap: =8
+                    LayoutJustifyContent: =LayoutJustifyContent.End
+                    LayoutMinHeight: =100
+                    LayoutMinWidth: =250
+                    LayoutMode: =LayoutMode.Auto
+                    PaddingLeft: =1
+                    PaddingRight: =1
+                    ZIndex: =1
+
+                    lblFacilityTrendsAndDistributionHeaderHS As Text:
+                        Align: ='TextCanvas.Align'.Center
+                        AlignInContainer: =AlignInContainer.Center
+                        DisplayMode: =DisplayMode.Edit
+                        FillPortions: =1
+                        Font: =EDSFonts.Heading.H3.Font
+                        FontColor: =EDSColors.Static.Default
+                        Height: =32
+                        LayoutMinHeight: =32
+                        LayoutMinWidth: =96
+                        Size: =EDSFonts.Heading.H3.Size
+                        Text: =$"{gblActivePlant.description} issue statistics"
+                        Weight: =EDSFonts.Heading.H3.Weight
+                        Width: =320
+                        X: =0
+                        Y: =0
+                        ZIndex: =1
+
+                    icoCloseStatsHS As image:
+                        AccessibleLabel: ="Button that hides the statistics view for the selected installation."
+                        BorderColor: =EDSStyles.Icon.BorderColor
+                        BorderStyle: =EDSStyles.Icon.BorderStyle
+                        BorderThickness: =EDSStyles.Icon.BorderThickness
+                        DisabledBorderColor: =EDSStyles.Icon.DisabledBorderColor
+                        DisabledFill: =EDSStyles.Icon.DisabledFill
+                        Fill: =EDSDefaults.IconBackground
+                        FocusedBorderColor: =
+                        FocusedBorderThickness: =EDSStyles.Icon.FocusedBorderThickness
+                        Height: =EDSStyles.Icon.Height
+                        HoverBorderColor: =EDSStyles.Icon.HoverBorderColor
+                        HoverFill: =EDSStyles.Icon.HoverFill
+                        Image: =EDSIcons.Close
+                        LayoutMinHeight: =EDSStyles.Icon.Height
+                        OnSelect: |-
+                            =UpdateContext({locShowFacilityStats: false});
+                        PaddingBottom: =EDSStyles.Icon.PaddingBottom
+                        PaddingLeft: =EDSStyles.Icon.PaddingLeft
+                        PaddingRight: =EDSStyles.Icon.PaddingRight
+                        PaddingTop: =EDSStyles.Icon.PaddingTop
+                        PressedBorderColor: =EDSStyles.Icon.PressedBorderColor
+                        PressedFill: =EDSStyles.Icon.PressedFill
+                        RadiusBottomLeft: =Self.Height/2
+                        RadiusBottomRight: =Self.Height/2
+                        RadiusTopLeft: =Self.Height/2
+                        RadiusTopRight: =Self.Height/2
+                        TabIndex: =0
+                        Width: =Self.Height
+                        ZIndex: =2
+
+                conChartFacilityTypeSelectionDetailsHS As groupContainer.horizontalAutoLayoutContainer:
+                    DropShadow: =DropShadow.None
+                    FillPortions: =0
+                    Height: =36
+                    LayoutAlignItems: =LayoutAlignItems.Center
+                    LayoutGap: =8
+                    LayoutJustifyContent: =LayoutJustifyContent.Center
+                    LayoutMinHeight: =100
+                    LayoutMinWidth: =250
+                    LayoutMode: =LayoutMode.Auto
+                    Visible: =!IsBlank(chtFacilityTypeSelectionDetailsHS.Selected.Label)
+                    ZIndex: =2
+
+                    lblCateringAndAccommodationResponsibleEmailHS_1 As Text:
+                        Align: ='TextCanvas.Align'.End
+                        AlignInContainer: =AlignInContainer.Center
+                        DisplayMode: =DisplayMode.Edit
+                        Font: =EDSFonts.Paragraph.BodyLong.Font
+                        FontColor: =EDSColors.Static.Default
+                        Height: =32
+                        LayoutMinHeight: =32
+                        LayoutMinWidth: =96
+                        Size: =EDSFonts.Paragraph.BodyLong.Size
+                        Text: |-
+                            =$"{chtFacilityTypeSelectionDetailsHS.Selected.Label}:"
+                        Weight: =EDSFonts.Paragraph.BodyLong.Weight
+                        Width: =100
+                        X: =0
+                        Y: =0
+                        ZIndex: =1
+
+                    bdgFacilityTypeSelectedOpenCountHS As Badge:
+                        AccessibleLabel: ="Displays number of open issues of the selected type"
+                        Appearance: ='BadgeCanvas.Appearance'.Outline
+                        BasePaletteColor: =EDSColors.Interactive.Danger.Resting
+                        Content: =$"{chtFacilityTypeSelectionDetailsHS.Selected.'data-ADB4D7A662F548B49FAC2B986E348A1BOpenCount'} open"
+                        DisplayMode: =DisplayMode.Edit
+                        Font: =Font.Lato
+                        FontColor: =EDSColors.Interactive.Danger.Text
+                        FontSize: =12
+                        FontWeight: =FontWeight.Semibold
+                        Height: =28
+                        LayoutMinHeight: =32
+                        LayoutMinWidth: =32
+                        Shape: ='BadgeCanvas.Shape'.Rounded
+                        ThemeColor: ='BadgeCanvas.ThemeColor'.Brand
+                        Width: =100
+                        X: =0
+                        Y: =0
+                        ZIndex: =2
+
+                    bdgFacilityTypeSelectedClosedCountHS As Badge:
+                        AccessibleLabel: ="Displays number of closed issues of the selected type"
+                        Appearance: ='BadgeCanvas.Appearance'.Outline
+                        BasePaletteColor: =EDSColors.Interactive.Success.Resting
+                        Content: =$"{chtFacilityTypeSelectionDetailsHS.Selected.'data-ADB4D7A662F548B49FAC2B986E348A1BClosedCount'} closed"
+                        DisplayMode: =DisplayMode.Edit
+                        Font: =Font.Lato
+                        FontColor: =EDSColors.Interactive.Success.Text
+                        FontSize: =12
+                        FontWeight: =FontWeight.Semibold
+                        Height: =28
+                        LayoutMinHeight: =32
+                        LayoutMinWidth: =32
+                        Shape: ='BadgeCanvas.Shape'.Rounded
+                        ThemeColor: ='BadgeCanvas.ThemeColor'.Brand
+                        Width: =100
+                        X: =0
+                        Y: =0
+                        ZIndex: =3
+
+                chtFacilityTypeSelectionDetailsHS As barChart:
+                    AccessibleLabel: ="Column chart showing distribution of open and closed issue registration types"
+                    BorderColor: =EDSDefaults.BorderColor
+                    BorderStyle: =EDSDefaults.BorderStyle
+                    BorderThickness: =EDSDefaults.BorderThickness
+                    Color: =EDSDefaults.Color
+                    ContentLanguage: =gblDisplayLanguageSetting.Language
+                    DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                    Font: =EDSDefaults.Font
+                    GridStyle: =GridStyle.All
+                    Height: =EDSDefaults.FormLayoutMinHeight
+                    HoverBorderColor: =EDSDefaults.HoverBorderColor
+                    ItemColorSet: |-
+                        =[
+                            EDSColors.Infographic.Substitute.PurpleBerry,
+                            EDSColors.Infographic.Substitute.PinkRose,
+                            EDSColors.Infographic.Substitute.PinkSalmon,
+                            EDSColors.Infographic.Substitute.BlueSky,
+                            EDSColors.Infographic.Substitute.BlueOcean,
+                            EDSColors.Infographic.Primary.MossGreen21,
+                            EDSColors.Infographic.Substitute.BlueOvercast,
+                            EDSColors.Infographic.Primary.MossGreen55,
+                            EDSColors.Infographic.Primary.MossGreen100,
+                            EDSColors.Infographic.Primary.MossGreen34
+                        ]
+                    Items: |-
+                        =AddColumns(
+                            GroupBy(
+                                Filter(
+                                    'Issue Registrations',
+                                    ThisRecord.Installation.PlantGUID = gblActivePlant.PlantGUID
+                                ),
+                                "josca_issuetype",
+                                "IssueTypes"
+                            ),
+                            "IssueCount",
+                            CountRows(ThisRecord.IssueTypes),
+                            "OpenCount",
+                            //CountRows(ThisRecord.IssueTypes),
+                            CountIf(
+                                ThisRecord.IssueTypes,
+                                Status = 'Status (Issue Registrations)'.Active
+                            ),
+                            "ClosedCount",
+                            CountIf(
+                                ThisRecord.IssueTypes,
+                                Status = 'Status (Issue Registrations)'.Inactive
+                            ),
+                            "RegistrationDates",
+                            ForAll(
+                                IssueTypes,
+                                DateValue(ThisRecord.'Registration Date Time')
+                            )
+                        )
+                    ItemsGap: =8   
+                    LayoutMinHeight: =256
+                    LayoutMinWidth: =360
+                    MinimumBarWidth: =16 
+                    PaddingLeft: =0
+                    PaddingRight: =0
+                    PressedBorderColor: =EDSDefaults.PressedBorderColor
+                    SeriesAxisMin: =0
+                    Size: =EDSDefaults.FontSize
+                    Width: =EDSDefaults.FormLayoutMinWidth
+                    XLabelAngle: =30
+                    ZIndex: =3
+
+                lhtFacilityRegistrationCountOverTimeHS As lineChart:
+                    BorderColor: =EDSDefaults.BorderColor
+                    BorderStyle: =EDSDefaults.BorderStyle
+                    BorderThickness: =EDSDefaults.BorderThickness
+                    Color: =EDSDefaults.Color
+                    DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                    Font: =EDSDefaults.Font
+                    Height: =200
+                    HoverBorderColor: =EDSDefaults.HoverBorderColor
+                    ItemColorSet: |-
+                        =//LastN(EDSDefaults.ItemColorSet, 7)
+                        [
+                        EDSColors.Infographic.Primary.MossGreen100,
+                        EDSColors.Infographic.Primary.MossGreen34,
+                            /*
+                            EDSColors.Infographic.Substitute.PurpleBerry,
+                            EDSColors.Infographic.Substitute.PinkRose,
+                            EDSColors.Infographic.Substitute.PinkSalmon,
+                            */
+                            /*
+                            Coalesce(
+                                EDSColors.Infographic.Primary.MossGreen21,
+                                chtFacilityDisciplineDistributionHS.Selected.Color
+                            )
+                            EDSColors.Infographic.Primary.MossGreen34,
+                            EDSColors.Infographic.Primary.MossGreen21,
+                            EDSColors.Infographic.Substitute.BlueOcean,
+                            EDSColors.Infographic.Substitute.BlueOvercast,
+                            EDSColors.Infographic.Substitute.BlueSky
+                            */
+                        ]
+                    Items: |-
+                        =AddColumns(
+                            GroupBy(
+                                AddColumns(
+                                    Filter(
+                                        'Issue Registrations',
+                                        ThisRecord.Installation.PlantGUID = gblActivePlant.PlantGUID
+                                    ),
+                                    "RegistrationDate",
+                                    DateValue(ThisRecord.'Registration Date Time')
+                                ),
+                                //"josca_registrationdatetime",
+                                "RegistrationDate",
+                                "Dates"
+                            ),
+                            "IssueRegistrationCount",
+                            CountRows(Dates),
+                            //CountIf(Dates, ThisRecord.Status = 'Status (Issue Registrations)'.Active),
+                            "IssueRegistrationCountOfType",
+                            CountIf(
+                                Dates,
+                                ThisRecord.'Issue Type' = Coalesce(
+                                    chtFacilityTypeSelectionDetailsHS.Selected.'data-ADB4D7A662F548B49FAC2B986E348A1Bjosca_issuetype',
+                                    "none"
+                                )
+                            )
+                        )
+                        /*
+                            ),
+                            CountRows(ThisRecord.IssueTypes)
+                        )
+                        */
+                    LayoutMinHeight: =256
+                    LayoutMinWidth: =360
+                    NumberOfSeries: =If(IsBlank(chtFacilityTypeSelectionDetailsHS.Selected.Label),1, 2)
+                    PaddingRight: =0
+                    PressedBorderColor: =EDSDefaults.PressedBorderColor
+                    Size: =EDSDefaults.FontSize
+                    Width: =EDSDefaults.FormLayoutMinWidth
+                    X: =16
+                    XLabelAngle: =30
+                    Y: =16
+                    ZIndex: =4
+
+                conLineChartFacilityRegistrationCountOverTimeHS As groupContainer.horizontalAutoLayoutContainer:
+                    DropShadow: =DropShadow.None
+                    FillPortions: =0
+                    Height: =36
+                    LayoutAlignItems: =LayoutAlignItems.Center
+                    LayoutGap: =8
+                    LayoutJustifyContent: =LayoutJustifyContent.Center
+                    LayoutMinHeight: =100
+                    LayoutMinWidth: =250
+                    LayoutMode: =LayoutMode.Auto
+                    ZIndex: =5
+
+                    bdgPrimaryLineChartFacilityRegistrationCountOverTimeHS As Badge:
+                        AccessibleLabel: ="Displays color legend line diagram that represents all issues"
+                        Appearance: ='BadgeCanvas.Appearance'.Ghost
+                        BasePaletteColor: =EDSColors.Infographic.Primary.MossGreen100
+                        Content: =$"Issues registered"
+                        DisplayMode: =DisplayMode.Edit
+                        Font: =Font.Lato
+                        FontColor: =EDSColors.Interactive.Primary.Resting
+                        FontSize: =10
+                        FontWeight: =FontWeight.Semibold
+                        Height: =24
+                        LayoutMinHeight: =32
+                        LayoutMinWidth: =32
+                        Shape: ='BadgeCanvas.Shape'.Rounded
+                        ThemeColor: ='BadgeCanvas.ThemeColor'.Brand
+                        Width: =100
+                        X: =0
+                        Y: =0
+                        ZIndex: =3
+
+                    bdgSecondaryLineChartFacilityRegistrationCountOverTimeHS As Badge:
+                        AccessibleLabel: ="Displays color legend line diagram that represents all issues"
+                        Appearance: ='BadgeCanvas.Appearance'.Ghost
+                        BasePaletteColor: =EDSColors.Infographic.Primary.MossGreen100
+                        Content: =$"{chtFacilityTypeSelectionDetailsHS.Selected.Label}"
+                        DisplayMode: =DisplayMode.Edit
+                        Font: =Font.Lato
+                        FontColor: =EDSColors.Infographic.Primary.MossGreen34
+                        FontSize: =10
+                        FontWeight: =FontWeight.Semibold
+                        Height: =24
+                        LayoutMinHeight: =32
+                        LayoutMinWidth: =32
+                        Shape: ='BadgeCanvas.Shape'.Rounded
+                        ThemeColor: ='BadgeCanvas.ThemeColor'.Brand
+                        Visible: =!IsBlank(chtFacilityTypeSelectionDetailsHS.Selected.Label)
+                        Width: =100
+                        X: =0
+                        Y: =0
+                        ZIndex: =4
 
     grpAppMenuHS As group:
         Height: =5
@@ -495,7 +1115,7 @@
             Visible: =conAppMenuHS.Visible
             Width: =Parent.Width
             Y: =40
-            ZIndex: =3
+            ZIndex: =2
 
         conAppMenuHS As groupContainer.manualLayoutContainer:
             DropShadow: =DropShadow.Bold
@@ -513,9 +1133,9 @@
             RadiusTopRight: =4
             Visible: =gblEDSShowAppMenu
             Width: =galAppMenuHS.Width
-            X: =70
-            Y: =100
-            ZIndex: =4
+            X: =30
+            Y: =60
+            ZIndex: =3
 
             galAppMenuHS As gallery.galleryVertical:
                 AccessibleLabel: ="Choose from " & Concat(Self.AllItems, ThisRecord.Title, ", ")
@@ -649,6 +1269,7 @@
                         BorderStyle: =BorderStyle.None
                         BorderThickness: =EDSStyles.Menu.BorderThickness
                         DisabledFill: =Color.Transparent
+                        FocusedBorderColor: =
                         Height: |-
                             =//EDSDataTable.Styling.Menu.IconHeight
                             Parent.Height

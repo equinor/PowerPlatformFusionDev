@@ -156,7 +156,7 @@
           <AutoNumberFormat></AutoNumberFormat>
           <IsSearchable>0</IsSearchable>
           <IsFilterable>0</IsFilterable>
-          <IsRetrievable>0</IsRetrievable>
+          <IsRetrievable>1</IsRetrievable>
           <IsLocalizable>0</IsLocalizable>
           <Format>duration</Format>
           <MinValue>0</MinValue>
@@ -1119,6 +1119,85 @@
             <Description description="Information regarding whether the activity was created from a workflow rule." languagecode="1033" />
           </Descriptions>
         </attribute>
+        <attribute PhysicalName="josca_ActivityReport">
+          <Type>nvarchar</Type>
+          <Name>josca_activityreport</Name>
+          <LogicalName>josca_activityreport</LogicalName>
+          <RequiredLevel>none</RequiredLevel>
+          <DisplayMask>ValidForAdvancedFind|ValidForForm|ValidForGrid</DisplayMask>
+          <ImeMode>disabled</ImeMode>
+          <ValidForUpdateApi>1</ValidForUpdateApi>
+          <ValidForReadApi>1</ValidForReadApi>
+          <ValidForCreateApi>1</ValidForCreateApi>
+          <IsCustomField>1</IsCustomField>
+          <IsAuditEnabled>1</IsAuditEnabled>
+          <IsSecured>0</IsSecured>
+          <IntroducedVersion>0.1.0.0</IntroducedVersion>
+          <IsCustomizable>1</IsCustomizable>
+          <IsRenameable>1</IsRenameable>
+          <CanModifySearchSettings>1</CanModifySearchSettings>
+          <CanModifyRequirementLevelSettings>1</CanModifyRequirementLevelSettings>
+          <CanModifyAdditionalSettings>1</CanModifyAdditionalSettings>
+          <SourceType>0</SourceType>
+          <IsGlobalFilterEnabled>0</IsGlobalFilterEnabled>
+          <IsSortableEnabled>0</IsSortableEnabled>
+          <CanModifyGlobalFilterSettings>1</CanModifyGlobalFilterSettings>
+          <CanModifyIsSortableSettings>1</CanModifyIsSortableSettings>
+          <IsDataSourceSecret>0</IsDataSourceSecret>
+          <AutoNumberFormat></AutoNumberFormat>
+          <IsSearchable>0</IsSearchable>
+          <IsFilterable>0</IsFilterable>
+          <IsRetrievable>1</IsRetrievable>
+          <IsLocalizable>0</IsLocalizable>
+          <Format>text</Format>
+          <MaxLength>8</MaxLength>
+          <Length>16</Length>
+          <displaynames>
+            <displayname description="M3" languagecode="1033" />
+          </displaynames>
+          <Descriptions>
+            <Description description="ActivityReport (MaintenanceAPI) " languagecode="1033" />
+          </Descriptions>
+        </attribute>
+        <attribute PhysicalName="josca_Discipline">
+          <Type>picklist</Type>
+          <Name>josca_discipline</Name>
+          <LogicalName>josca_discipline</LogicalName>
+          <RequiredLevel>none</RequiredLevel>
+          <DisplayMask>ValidForAdvancedFind|ValidForForm|ValidForGrid</DisplayMask>
+          <ImeMode>auto</ImeMode>
+          <ValidForUpdateApi>1</ValidForUpdateApi>
+          <ValidForReadApi>1</ValidForReadApi>
+          <ValidForCreateApi>1</ValidForCreateApi>
+          <IsCustomField>1</IsCustomField>
+          <IsAuditEnabled>1</IsAuditEnabled>
+          <IsSecured>0</IsSecured>
+          <IntroducedVersion>0.1.0.0</IntroducedVersion>
+          <IsCustomizable>1</IsCustomizable>
+          <IsRenameable>1</IsRenameable>
+          <CanModifySearchSettings>1</CanModifySearchSettings>
+          <CanModifyRequirementLevelSettings>1</CanModifyRequirementLevelSettings>
+          <CanModifyAdditionalSettings>1</CanModifyAdditionalSettings>
+          <SourceType>0</SourceType>
+          <IsGlobalFilterEnabled>0</IsGlobalFilterEnabled>
+          <IsSortableEnabled>0</IsSortableEnabled>
+          <CanModifyGlobalFilterSettings>1</CanModifyGlobalFilterSettings>
+          <CanModifyIsSortableSettings>1</CanModifyIsSortableSettings>
+          <IsDataSourceSecret>0</IsDataSourceSecret>
+          <AutoNumberFormat></AutoNumberFormat>
+          <IsSearchable>0</IsSearchable>
+          <IsFilterable>0</IsFilterable>
+          <IsRetrievable>1</IsRetrievable>
+          <IsLocalizable>0</IsLocalizable>
+          <AppDefaultValue>459480003</AppDefaultValue>
+          <OptionSetName>josca_maintenancediscipline</OptionSetName>
+          <displaynames>
+            <displayname description="Discipline" languagecode="1033" />
+          </displaynames>
+          <Descriptions>
+            <Description description="The tasks discipline" languagecode="1033" />
+          </Descriptions>
+        </attribute>
         <attribute PhysicalName="josca_DisciplineManagerComment">
           <Type>ntext</Type>
           <Name>josca_disciplinemanagercomment</Name>
@@ -1147,7 +1226,7 @@
           <AutoNumberFormat></AutoNumberFormat>
           <IsSearchable>0</IsSearchable>
           <IsFilterable>0</IsFilterable>
-          <IsRetrievable>0</IsRetrievable>
+          <IsRetrievable>1</IsRetrievable>
           <IsLocalizable>0</IsLocalizable>
           <Format>richtext</Format>
           <MaxLength>5000</MaxLength>
@@ -1186,7 +1265,7 @@
           <AutoNumberFormat></AutoNumberFormat>
           <IsSearchable>0</IsSearchable>
           <IsFilterable>0</IsFilterable>
-          <IsRetrievable>0</IsRetrievable>
+          <IsRetrievable>1</IsRetrievable>
           <IsLocalizable>0</IsLocalizable>
           <Format>text</Format>
           <MaxLength>5000</MaxLength>
@@ -1195,6 +1274,46 @@
           </displaynames>
           <Descriptions>
             <Description description="Comments by the technician assigned to work on this task." languagecode="1033" />
+          </Descriptions>
+        </attribute>
+        <attribute PhysicalName="josca_FailureReport">
+          <Type>nvarchar</Type>
+          <Name>josca_failurereport</Name>
+          <LogicalName>josca_failurereport</LogicalName>
+          <RequiredLevel>none</RequiredLevel>
+          <DisplayMask>ValidForAdvancedFind|ValidForForm|ValidForGrid</DisplayMask>
+          <ImeMode>auto</ImeMode>
+          <ValidForUpdateApi>1</ValidForUpdateApi>
+          <ValidForReadApi>1</ValidForReadApi>
+          <ValidForCreateApi>1</ValidForCreateApi>
+          <IsCustomField>1</IsCustomField>
+          <IsAuditEnabled>1</IsAuditEnabled>
+          <IsSecured>0</IsSecured>
+          <IntroducedVersion>0.1.0.0</IntroducedVersion>
+          <IsCustomizable>1</IsCustomizable>
+          <IsRenameable>1</IsRenameable>
+          <CanModifySearchSettings>1</CanModifySearchSettings>
+          <CanModifyRequirementLevelSettings>1</CanModifyRequirementLevelSettings>
+          <CanModifyAdditionalSettings>1</CanModifyAdditionalSettings>
+          <SourceType>0</SourceType>
+          <IsGlobalFilterEnabled>0</IsGlobalFilterEnabled>
+          <IsSortableEnabled>0</IsSortableEnabled>
+          <CanModifyGlobalFilterSettings>1</CanModifyGlobalFilterSettings>
+          <CanModifyIsSortableSettings>1</CanModifyIsSortableSettings>
+          <IsDataSourceSecret>0</IsDataSourceSecret>
+          <AutoNumberFormat></AutoNumberFormat>
+          <IsSearchable>0</IsSearchable>
+          <IsFilterable>0</IsFilterable>
+          <IsRetrievable>1</IsRetrievable>
+          <IsLocalizable>0</IsLocalizable>
+          <Format>text</Format>
+          <MaxLength>8</MaxLength>
+          <Length>200</Length>
+          <displaynames>
+            <displayname description="M2" languagecode="1033" />
+          </displaynames>
+          <Descriptions>
+            <Description description="FailureReport (MaintenanceAPI)" languagecode="1033" />
           </Descriptions>
         </attribute>
         <attribute PhysicalName="josca_Issue">
@@ -1224,15 +1343,15 @@
           <AutoNumberFormat></AutoNumberFormat>
           <IsSearchable>0</IsSearchable>
           <IsFilterable>0</IsFilterable>
-          <IsRetrievable>0</IsRetrievable>
+          <IsRetrievable>1</IsRetrievable>
           <IsLocalizable>0</IsLocalizable>
           <LookupStyle>single</LookupStyle>
           <LookupTypes />
           <displaynames>
-            <displayname description="Issue" languagecode="1033" />
+            <displayname description="Issue Registration" languagecode="1033" />
           </displaynames>
           <Descriptions>
-            <Description description="" languagecode="1033" />
+            <Description description="The LQ issue registration this task belongs to" languagecode="1033" />
           </Descriptions>
         </attribute>
         <attribute PhysicalName="josca_Progress">
@@ -1302,7 +1421,7 @@
           <AutoNumberFormat></AutoNumberFormat>
           <IsSearchable>0</IsSearchable>
           <IsFilterable>0</IsFilterable>
-          <IsRetrievable>0</IsRetrievable>
+          <IsRetrievable>1</IsRetrievable>
           <IsLocalizable>0</IsLocalizable>
           <LookupStyle>single</LookupStyle>
           <LookupTypes />
@@ -2078,7 +2197,7 @@
           <IsLocalizable>0</IsLocalizable>
           <LookupStyle>single</LookupStyle>
           <displaynames>
-            <displayname description="Regarding" languagecode="1033" />
+            <displayname description="Account" languagecode="1033" />
           </displaynames>
           <Descriptions>
             <Description description="Unique identifier of the object with which the activity is associated." languagecode="1033" />
@@ -2912,7 +3031,7 @@
       <IsConnectionsEnabled>1</IsConnectionsEnabled>
       <EntityColor>#0084C4</EntityColor>
       <IsDocumentManagementEnabled>0</IsDocumentManagementEnabled>
-      <AutoCreateAccessTeams>0</AutoCreateAccessTeams>
+      <AutoCreateAccessTeams>1</AutoCreateAccessTeams>
       <IsOneNoteIntegrationEnabled>0</IsOneNoteIntegrationEnabled>
       <IsKnowledgeManagementEnabled>0</IsKnowledgeManagementEnabled>
       <IsSLAEnabled>0</IsSLAEnabled>
@@ -2937,7 +3056,7 @@
       <IsMapiGridEnabled>1</IsMapiGridEnabled>
       <IsReadingPaneEnabled>1</IsReadingPaneEnabled>
       <IsQuickCreateEnabled>0</IsQuickCreateEnabled>
-      <SyncToExternalSearchIndex>0</SyncToExternalSearchIndex>
+      <SyncToExternalSearchIndex>1</SyncToExternalSearchIndex>
       <IntroducedVersion>5.0.0.0</IntroducedVersion>
       <IsCustomizable>1</IsCustomizable>
       <IsRenameable>1</IsRenameable>

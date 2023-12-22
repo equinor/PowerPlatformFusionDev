@@ -10,9 +10,72 @@
     <layoutxml>
       <grid name="resultset" jump="josca_name" select="1" icon="1" preview="1">
         <row name="result" id="josca_issueregistrationid">
-          <cell name="josca_name" width="300" />
-          <cell name="createdon" width="125" />
+          <cell name="josca_name" width="140" />
+          <cell name="a_3a4100224dcb47d4ab7d62412d22c849.josca_plant" width="145" />
+          <cell name="josca_functionallocation" width="159" />
+          <cell name="a_3a4100224dcb47d4ab7d62412d22c849.josca_camanagementemail" width="180" />
+          <cell name="josca_registrationdatetime" width="207" />
+          <cell name="josca_issuelocationdetails" width="158" />
+          <cell name="josca_failurereport" width="118" />
         </row>
+        <controlDescriptions>
+          <controlDescription>
+            <customControl id="{E7A81278-8635-4D9E-8D4D-59480B391C5B}">
+              <parameters />
+            </customControl>
+            <customControl formFactor="0" name="MscrmControls.Grid.GridControl">
+              <parameters>
+                <data-set name="Grid">
+                  <ViewId>00000000-0000-0000-0000-000000000000</ViewId>
+                </data-set>
+                <data-set name="SubGrid">
+                  <TargetEntityType>josca_livingquartermaintenancetask</TargetEntityType>
+                  <ViewId>1fd8b399-87cd-405b-8c01-bba8b365a083</ViewId>
+                  <SubGridParentId>josca_issue</SubGridParentId>
+                </data-set>
+                <EnableGroupBy static="true" type="Enum">yes</EnableGroupBy>
+                <ListLayoutDirection static="true" type="Enum">Vertical</ListLayoutDirection>
+                <EnableFiltering static="true" type="Enum">yes</EnableFiltering>
+                <HideNestedGridColumnHeader static="true" type="Enum">no</HideNestedGridColumnHeader>
+                <EnableJumpBar static="true" type="Enum">yes</EnableJumpBar>
+              </parameters>
+            </customControl>
+            <customControl formFactor="1" name="MscrmControls.Grid.GridControl">
+              <parameters>
+                <data-set name="Grid">
+                  <ViewId>00000000-0000-0000-0000-000000000000</ViewId>
+                </data-set>
+                <data-set name="SubGrid">
+                  <TargetEntityType>josca_livingquartermaintenancetask</TargetEntityType>
+                  <ViewId>1fd8b399-87cd-405b-8c01-bba8b365a083</ViewId>
+                  <SubGridParentId>josca_issue</SubGridParentId>
+                </data-set>
+                <EnableGroupBy static="true" type="Enum">yes</EnableGroupBy>
+                <ListLayoutDirection static="true" type="Enum">Vertical</ListLayoutDirection>
+                <EnableFiltering static="true" type="Enum">yes</EnableFiltering>
+                <HideNestedGridColumnHeader static="true" type="Enum">no</HideNestedGridColumnHeader>
+                <EnableJumpBar static="true" type="Enum">yes</EnableJumpBar>
+              </parameters>
+            </customControl>
+            <customControl formFactor="2" name="MscrmControls.Grid.GridControl">
+              <parameters>
+                <data-set name="Grid">
+                  <ViewId>00000000-0000-0000-0000-000000000000</ViewId>
+                </data-set>
+                <data-set name="SubGrid">
+                  <TargetEntityType>josca_livingquartermaintenancetask</TargetEntityType>
+                  <ViewId>1fd8b399-87cd-405b-8c01-bba8b365a083</ViewId>
+                  <SubGridParentId>josca_issue</SubGridParentId>
+                </data-set>
+                <EnableGroupBy static="true" type="Enum">yes</EnableGroupBy>
+                <ListLayoutDirection static="true" type="Enum">Vertical</ListLayoutDirection>
+                <EnableFiltering static="true" type="Enum">yes</EnableFiltering>
+                <HideNestedGridColumnHeader static="true" type="Enum">no</HideNestedGridColumnHeader>
+                <EnableJumpBar static="true" type="Enum">yes</EnableJumpBar>
+              </parameters>
+            </customControl>
+          </controlDescription>
+        </controlDescriptions>
       </grid>
     </layoutxml>
     <querytype>0</querytype>
@@ -21,11 +84,18 @@
         <entity name="josca_issueregistration">
           <attribute name="josca_issueregistrationid" />
           <attribute name="josca_name" />
-          <attribute name="createdon" />
           <order attribute="josca_name" descending="false" />
           <filter type="and">
             <condition attribute="statecode" operator="eq" value="0" />
           </filter>
+          <attribute name="josca_functionallocation" />
+          <attribute name="josca_registrationdatetime" />
+          <link-entity alias="a_3a4100224dcb47d4ab7d62412d22c849" name="josca_stidplant" to="josca_stidplant" from="josca_stidplantid" link-type="outer" visible="false">
+            <attribute name="josca_plant" />
+            <attribute name="josca_camanagementemail" />
+          </link-entity>
+          <attribute name="josca_issuelocationdetails" />
+          <attribute name="josca_failurereport" />
         </entity>
       </fetch>
     </fetchxml>

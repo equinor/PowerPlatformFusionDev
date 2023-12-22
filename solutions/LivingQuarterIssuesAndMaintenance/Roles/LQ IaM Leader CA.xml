@@ -2,13 +2,14 @@
 <Role id="{de59ba43-1298-ee11-be37-0022488b6bbf}" name="LQ IaM Leader CA" isinherited="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <IsCustomizable>1</IsCustomizable>
   <RolePrivileges>
-    <RolePrivilege name="prvAppendjosca_IssueRegistration" level="Basic" />
-    <RolePrivilege name="prvAppendTojosca_IssueRegistration" level="Basic" />
-    <RolePrivilege name="prvAssignjosca_IssueRegistration" level="Basic" />
+    <RolePrivilege name="prvAppendjosca_IssueRegistration" level="Deep" />
+    <RolePrivilege name="prvAppendTojosca_IssueRegistration" level="Deep" />
+    <RolePrivilege name="prvAssignjosca_IssueRegistration" level="Deep" />
     <RolePrivilege name="prvCreatejosca_IssueRegistration" level="Basic" />
     <RolePrivilege name="prvCreateSharePointData" level="Global" />
-    <RolePrivilege name="prvDeletejosca_IssueRegistration" level="Basic" />
+    <RolePrivilege name="prvDeletejosca_IssueRegistration" level="Deep" />
     <RolePrivilege name="prvReadjosca_IssueRegistration" level="Deep" />
+    <RolePrivilege name="prvReadjosca_STIDPlant" level="Global" />
     <RolePrivilege name="prvReadPluginAssembly" level="Global" />
     <RolePrivilege name="prvReadPluginType" level="Global" />
     <RolePrivilege name="prvReadSdkMessage" level="Global" />
@@ -16,7 +17,7 @@
     <RolePrivilege name="prvReadSdkMessageProcessingStepImage" level="Global" />
     <RolePrivilege name="prvReadSharePointData" level="Global" />
     <RolePrivilege name="prvReadSharePointDocument" level="Global" />
-    <RolePrivilege name="prvSharejosca_IssueRegistration" level="Basic" />
+    <RolePrivilege name="prvSharejosca_IssueRegistration" level="Deep" />
     <RolePrivilege name="prvWritejosca_IssueRegistration" level="Deep" />
     <RolePrivilege name="prvWriteSharePointData" level="Global" />
   </RolePrivileges>

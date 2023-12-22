@@ -6,6 +6,70 @@
       "Values": {
         "Information": "3618db8f-4f65-41ff-8f9f-ae59e21644e5"
       }
+    },
+    {
+      "Kind": "default.cds_josca_stidplant_forms",
+      "Namespace": "Installations (Forms)",
+      "Values": {
+        "Information": "59d2943a-c4c6-4755-b1f6-e22b75db84b3"
+      }
+    },
+    {
+      "Kind": "default.cds_josca_livingquartermaintenancetask_forms",
+      "Namespace": "Living Quarter Maintenance Tasks (Forms)",
+      "Values": {
+        "Information": "8cce18c3-d186-4936-9205-c413fb915213"
+      }
+    },
+    {
+      "Kind": "default.cds_systemuser_forms",
+      "Namespace": "Users (Forms)",
+      "Values": {
+        "Application User": "d26924ef-4d80-46f7-ab1d-e6ae80a54ce8",
+        "Information": "094fb08a-77bb-49e0-b7ea-8dbddfd01294",
+        "User": "c2cd9e55-d4b4-4b55-9951-16ead79643e5",
+        "User form – Business": "c2413504-7eb2-4c59-a087-95d819866114",
+        "User Hierarchy Tile Form": "c68d6c09-d7a7-4959-8d0f-44b8cff9b452"
+      }
+    },
+    {
+      "Kind": "default.cds_josca_stidplant_forms",
+      "Namespace": "STID Plants (Forms)",
+      "Values": {
+        "Information": "59d2943a-c4c6-4755-b1f6-e22b75db84b3"
+      }
+    },
+    {
+      "Kind": "default.cds_activitypointer_forms",
+      "Namespace": "Activities (Forms)",
+      "Values": {}
+    },
+    {
+      "Kind": "default.cds_task_forms",
+      "Namespace": "MaintEngTasks (Forms)",
+      "Values": {
+        "Information": "b62ce022-cc0f-4c8c-bb29-21948f70dc74",
+        "Quick Form": "1fac7e2e-0b1c-4b6c-ab92-8af0f92dbdbc",
+        "Task": "16654191-19ad-48ca-9e46-c4b4fbdad76f",
+        "Task Card form": "5e9725e4-5449-4363-8c1c-5ae71767af34",
+        "Task for Interactive experience": "d5b4a1b2-de4f-4f86-8768-b0730001e7d1",
+        "Task quick create form.": "a1c8a6dc-8804-4019-9c78-7dbe86560ea1",
+        "Task Reference Panel": "81a89014-442c-44ad-9725-4077426a7fee"
+      }
+    },
+    {
+      "Kind": "default.cds_cr1c1_plant_forms",
+      "Namespace": "Plants (Forms)",
+      "Values": {
+        "Information": "c9be6097-f2eb-422c-9aa9-db98d86dea40"
+      }
+    },
+    {
+      "Kind": "default.cds_int_plant_forms",
+      "Namespace": "Plants (Forms)1",
+      "Values": {
+        "Information": "e5276b15-1dfa-48d1-99c5-e58d83e2c69b"
+      }
     }
   ]
 }

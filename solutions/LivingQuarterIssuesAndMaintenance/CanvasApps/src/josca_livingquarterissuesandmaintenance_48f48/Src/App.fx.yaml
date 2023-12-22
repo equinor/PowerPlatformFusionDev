@@ -2,12 +2,56 @@ App As appinfo:
     BackEnabled: =true
     OnStart: |-
         =/*
-        This can be run as an alternative to the EDSTheme component and works without enabling experimental features which is not recommended for production solutions.
-        The variables are used by the classic components included in the template 
-        You can add this to a hidden control on the apps start screen along with `Select(control)` the screens OnVisible property
-        or add this formula directly to the apps OnStart property.
+        The prototype / MVP was initially developed by GEIN@equinor.com and HJAF@equinor.com during Descember 2023.
+        
+        Architecture contract can be found here: 
+        https://apps.equinor.com/ac?pagetype=entityrecord&etn=ak_architecturecontract&id=6db27142-aedd-4a99-a7df-216c1384fc54&lid=1703249399299
+        (In progress, December 2023)
+        
+        Miroboard documentation:
+        https://miro.com/app/board/uXjVNGvkfOU=/?share_link_id=248649247005
+        
+        Accessibility warnings have been resolved, but tabstops and content of labels needs QC.
+        Roles for technician and discipline responsible implemented at the datasource (dataverse), currently these roles have the same privileges on the task records.
+        The plan is to give the technician role privileges to update task progress, M3 and comment (technician). 
+        
+        Collections used by menus are added to the end of this OnStart.
         */
+        Set(
+            gblNotificationUrl,
+        // Used for buttons with deeplinks to the notifications.equinor.com app
+            {
+                Base: "https://notifications.equinor.com/",
+                Notification: "notification-view",
+                FunctionalLocation: "notification-view-tag"
+            }
+        );
+        Set(
+            gblAppShortUrlBase,
+            /*
+        ShortUrls (apps.equinor.com/register): 
+         -'lqiam' for app
+         -'lqissue' for the forms 
+        */
+            "https://apps.equinor.com/lqiam/"
+        );
+        Set(
+            gblDisplayLanguageSetting,
+            // default language setting. TODO: use Language()
+            {
+                Title: "EN",
+                Language: "en-GB"
+            }
+        );
+        Set(
+            gblIgnoreParam,
+            // This is to ignore the Param() when entering screens when the app i launched with a deeplink.
+            // See App StartScreen and the OnVisible for screens that use Param()
+            false
+        );
+        
         With(
+            // EDS Template 0.3x 
             {
                 Version: "1.4",
                 Palette: {
@@ -1983,7 +2027,8 @@ App As appinfo:
             colAppMenu,
             Table(
                 {
-                    Title: "Home screen",
+                    Title: "Home",
+                    NO_Title: "Hjem",
                     SubTitle: "Go to home screen",
                     Icon: EDSIcons.Home,
                     Action: "navigate",
@@ -1999,7 +2044,8 @@ App As appinfo:
                     }
                 },
                 {
-                    Title: "Issue Reports",
+                    Title: "Issue reports",
+                    NO_Title: "Innmeldte feil",
                     SubTitle: "Go to the issue issue report screen",
                     Icon: EDSIcons.AssignmentImportant,
                     Action: "navigate",
@@ -2021,7 +2067,7 @@ App As appinfo:
             colTopBarMenu,
             Table(
                 {
-                    Title: "Home screen",
+                    Title: "Home Screen",
                     SubTitle: "Go to home screen",
                     Icon: EDSIcons.ChevronLeft,
                     Action: "return",
@@ -2053,7 +2099,10 @@ App As appinfo:
                 {
                     Title: "My account",
                     SubTitle: "View my account profile",
-                    Icon: Coalesce(User().Image, EDSIcons.AccountCircle),
+                    Icon: Coalesce(
+                        User().Image,
+                        EDSIcons.AccountCircle
+                    ),
                     Action: "launch",
                     Option: {
                         Arguments: [
@@ -2066,7 +2115,16 @@ App As appinfo:
                 }
             )
         )
-    Theme: =PowerAppsTheme
+    SizeBreakpoints: =[375, 1080, 1366]
+    StartScreen: |-
+        =If(
+            !IsBlank(Param("issueId")),
+            'Issue Report Screen',
+            !IsBlank(Param("taskId")),
+            'Maintenance Task Screen',
+            'Home Screen'
+        )
+    Theme: =SteelTheme
 
     Host As hostControl.DefaultHostControlVariant:
         OnCancel: =false

@@ -14,6 +14,40 @@
   <AppModules />
   <EntityDataProviders />
   <CanvasApps />
+  <connectionreferences>
+    <connectionreference connectionreferencelogicalname="josca_sharedapprovals_66f00">
+      <connectionreferencedisplayname>LQ IaM Approvals CR</connectionreferencedisplayname>
+      <connectorid>/providers/Microsoft.PowerApps/apis/shared_approvals</connectorid>
+      <description>Connection reference for approvals</description>
+      <iscustomizable>1</iscustomizable>
+      <statecode>0</statecode>
+      <statuscode>1</statuscode>
+    </connectionreference>
+    <connectionreference connectionreferencelogicalname="josca_sharedcommondataserviceforapps_70c10">
+      <connectionreferencedisplayname>LQ IaM Dataverse CR</connectionreferencedisplayname>
+      <connectorid>/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps</connectorid>
+      <description>Connection reference for dataverse</description>
+      <iscustomizable>1</iscustomizable>
+      <statecode>0</statecode>
+      <statuscode>1</statuscode>
+    </connectionreference>
+    <connectionreference connectionreferencelogicalname="josca_sharedmicrosoftforms_54cc6">
+      <connectionreferencedisplayname>LQ IaM Microsoft Forms CR</connectionreferencedisplayname>
+      <connectorid>/providers/Microsoft.PowerApps/apis/shared_microsoftforms</connectorid>
+      <description>Connection reference for Microsoft Forms</description>
+      <iscustomizable>1</iscustomizable>
+      <statecode>0</statecode>
+      <statuscode>1</statuscode>
+    </connectionreference>
+    <connectionreference connectionreferencelogicalname="josca_sharedoffice365_2a7f8">
+      <connectionreferencedisplayname>LQ IaM Office 365 Outlook CR</connectionreferencedisplayname>
+      <connectorid>/providers/Microsoft.PowerApps/apis/shared_office365</connectorid>
+      <description>Connection Reference for Office 365 Outlook </description>
+      <iscustomizable>1</iscustomizable>
+      <statecode>0</statecode>
+      <statuscode>1</statuscode>
+    </connectionreference>
+  </connectionreferences>
   <Languages>
     <Language>1033</Language>
   </Languages>

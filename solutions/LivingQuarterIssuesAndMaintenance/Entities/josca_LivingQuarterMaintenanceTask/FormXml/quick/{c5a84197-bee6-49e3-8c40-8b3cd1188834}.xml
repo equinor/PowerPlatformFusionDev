@@ -30,7 +30,7 @@
                     <row>
                       <cell id="{bf42997b-c2cb-4d82-90bf-76f5a9fcc3ec}">
                         <labels>
-                          <label description="Regarding" languagecode="1033" />
+                          <label description="Account" languagecode="1033" />
                         </labels>
                         <control id="regardingobjectid" classid="{F3015350-44A2-4aa0-97B5-00166532B5E9}" datafieldname="regardingobjectid" />
                       </cell>

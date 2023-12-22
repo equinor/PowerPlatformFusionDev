@@ -1,0 +1,955 @@
+"'Discipline Notification Screen (DISABLED)' As screen":
+    OnHidden: |-
+        =Set(
+            gblIgnoreParam,
+            true
+        );
+        /*
+        UpdateContext(
+            {
+                locActiveIssueReport: Blank(),
+                locActiveIssueReportTask: Blank(),
+                locIssueReportFocused: false,
+                locIssueReportListFocused: false
+            }
+        )
+        */
+    OnVisible: =false
+
+    vcoMainDNS As groupContainer.verticalAutoLayoutContainer:
+        Height: =Parent.Height
+        LayoutAlignItems: =LayoutAlignItems.Stretch
+        LayoutDirection: =LayoutDirection.Vertical
+        LayoutGap: =16
+        LayoutMode: =LayoutMode.Auto
+        PaddingTop: =EDSDefaults.LayoutGap
+        Width: =Parent.Width
+        ZIndex: =1
+
+        hcoTopBarDNS As groupContainer.horizontalAutoLayoutContainer:
+            AlignInContainer: =AlignInContainer.SetByContainer
+            BorderColor: =Color.Transparent
+            BorderStyle: =EDSStyles.TopBar.BorderStyle
+            Fill: =EDSStyles.TopBar.Fill
+            FillPortions: =0
+            Height: =EDSStyles.TopBar.Height+16
+            LayoutAlignItems: =LayoutAlignItems.Center
+            LayoutGap: =EDSStyles.TopBar.LayoutGap
+            LayoutJustifyContent: =LayoutJustifyContent.SpaceBetween
+            LayoutMinHeight: =100
+            LayoutMinWidth: =250
+            LayoutMode: =LayoutMode.Auto
+            LayoutWrap: =
+            PaddingBottom: =16
+            PaddingLeft: =16  
+            PaddingRight: =16
+            Width: =Parent.Width
+            ZIndex: =1
+
+            icoTopBarMenuToggleDNS As image:
+                AccessibleLabel: ="Toggles visibility of main menu dropdown"
+                BorderColor: =RGBA(0, 0, 0, 0)
+                BorderStyle: =BorderStyle.Dashed
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledFill: =RGBA(0, 0, 0, 0)
+                FocusedBorderColor: =EDSDefaults.FocusedBorderColor
+                FocusedBorderThickness: =EDSDefaults.FocusedBorderThickness
+                Height: =EDSStyles.IconMenu.TemplateSize
+                HoverBorderColor: =RGBA(0, 0, 0, 0)
+                HoverFill: =RGBA(0, 0, 0, 0)
+                Image: |-
+                    =If(
+                        gblEDSShowAppMenu,
+                        EDSIcons.ChevronDown,
+                        EDSIcons.Menu
+                    )
+                LayoutMinHeight: =0
+                LayoutMinWidth: =0
+                OnSelect: |-
+                    =//UpdateContext({locShowMenu: !locShowMenu})
+                    Set(gblEDSShowAppMenu, !gblEDSShowAppMenu)
+                PaddingBottom: =12
+                PaddingLeft: =12
+                PaddingRight: =12
+                PaddingTop: =12
+                PressedBorderColor: =RGBA(0, 0, 0, 0)
+                PressedFill: =RGBA(0, 0, 0, 0)
+                TabIndex: =0
+                Width: =EDSStyles.IconMenu.TemplateSize
+                ZIndex: =1
+
+            "tabUserDisplayLanguageSettingDNS As 'Tab list'.pcfdataset":
+                AccessibleLabel: ="Switch between English and Norwegian display language for the application."
+                DefaultSelectedItems: =[gblDisplayLanguageSetting]
+                DisplayMode: =DisplayMode.Edit
+                Height: =36
+                Items: |-
+                    =[
+                        {
+                            Title: "EN",
+                            Language: "en-GB"
+                        },
+                        {
+                            Title: "NO",
+                            Language: "no-NO"
+                        }
+                    ]
+                LayoutMinHeight: =55
+                LayoutMinWidth: =280
+                OnChange: =Set(gblDisplayLanguageSetting, Self.Selected)
+                Size: ='TabList.Size'.Small
+                Width: =100
+                X: =0
+                Y: =0
+                ZIndex: =2
+
+                Title1_3 As pcfDataField.textualColumn:
+                    FieldDisplayName: ="Title"
+                    FieldName: ="Title"
+                    FieldType: ="s"
+                    FieldVariantName: ="textualColumn"
+                    Order: =1
+                    ZIndex: =13
+
+            lblTopBarAppScreenNameDNS As label:
+                Align: =Align.Center
+                AutoHeight: =true
+                BorderColor: =EDSDefaults.BorderColor
+                BorderStyle: =EDSDefaults.BorderStyle
+                BorderThickness: =EDSDefaults.BorderThickness
+                Color: =EDSDefaults.Color
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                FillPortions: =1
+                FocusedBorderThickness: =4
+                Font: =EDSDefaults.Font
+                FontWeight: =EDSFonts.Heading.H1.Weight
+                Height: =Self.Size*Self.LineHeight * 1.75
+                LayoutMinHeight: =EDSDefaults.Height
+                LayoutMinWidth: =64
+                LineHeight: =EDSFonts.Heading.H1.LineHeight
+                PaddingBottom: =0
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Size: =EDSFonts.Heading.H1.Size
+                Text: |-
+                    =Switch(
+                        gblDisplayLanguageSetting.Language,
+                        "no-NO",
+                        "Feil og vedlikeholdsoppgaver",
+                        "Issues and maintenance tasks"
+                    )
+                Visible: =hcoTopBarDNS.Width > (icoTopBarMenuToggleDNS.Width + galTopBarHorizontalMenuDNS.Width+shpTopBarMenuDividerDNS.Width+1+(Parent.LayoutGap*4))
+                Width: =EDSStyles.Label.Width
+                ZIndex: =3
+
+            shpTopBarMenuSpacerDNS As rectangle:
+                BorderColor: =Color.Transparent
+                BorderStyle: =BorderStyle.None
+                Fill: =Color.Transparent
+                FillPortions: =1
+                FocusedBorderThickness: =0
+                Height: =48
+                LayoutMinWidth: =0
+                Visible: |-
+                    =//Self.Width<10
+                    !lblTopBarAppScreenNameDNS.Visible
+                Width: =0
+                ZIndex: =4
+
+            galTabsTopBarDNS As gallery.galleryHorizontal:
+                AccessibleLabel: =$"Tab selection"
+                AlignInContainer: =AlignInContainer.SetByContainer
+                BorderColor: =Color.Transparent
+                BorderStyle: =EDSDefaults.BorderStyle
+                BorderThickness: =EDSStyles.Tabs.BorderThickness
+                Fill: =EDSStyles.Tabs.Fill
+                FillPortions: =0
+                FocusedBorderThickness: =EDSDefaults.FocusedBorderThickness
+                Height: =EDSStyles.Tabs.LayoutMinHeight
+                Items: =colAppMenu
+                LayoutMinHeight: =287
+                LayoutMinWidth: =320
+                OnSelect: |
+                    =Switch(
+                        Lower(ThisItem.Action),
+                        "navigate",
+                        Navigate(
+                            ThisItem.Option.Screen,
+                            LookUp(
+                                ThisItem.Option.Arguments,
+                                Name = "Transition"
+                            ).Value
+                        ),
+                        "launch",
+                        Launch(
+                            LookUp(
+                                ThisItem.Option.Arguments,
+                                Name = "address"
+                            ).Value
+                        ),
+                        "notify",
+                        Notify(
+                            Coalesce(
+                                LookUp(
+                                    ThisItem.Option.Arguments,
+                                    Name = "text"
+                                ).Value,
+                                //ThisItem.Option.Text,// fallback to the main option property instead of using lookup.
+                                "Change this formula to what you wish, you can also provide a custom option"
+                            ),
+                            Coalesce(
+                                LookUp(
+                                    ThisItem.Option.Arguments,
+                                    Name = "notification_type"
+                                ).Value,
+                                NotificationType.Information
+                            ),
+                            LookUp(
+                                ThisItem.Option.Arguments,
+                                Name = "timeout"
+                            ).Value
+                        ),
+                        "return",
+                        Back(
+                            LookUp(
+                                ThisItem.Option.Arguments,
+                                Name = "transition"
+                            ).Value
+                        ),
+                        false
+                    );
+                ShowNavigation: =Self.Width<EDSStyles.Tabs.LayoutMinWidth*CountRows(Self.AllItems)
+                ShowScrollbar: =false
+                TabIndex: =0
+                TemplateFill: =EDSStyles.Tabs.TemplateFill
+                TemplatePadding: =0
+                TemplateSize: =EDSStyles.Tabs.LayoutMinWidth
+                Visible: =Self.Width < (Parent.Width - Parent.PaddingLeft - Parent.PaddingRight - Parent.LayoutGap*2 - Self.Width)
+                Width: |-
+                    =Max(
+                        Min(
+                            (CountRows(Self.AllItems) * Self.TemplateWidth)
+                        ),
+                        1
+                    )
+                WrapCount: =0
+                X: =EDSStyles.Tabs.BorderThickness
+                ZIndex: =5
+
+                vcoTabsTobBarTabItemDNS As groupContainer.horizontalAutoLayoutContainer:
+                    BorderStyle: =BorderStyle.None
+                    Height: =Parent.TemplateHeight
+                    LayoutAlignItems: =LayoutAlignItems.Stretch
+                    LayoutDirection: =LayoutDirection.Vertical
+                    LayoutMode: =LayoutMode.Auto
+                    PaddingTop: |
+                        =EDSStyles.Tabs.BorderThickness
+                    Width: =Parent.TemplateWidth
+                    ZIndex: =1
+
+                    btnTabsTobBarTabItemButtonDNS As button:
+                        BorderColor: =Color.Transparent
+                        BorderStyle: =BorderStyle.Dashed
+                        BorderThickness: =EDSStyles.Tabs.BorderThickness
+                        Color: |-
+                            =If(
+                                Or(
+                                    And(
+                                        // This will highlight the correct item when used as screen navigation.
+                                        ThisItem.Action = "navigate",
+                                        ThisItem.Option.Screen = App.ActiveScreen
+                                    ),
+                                    And(
+                                        ThisItem.Action <> "navigate",
+                                        ThisItem.IsSelected
+                                    )
+                                ),
+                                EDSStyles.Tabs.ActiveColor,
+                                EDSStyles.Tabs.Color
+                            )
+                        DisabledBorderColor: =EDSStyles.Tabs.DisabledBorderColor
+                        DisabledColor: =EDSStyles.Tabs.DisabledColor
+                        DisabledFill: =EDSStyles.Tabs.DisabledFill
+                        Fill: =Color.Transparent
+                        FocusedBorderColor: =EDSDefaults.FocusedBorderColor
+                        FocusedBorderThickness: =EDSDefaults.FocusedBorderThickness
+                        Font: =EDSStyles.Tabs.Font.Font
+                        FontWeight: |
+                            =EDSStyles.Tabs.Font.Weight
+                        Height: =Parent.Height-shpTabsTobBarTabItemBorderDNS.Height-Parent.PaddingTop
+                        HoverBorderColor: =Self.BorderColor
+                        HoverColor: =EDSStyles.Tabs.HoverColor
+                        HoverFill: =EDSStyles.Tabs.HoverFill
+                        LayoutMinHeight: =Parent.Height-shpTabsTobBarTabItemBorderDNS.Height
+                        LayoutMinWidth: =galTabsTopBarDNS.TemplateWidth-(Self.FocusedBorderThickness*2)
+                        OnSelect: =Select(shpTabsTobBarSelectParentWorkaroundDNS);
+                        PaddingBottom: =EDSStyles.Tabs.PaddingBottom
+                        PaddingLeft: =EDSStyles.Tabs.PaddingLeft
+                        PaddingRight: =EDSStyles.Tabs.PaddingRight
+                        PaddingTop: =EDSStyles.Tabs.PaddingTop
+                        PressedBorderColor: =Self.BorderColor
+                        PressedColor: =EDSStyles.Tabs.PressedColor
+                        PressedFill: =EDSStyles.Tabs.PressedFill
+                        RadiusBottomLeft: =0
+                        RadiusBottomRight: =0
+                        RadiusTopLeft: =EDSStyles.Tabs.RadiusTopLeft
+                        RadiusTopRight: =EDSStyles.Tabs.RadiusTopRight
+                        Size: =EDSStyles.Tabs.Font.Size
+                        Text: |-
+                            =Switch(
+                                gblDisplayLanguageSetting.Language,
+                                "no-NO",
+                                ThisItem.NO_Title,
+                                ThisItem.Title
+                            )
+                        Tooltip: =ThisItem.SubTitle
+                        Width: =galTabsTopBarDNS.TemplateWidth -(Self.FocusedBorderThickness)
+                        ZIndex: =1
+
+                    shpTabsTobBarTabItemBorderDNS As rectangle:
+                        BorderColor: =Color.Transparent
+                        BorderStyle: =BorderStyle.None
+                        DisabledFill: =EDSStyles.Tabs.DisabledFill
+                        Fill: |-
+                            =If(
+                                Or(
+                                    And(
+                                        // This will highlight the correct item when used as screen navigation.
+                                        ThisItem.Action = "navigate",
+                                        ThisItem.Option.Screen = App.ActiveScreen
+                                    ),
+                                    And(
+                                        ThisItem.Action <> "navigate",
+                                        ThisItem.IsSelected
+                                    )
+                                ),
+                                EDSStyles.Tabs.ActiveBorderColor,
+                                EDSStyles.Tabs.BorderColor
+                            )
+                        FocusedBorderThickness: =4
+                        Height: =EDSStyles.Tabs.BorderThickness
+                        HoverFill: =EDSStyles.Tabs.HoverFill
+                        LayoutMinWidth: =galTabsTopBarDNS.TemplateWidth
+                        ZIndex: =3
+
+                shpTabsTobBarSelectParentWorkaroundDNS As rectangle:
+                    AccessibleLabel: =$"Tab for {btnTabsTobBarTabItemButtonDNS.Text}"
+                    BorderColor: =RGBA(0, 0, 0, 0)
+                    BorderStyle: =BorderStyle.None
+                    DisabledFill: =Color.Transparent
+                    Fill: =RGBA(0, 0, 0, 0)
+                    FocusedBorderColor: =EDSDefaults.FocusedBorderColor
+                    FocusedBorderThickness: =EDSDefaults.FocusedBorderThickness
+                    Height: =0
+                    HoverFill: =RGBA(0, 0, 0, 0)
+                    OnSelect: |-
+                        =Select(Parent)
+                        //Workaround for selecting this item so that the gallery control updates its selected item.
+                    PressedFill: =RGBA(0, 0, 0, 0)
+                    TabIndex: =0
+                    Tooltip: =ThisItem.SubTitle
+                    Visible: =false
+                    Width: =0
+                    ZIndex: =2
+
+            shpTopBarMenuDividerDNS As rectangle:
+                BorderColor: =Color.Transparent
+                BorderStyle: =BorderStyle.None
+                Fill: =EDSColors.Background.Medium
+                FocusedBorderThickness: =0
+                Height: =48
+                LayoutMinWidth: =EDSStyles.Tabs.LayoutMinWidth
+                Width: =2
+                ZIndex: =6
+
+            galTopBarHorizontalMenuDNS As gallery.galleryHorizontal:
+                AccessibleLabel: ="Menu with links to common external resources and back button for app navigation."
+                AlignInContainer: =AlignInContainer.SetByContainer
+                BorderColor: =EDSDefaults.BorderColor
+                BorderStyle: =EDSDefaults.BorderStyle
+                BorderThickness: =EDSDefaults.BorderThickness
+                Fill: =EDSStyles.Icon.Fill
+                FillPortions: =0
+                FocusedBorderThickness: |-
+                    =//EDSDefaults.FocusedBorderThickness
+                    EDSDefaults.FocusedBorderThickness
+                Height: =EDSStyles.Icon.Height
+                Items: |-
+                    =// ForAll(Parent.MenuItems, Value), EDSIconMenu.MenuItems) // When using object array notation [] instead of Table()
+                    colTopBarMenu
+                LayoutMinHeight: =48
+                LayoutMinWidth: =320
+                OnSelect: |
+                    =Switch(
+                        Lower(ThisItem.Action),
+                        "navigate",
+                        Navigate(
+                            ThisItem.Option.Screen,
+                            LookUp(
+                                ThisItem.Option.Arguments,
+                                Name = "Transition"
+                            ).Value
+                        ),
+                        "launch",
+                        Launch(
+                            LookUp(
+                                ThisItem.Option.Arguments,
+                                Name = "address"
+                            ).Value
+                        ),
+                        "notify",
+                        Notify(
+                            Coalesce(
+                                LookUp(
+                                    ThisItem.Option.Arguments,
+                                    Name = "text"
+                                ).Value,
+                                //ThisItem.Option.Text,// fallback to the main option property instead of using lookup.
+                                "Change this formula to what you wish, you can also provide a custom option"
+                            ),
+                            Coalesce(
+                                LookUp(
+                                    ThisItem.Option.Arguments,
+                                    Name = "notification_type"
+                                ).Value,
+                                NotificationType.Information
+                            ),
+                            LookUp(
+                                ThisItem.Option.Arguments,
+                                Name = "timeout"
+                            ).Value
+                        ),
+                        "return",
+                        Back(
+                            LookUp(
+                                ThisItem.Option.Arguments,
+                                Name = "transition"
+                            ).Value
+                        ),
+                        false
+                    );
+                ShowScrollbar: =false
+                TabIndex: =0
+                TemplatePadding: =0
+                TemplateSize: |-
+                    =//EDSDefaults.TemplateSize+(EDSDefaults.FocusedBorderThickness*2)
+                    EDSStyles.IconMenu.TemplateSize
+                Width: =hcoHorizontalMenuItemDNS.Width*CountRows(Self.AllItems)+(EDSDefaults.FocusedBorderThickness*2)
+                WrapCount: =0
+                X: =0 
+                ZIndex: =7
+
+                hcoHorizontalMenuItemDNS As groupContainer.horizontalAutoLayoutContainer:
+                    BorderColor: =Color.Transparent
+                    BorderStyle: =BorderStyle
+                    Height: =Parent.Height
+                    LayoutAlignItems: =LayoutAlignItems.Stretch
+                    LayoutDirection: =LayoutDirection.Vertical
+                    LayoutJustifyContent: =LayoutJustifyContent.Center
+                    LayoutMode: =LayoutMode.Auto
+                    PaddingBottom: =2
+                    PaddingLeft: =2
+                    PaddingRight: =2
+                    PaddingTop: =2
+                    Width: =Parent.TemplateWidth
+                    ZIndex: =1
+
+                    icoHorizontalMenuItemDNS As image:
+                        AccessibleLabel: =$"Button for {Self.Tooltip}"
+                        BorderColor: =Color.Transparent
+                        BorderStyle: =BorderStyle.Dashed
+                        BorderThickness: =EDSDefaults.BorderThickness
+                        DisabledBorderColor: =EDSDefaults.DisabledBorderColor
+                        DisabledFill: =EDSDefaults.DisabledFill
+                        Fill: =EDSStyles.Icon.Fill
+                        FillPortions: =1
+                        FocusedBorderColor: =EDSDefaults.FocusedBorderColor
+                        Height: =EDSStyles.Icon.Height
+                        HoverBorderColor: |
+                            =//EDSDataTable.Styling.Defaults.HoverBorderColor
+                        HoverFill: =EDSDefaults.IconHoverFill
+                        Image: =ThisItem.Icon
+                        LayoutMinHeight: =0
+                        LayoutMinWidth: =0
+                        OnSelect: |
+                            =Switch(
+                                Lower(ThisItem.Action),
+                                "navigate",
+                                Navigate(ThisItem.Option.Screen),
+                                "launch",
+                                Launch(
+                                    LookUp(
+                                        ThisItem.Option.Arguments,
+                                        Name = "Url"
+                                    ).Value
+                                ),
+                                "notify",
+                                Notify(
+                                    Concatenate(
+                                        "Change this formula to what you wish, you can also provide a custom option ",
+                                        Coalesce(
+                                            LookUp(
+                                                ThisItem.Option.Arguments,
+                                                Name = "NotificationText"
+                                            ).Value
+                                        )
+                                    ),
+                                    LookUp(
+                                        ThisItem.Option.Arguments,
+                                        Name = "NotificationType"
+                                    ).Value
+                                ),
+                                "return",
+                                Back(
+                                    LookUp(
+                                        ThisItem.Option.Arguments,
+                                        Name = "ScreenTransition"
+                                    ).Value
+                                ),
+                                false
+                            );
+                        PaddingBottom: =EDSDefaults.IconButtonPadding
+                        PaddingLeft: =EDSDefaults.IconButtonPadding
+                        PaddingRight: =EDSDefaults.IconButtonPadding
+                        PaddingTop: =EDSDefaults.IconButtonPadding
+                        PressedBorderColor: =EDSDefaults.PressedBorderColor
+                        PressedFill: =Self.HoverFill
+                        RadiusBottomLeft: =Self.RadiusTopLeft
+                        RadiusBottomRight: =Self.RadiusTopLeft
+                        RadiusTopLeft: =Self.Height/2
+                        RadiusTopRight: =Self.RadiusTopLeft
+                        TabIndex: =0
+                        Tooltip: =ThisItem.Title &" - "& ThisItem.SubTitle
+                        Width: =Self.Height
+                        ZIndex: =1
+
+        lblInstallationHeaderDNS As Text:
+            Align: ='TextCanvas.Align'.Center
+            DisplayMode: =DisplayMode.Edit
+            Font: =EDSFonts.Paragraph.BodyLong.Font
+            FontColor: =EDSColors.Static.Default
+            Height: =32
+            LayoutMinHeight: =32
+            LayoutMinWidth: =96
+            Size: =EDSFonts.Heading.H2.Size
+            Text: =$"{gblActivePlant.description}"
+            Weight: =EDSFonts.Paragraph.BodyLong.Weight
+            Width: =320
+            X: =0
+            Y: =0
+            ZIndex: =2
+
+        vcoContentDNS As groupContainer.verticalAutoLayoutContainer:
+            AlignInContainer: =AlignInContainer.SetByContainer
+            Fill: =EDSColors.Background.Light
+            Height: =225
+            LayoutAlignItems: =LayoutAlignItems.Stretch
+            LayoutGap: =EDSDefaults.LayoutGap
+            LayoutMinHeight: =EDSDefaults.LayoutMinHeight
+            LayoutMinWidth: =EDSDefaults.LayoutMinWidth
+            LayoutMode: =LayoutMode.Auto
+            LayoutOverflowY: =LayoutOverflow.Scroll
+            LayoutWrap: |-
+                =//(App.ActiveScreen.Size < ScreenSize.Medium)
+                true
+            PaddingBottom: =16
+            PaddingLeft: =16
+            PaddingRight: =16
+            PaddingTop: =16
+            ZIndex: =3
+
+            conNotificationAuthoringMainDNS As groupContainer.verticalAutoLayoutContainer:
+                AlignInContainer: =AlignInContainer.SetByContainer
+                LayoutAlignItems: =LayoutAlignItems.Stretch
+                LayoutDirection: =LayoutDirection.Vertical
+                LayoutMinHeight: =100
+                LayoutMinWidth: =250
+                LayoutMode: =LayoutMode.Auto
+                ZIndex: =2
+
+                conIssueDisciplineCreateTaskIRS_3 As groupContainer.horizontalAutoLayoutContainer:
+                    AlignInContainer: =AlignInContainer.SetByContainer
+                    DropShadow: =DropShadow.None
+                    FillPortions: =0
+                    Height: =50
+                    LayoutAlignItems: =LayoutAlignItems.Center
+                    LayoutGap: =8
+                    LayoutMinHeight: =100
+                    LayoutMinWidth: =250
+                    LayoutMode: =LayoutMode.Auto
+                    PaddingLeft: =1
+                    PaddingRight: =1
+                    ZIndex: =1
+
+                    Label1 As label:
+                        FillPortions: =1
+                        Text: |-
+                            =$"To: {gblActivePlant.Hotel}" // {locActiveIssueReportTask}"
+                        ZIndex: =1
+
+                hcoNotificationSubjectSectionDNS As groupContainer.horizontalAutoLayoutContainer:
+                    AlignInContainer: =AlignInContainer.SetByContainer
+                    DropShadow: =DropShadow.None
+                    FillPortions: =0
+                    Height: =50
+                    LayoutAlignItems: =LayoutAlignItems.Center
+                    LayoutGap: =8
+                    LayoutMinHeight: =100
+                    LayoutMinWidth: =250
+                    LayoutMode: =LayoutMode.Auto
+                    PaddingLeft: =1
+                    PaddingRight: =1
+                    ZIndex: =2
+
+                    lblNotificationSubjectLabelDNS As label:
+                        Text: |-
+                            ="Subject:"
+                        ZIndex: =1
+
+                rtxNotificationBodyTextDNS As richTextEditor:
+                    AccessibleLabel: ="A rich text editor for editing the notification message"
+                    AlignInContainer: =AlignInContainer.Stretch
+                    BorderColor: |
+                        =EDSColors.Interactive.Primary.Resting
+                    Default: |
+                        =//locDefaultBody
+                    FillPortions: =1
+                    LayoutMinWidth: =360
+                    ZIndex: =3
+
+                conIssueDisciplineCreateTaskDNS As groupContainer.horizontalAutoLayoutContainer:
+                    AlignInContainer: =AlignInContainer.SetByContainer
+                    DropShadow: =DropShadow.None
+                    FillPortions: =0
+                    Height: =50
+                    LayoutAlignItems: =LayoutAlignItems.Center
+                    LayoutGap: =8
+                    LayoutJustifyContent: =LayoutJustifyContent.Center
+                    LayoutMinHeight: =100
+                    LayoutMinWidth: =250
+                    LayoutMode: =LayoutMode.Auto
+                    PaddingLeft: =1
+                    PaddingRight: =1
+                    ZIndex: =4
+
+                    btnSendNotificationDNS As button:
+                        BorderColor: =EDSStyles.Button.BorderColor
+                        BorderStyle: =EDSStyles.OutlinedButton.BorderStyle
+                        BorderThickness: =EDSStyles.Button.BorderThickness
+                        Color: =EDSStyles.OutlinedButton.Color
+                        DisabledBorderColor: =EDSStyles.OutlinedButton.DisabledBorderColor
+                        DisabledColor: =EDSStyles.Button.DisabledColor
+                        DisabledFill: =EDSStyles.OutlinedButton.DisabledFill
+                        DisplayMode: |-
+                            =/*
+                            If(
+                                Or(
+                                    CountIf(
+                                        'Living Quarter Maintenance Tasks',
+                                        ThisRecord.'Issue Registration'.IssueRegistrationGUID = locActiveIssueReport.IssueRegistrationGUID,
+                                        ThisRecord.Progress < 100
+                                    ) = 0,
+                                    locActiveIssueReport.Status = 'Status (Issue Registrations)'.Inactive
+                                ),
+                                DisplayMode.Edit,
+                                DisplayMode.Disabled
+                            )
+                            */
+                        Fill: =EDSStyles.OutlinedButton.Fill
+                        FocusedBorderColor: =EDSStyles.OutlinedButton.FocusedBorderColor
+                        FocusedBorderThickness: =EDSStyles.Button.FocusedBorderThickness
+                        Font: =EDSStyles.Button.Font
+                        FontWeight: =EDSStyles.Button.FontWeight
+                        Height: =EDSStyles.Button.Height
+                        HoverBorderColor: =EDSStyles.Button.HoverBorderColor
+                        HoverColor: =EDSStyles.OutlinedButton.HoverColor
+                        HoverFill: =EDSStyles.OutlinedButton.HoverFill
+                        OnSelect: |-
+                            =Office365Outlook.SendEmailV2(gblActivePlant.'CA Management Email', "Her har du en oppgave", rtxNotificationBodyTextDNS.HtmlText, {from:gblActivePlant.'CA Management Email'})
+                        PaddingBottom: =EDSStyles.Button.PaddingBottom
+                        PaddingLeft: =EDSStyles.Button.PaddingLeft
+                        PaddingRight: =EDSStyles.Button.PaddingRight
+                        PaddingTop: =EDSStyles.Button.PaddingTop
+                        PressedBorderColor: =EDSStyles.Button.PressedBorderColor
+                        PressedColor: =EDSStyles.OutlinedButton.PressedColor
+                        PressedFill: =EDSStyles.OutlinedButton.PressedFill
+                        RadiusBottomLeft: =EDSStyles.Button.RadiusBottomLeft
+                        RadiusBottomRight: =EDSStyles.Button.RadiusBottomRight
+                        RadiusTopLeft: =EDSStyles.Button.RadiusTopLeft
+                        RadiusTopRight: =EDSStyles.Button.RadiusTopRight
+                        Size: =EDSStyles.Button.FontSize
+                        Text: ="Send"
+                        Width: =200
+                        X: =16
+                        Y: =16
+                        ZIndex: =5
+
+    grpAppMenuDNS As group:
+        Height: =5
+        Width: =5
+        X: =40
+        Y: =40
+        ZIndex: =5
+
+        shpAppMenuDismissLayerDNS As rectangle:
+            AccessibleLabel: ="Close the active menu"
+            BorderColor: =Self.Fill
+            Fill: =Color.Transparent
+            Height: =App.ActiveScreen.Height-Self.Y
+            OnSelect: =Set(gblEDSShowAppMenu, false)
+            TabIndex: =0
+            Visible: =conAppMenuDNS.Visible
+            Width: =Parent.Width
+            Y: =40
+            ZIndex: =3
+
+        conAppMenuDNS As groupContainer.manualLayoutContainer:
+            DropShadow: =DropShadow.Bold
+            Fill: =EDSStyles.Menu.Fill
+            Height: =48 * galAppMenuDNS.AllItemsCount + 16
+            PaddingBottom: |
+                =//EDSStyles.Menu.PaddingBottom
+                8
+            PaddingTop: |-
+                =//EDSStyles.Menu.ShadowPadding
+                8
+            RadiusBottomLeft: =4
+            RadiusBottomRight: =4
+            RadiusTopLeft: =4
+            RadiusTopRight: =4
+            Visible: =gblEDSShowAppMenu
+            Width: =galAppMenuDNS.Width
+            X: =30
+            Y: =60
+            ZIndex: =4
+
+            galAppMenuDNS As gallery.galleryVertical:
+                AccessibleLabel: ="Choose from " & Concat(Self.AllItems, ThisRecord.Title, ", ")
+                BorderColor: =EDSStyles.Menu.BorderColor
+                BorderStyle: =EDSStyles.Menu.BorderStyle
+                BorderThickness: =EDSStyles.Menu.BorderThickness
+                Default: |-
+                    =Coalesce(
+                        LookUp(
+                            Self.AllItems,
+                            Or(
+                                And(
+                                    Action = "navigate",
+                                    Option.Screen = App.ActiveScreen
+                                )
+                            )
+                        )
+                    )
+                    /*
+                    */
+                Fill: |-
+                    =//EDSDataTable.Styling.Menu.Fill
+                    Color.Transparent
+                FocusedBorderThickness: |+
+                    =EDSStyles.Menu.FocusedBorderThickness
+                    
+                Height: =Parent.Height-Parent.PaddingTop-Parent.PaddingBottom
+                Items: =colAppMenu
+                Layout: =Layout.Vertical
+                OnSelect: |
+                    =Switch(
+                        Lower(ThisItem.Action),
+                        "navigate",
+                        Navigate(
+                            ThisItem.Option.Screen,
+                            LookUp(
+                                ThisItem.Option.Arguments,
+                                Name = "transition"
+                            ).Value
+                        ),
+                        "launch",
+                        Launch(
+                            LookUp(
+                                ThisItem.Option.Arguments,
+                                Name = "address"
+                            ).Value
+                        ),
+                        "notify",
+                        Notify(
+                            Coalesce(
+                                LookUp(
+                                    ThisItem.Option.Arguments,
+                                    Name = "text"
+                                ).Value,
+                                "Change this formula to what you wish, you can also provide a custom option"
+                            ),
+                            Coalesce(
+                                LookUp(
+                                    ThisItem.Option.Arguments,
+                                    Name = "notification_type"
+                                ).Value,
+                                NotificationType.Information
+                            ),
+                            LookUp(
+                                ThisItem.Option.Arguments,
+                                Name = "timeout"
+                            ).Value
+                        ),
+                        "return",
+                        Back(
+                            LookUp(
+                                ThisItem.Option.Arguments,
+                                Name = "transition"
+                            ).Value
+                        ),
+                        false
+                    );
+                ShowScrollbar: =false
+                TabIndex: =0
+                TemplateFill: |-
+                    =If(
+                        Or(
+                            And(
+                                // This will highlight the correct item when used as screen navigation.
+                                ThisItem.Action = "navigate",
+                                ThisItem.Option.Screen = App.ActiveScreen
+                            ),
+                            And(
+                                ThisItem.Action <> "navigate",
+                                ThisItem.IsSelected
+                            )
+                        ),
+                        EDSStyles.Menu.ActiveFill,
+                        Color.Transparent
+                    )
+                TemplatePadding: =0
+                TemplateSize: |
+                    =EDSStyles.Menu.TemplateHeight
+                    //48
+                Width: |
+                    =//If(EDSMenu.Complex, EDSStyles.Menu.TemplateWidth, EDSStyles.Menu.TemplateWidth-EDSStyles.Menu.IconWidth)
+                    If(true, 240, 216)
+                Y: =Parent.PaddingTop
+                ZIndex: =1
+
+                hcoAppMenuItemDNS As groupContainer.horizontalAutoLayoutContainer:
+                    EnableChildFocus: =false
+                    Fill: =Color.Transparent
+                    Height: =Parent.TemplateHeight
+                    LayoutGap: =If(icoAppMenuItemDNS.Visible, EDSStyles.Menu.LayoutGap, 0)
+                    LayoutMode: =LayoutMode.Auto
+                    PaddingBottom: |-
+                        =//0
+                        EDSStyles.Menu.PaddingBottom
+                    PaddingLeft: |-
+                        =EDSStyles.Menu.PaddingLeft
+                        //24
+                    PaddingRight: |-
+                        =EDSStyles.Menu.PaddingRight
+                        //24
+                    PaddingTop: |-
+                        =0
+                        //EDSMenu.Styling.Menu.PaddingTop
+                    Width: =Parent.TemplateWidth
+                    ZIndex: =1
+
+                    icoAppMenuItemDNS As image:
+                        AccessibleLabel: =$"Icon for {btnAppMenuItemActionDNS.Text} menu item"
+                        BorderColor: |
+                            =EDSStyles.Menu.BorderColor
+                        BorderStyle: =BorderStyle.None
+                        BorderThickness: =EDSStyles.Menu.BorderThickness
+                        DisabledFill: =Color.Transparent
+                        FocusedBorderColor: =
+                        Height: |-
+                            =//EDSDataTable.Styling.Menu.IconHeight
+                            Parent.Height
+                        HoverFill: =Self.Fill
+                        Image: =ThisItem.Icon
+                        OnSelect: =Select(btnAppMenuItemActionDNS)
+                        PaddingBottom: |
+                            =EDSStyles.Menu.IconPaddingBottom
+                        PaddingLeft: |
+                            =EDSStyles.Menu.IconPaddingLeft
+                        PaddingRight: |
+                            =EDSStyles.Menu.IconPaddingRight
+                        PaddingTop: |
+                            =EDSStyles.Menu.IconPaddingTop
+                        TabIndex: =0
+                        Tooltip: =ThisItem.SubTitle
+                        Visible: |-
+                            =//EDSMenu.Complex
+                            true
+                        Width: |
+                            =EDSStyles.Menu.IconWidth
+                        X: |-
+                            =//Parent.Width - Self.Width-EDSDataTable.Styling.Menu.PaddingRight
+                            0
+                        Y: =1
+                        ZIndex: =1
+
+                    btnAppMenuItemActionDNS As button:
+                        Align: =Align.Left
+                        BorderColor: =Self.Fill
+                        BorderStyle: =BorderStyle.None
+                        BorderThickness: =EDSStyles.Menu.BorderThickness
+                        Color: =EDSStyles.Menu.Color
+                        DisabledBorderColor: =Self.DisabledFill
+                        DisabledColor: =EDSStyles.Menu.DisabledColor
+                        DisabledFill: =EDSStyles.Menu.DisabledFill
+                        Fill: |
+                            =//If(App.ActiveScreen.Name = ThisItem.Target.Screen.Name, EDSDataTable.Styling.Menu.ActiveFill, EDSDataTable.Styling.Menu.Fill)
+                            Color.Transparent
+                        FillPortions: =1
+                        FocusedBorderColor: =EDSStyles.Menu.FocusedBorderColor
+                        FocusedBorderThickness: =EDSStyles.Menu.FocusedBorderThickness
+                        Font: =EDSDefaults.Font
+                        FontWeight: =FontWeight.Normal
+                        Height: =galAppMenuDNS.TemplateHeight
+                        HoverBorderColor: =Self.HoverFill
+                        HoverColor: =EDSStyles.Menu.HoverColor
+                        HoverFill: =EDSStyles.Menu.HoverFill
+                        LayoutMinHeight: =48
+                        LayoutMinWidth: |-
+                            =//EDSStyles.Menu.IconLayoutMinWidth
+                            48
+                        OnSelect: =Select(shpAppMenuItemOverlayDNS)
+                        PaddingBottom: =//EDSDataTable.Styling.Menu.PaddingBottom
+                        PaddingLeft: |
+                            =//EDSDataTable.Styling.Menu.
+                            0
+                        PaddingRight: |-
+                            =//EDSDataTable.Styling.Menu.PaddingRight+icoMenuItem.Width
+                            0
+                        PaddingTop: =//EDSDataTable.Styling.Menu.PaddingTop
+                        PressedColor: =EDSStyles.Menu.PressedColor
+                        PressedFill: =EDSStyles.Menu.PressedFill
+                        RadiusBottomLeft: =0
+                        RadiusBottomRight: =0
+                        RadiusTopLeft: =0 
+                        RadiusTopRight: =0
+                        Size: =EDSDefaults.FontSize //Paragraph.BodyShort.Size
+                        Text: =ThisItem.Title
+                        Tooltip: =ThisItem.SubTitle
+                        Width: |-
+                            =//galAppMenu.TemplateWidth
+                            64
+                        ZIndex: =2
+
+                shpAppMenuItemOverlayDNS As rectangle:
+                    AccessibleLabel: =$"Menu item for {btnAppMenuItemActionDNS.Text}"
+                    BorderColor: =RGBA(0, 0, 0, 0)
+                    BorderStyle: =BorderStyle.Dashed
+                    DisabledFill: =Color.Transparent
+                    Fill: =RGBA(0, 0, 0, 0)
+                    FocusedBorderColor: |
+                        =EDSStyles.Menu.FocusedBorderColor
+                    FocusedBorderThickness: |
+                        =EDSStyles.Menu.FocusedBorderThickness
+                    Height: =Parent.TemplateHeight
+                    HoverFill: |
+                        =EDSStyles.Menu.HoverFill
+                    OnSelect: =Select(Parent)
+                    PressedFill: |
+                        =EDSStyles.Menu.PressedFill
+                    TabIndex: =0
+                    Tooltip: =ThisItem.SubTitle
+                    Width: =Parent.TemplateWidth
+                    ZIndex: =2
+

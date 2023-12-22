@@ -75,7 +75,7 @@
                     <row>
                       <cell id="{ed54b2eb-5e04-4820-806c-8a45640480a0}" showlabel="true" locklevel="0">
                         <labels>
-                          <label description="Regarding" languagecode="1033" />
+                          <label description="Account" languagecode="1033" />
                         </labels>
                         <control id="regardingobjectid" classid="{F3015350-44A2-4aa0-97B5-00166532B5E9}" datafieldname="regardingobjectid" disabled="false" />
                       </cell>

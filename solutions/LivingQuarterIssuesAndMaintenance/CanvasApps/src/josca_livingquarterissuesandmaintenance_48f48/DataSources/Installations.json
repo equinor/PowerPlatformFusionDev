@@ -1,0 +1,126 @@
+[
+  {
+    "CdsFCBContext": "{\"FileType\":true,\"ImageExternalStorage\":true}",
+    "EntitySetName": "josca_stidplants",
+    "IsHidden": false,
+    "IsSampleData": false,
+    "IsWritable": true,
+    "LogicalName": "josca_stidplant",
+    "MaxGetRowsCount": 500,
+    "Name": "Installations",
+    "NativeCDSDataSourceInfoNameMapping": {
+      "{Attachments}": "Attachments",
+      "createdby": "Created By",
+      "createdon": "Created On",
+      "createdonbehalfby": "Created By (Delegate)",
+      "importsequencenumber": "Import Sequence Number",
+      "josca_automation": "Automation",
+      "josca_businessarea": "businessArea",
+      "josca_camanagementemail": "CA Management Email",
+      "josca_description": "description",
+      "josca_electrical": "Electrical",
+      "josca_hotel": "Hotel",
+      "josca_instcode": "instCode",
+      "josca_IssueRegistration_Plant": "Issue Registrations",
+      "josca_kitchen": "Kitchen",
+      "josca_mechanical": "Mechanical",
+      "josca_plant": "Plant",
+      "josca_sapplantid": "sapPlantId",
+      "josca_stidplant_ActivityPointers": "Activities",
+      "josca_stidplant_adx_inviteredemptions": "Invite Redemptions",
+      "josca_stidplant_adx_portalcomments": "Portal Comments",
+      "josca_stidplant_Annotations": "Notes",
+      "josca_stidplant_Appointments": "Appointments",
+      "josca_stidplant_AsyncOperations": "System Jobs",
+      "josca_stidplant_BulkDeleteFailures": "Bulk Delete Failures",
+      "josca_stidplant_chats": "Teams chats",
+      "josca_stidplant_cr1c1_AVMTRUsages": "AVMTRUsages",
+      "josca_stidplant_cr1c1_LicenceMeetingProcesses": "LicenceMeetingProcess",
+      "josca_stidplant_DuplicateBaseRecord": "Duplicate Records (josca_stidplant_DuplicateBaseRecord)",
+      "josca_stidplant_DuplicateMatchingRecord": "Duplicate Records (josca_stidplant_DuplicateMatchingRecord)",
+      "josca_stidplant_Emails": "Email Messages",
+      "josca_stidplant_Faxes": "Faxes",
+      "josca_stidplant_josca_LivingQuarterMaintenanceTasks": "Living Quarter Maintenance Tasks",
+      "josca_stidplant_Letters": "Letters",
+      "josca_stidplant_MailboxTrackingFolders": "Mailbox Auto Tracking Folders",
+      "josca_stidplant_msfp_alerts": "Customer Voice alert",
+      "josca_stidplant_msfp_surveyinvites": "Customer Voice survey invites",
+      "josca_stidplant_msfp_surveyresponses": "Customer Voice survey responses",
+      "josca_stidplant_PhoneCalls": "Phone Calls",
+      "josca_stidplant_PrincipalObjectAttributeAccesses": "Field Sharing",
+      "josca_stidplant_ProcessSession": "Process Sessions",
+      "josca_stidplant_RecurringAppointmentMasters": "Recurring Appointments",
+      "josca_stidplant_SyncErrors": "Sync Errors",
+      "josca_stidplant_Tasks": "MaintEngTasks",
+      "josca_stidplantid": "PlantGUID",
+      "modifiedby": "Modified By",
+      "modifiedon": "Modified On",
+      "modifiedonbehalfby": "Modified By (Delegate)",
+      "organizationid": "Organization Id",
+      "overriddencreatedon": "Record Created On",
+      "statecode": "Status",
+      "statuscode": "Status Reason",
+      "timezoneruleversionnumber": "Time Zone Rule Version Number",
+      "utcconversiontimezonecode": "UTC Conversion Time Zone Code",
+      "versionnumber": "Version Number"
+    },
+    "PreferredName": "Installations",
+    "Type": "NativeCDSDataSourceInfo"
+  },
+  {
+    "DisplayName": "Installations (Views)",
+    "Name": "_josca_stidplant_views",
+    "RelatedEntityName": "Installations",
+    "TrimmedViewName": true,
+    "Type": "ViewInfo",
+    "ViewInfoNameMapping": {
+      "27dfa61d-f3ae-4b58-b858-dd70cc3f7745": "Inactive Installations",
+      "42586122-89bb-4858-a03a-a6001121ea20": "Installation Lookup View",
+      "7852d03a-d618-4f05-8f74-9c718997a407": "Installation Associated View",
+      "792f516b-db2d-4f5c-99d2-20a83a7a16ac": "Installation Advanced Find View",
+      "7ada84f8-9999-ee11-be37-000d3a2d68b8": "Global Admin Configuration",
+      "7d738ce0-b29c-ee11-be37-000d3a2d6797": "Other Inactive Installations",
+      "e7988a32-9c80-4276-8ba5-215df9a0c7bb": "Active Installations"
+    }
+  },
+  {
+    "DisplayName": "Status (Installations)",
+    "Name": "josca_stidplant_statecode",
+    "OptionSetInfoNameMapping": {
+      "0": "Active",
+      "1": "Inactive"
+    },
+    "OptionSetIsBooleanValued": false,
+    "OptionSetIsGlobal": false,
+    "OptionSetReference": {
+      "OptionSetReferenceItem0": {
+        "OptionSetReferenceColumnName": "statecode",
+        "OptionSetReferenceEntityName": "Installations"
+      }
+    },
+    "OptionSetTypeKey": "StateType",
+    "RelatedColumnInvariantName": "statecode",
+    "RelatedEntityName": "Installations",
+    "Type": "OptionSetInfo"
+  },
+  {
+    "DisplayName": "Status Reason (Installations)",
+    "Name": "josca_stidplant_statuscode",
+    "OptionSetInfoNameMapping": {
+      "1": "Active",
+      "2": "Inactive"
+    },
+    "OptionSetIsBooleanValued": false,
+    "OptionSetIsGlobal": false,
+    "OptionSetReference": {
+      "OptionSetReferenceItem0": {
+        "OptionSetReferenceColumnName": "statuscode",
+        "OptionSetReferenceEntityName": "Installations"
+      }
+    },
+    "OptionSetTypeKey": "StatusType",
+    "RelatedColumnInvariantName": "statuscode",
+    "RelatedEntityName": "Installations",
+    "Type": "OptionSetInfo"
+  }
+]

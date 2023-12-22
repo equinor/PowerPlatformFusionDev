@@ -67,6 +67,54 @@
                         <control id="josca_camanagementemail" classid="{ADA2203E-B4CD-49BE-9DDF-234642B43B52}" datafieldname="josca_camanagementemail" disabled="false" />
                       </cell>
                     </row>
+                    <row>
+                      <cell id="{c22fcc2b-7446-462c-9cca-4ec369e9a613}" locklevel="0" rowspan="1" colspan="1">
+                        <labels>
+                          <label description="Hotel" languagecode="1033" />
+                        </labels>
+                        <control id="josca_hotel" classid="{ADA2203E-B4CD-49BE-9DDF-234642B43B52}" datafieldname="josca_hotel" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{2c144d2c-7c28-4b6d-ac0f-d24aa5d90ff8}" locklevel="0" rowspan="1" colspan="1">
+                        <labels>
+                          <label description="Kitchen" languagecode="1033" />
+                        </labels>
+                        <control id="josca_kitchen" classid="{ADA2203E-B4CD-49BE-9DDF-234642B43B52}" datafieldname="josca_kitchen" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{149666b5-ddbc-488a-ba03-65d7dddd2bab}" locklevel="0" rowspan="1" colspan="1">
+                        <labels>
+                          <label description="Mechanical" languagecode="1033" />
+                        </labels>
+                        <control id="josca_mechanical" classid="{ADA2203E-B4CD-49BE-9DDF-234642B43B52}" datafieldname="josca_mechanical" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{51aea95c-640a-458a-8cfd-cc26db6c0c6f}" locklevel="0" rowspan="1" colspan="1">
+                        <labels>
+                          <label description="Electrical" languagecode="1033" />
+                        </labels>
+                        <control id="josca_electrical" classid="{ADA2203E-B4CD-49BE-9DDF-234642B43B52}" datafieldname="josca_electrical" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{09f3e594-45f3-488c-ad33-a4ea26c4ca4e}" locklevel="0" rowspan="1" colspan="1">
+                        <labels>
+                          <label description="Automation" languagecode="1033" />
+                        </labels>
+                        <control id="josca_automation" classid="{ADA2203E-B4CD-49BE-9DDF-234642B43B52}" datafieldname="josca_automation" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{99eddaac-cd46-41d4-9ee8-ded4a5073185}" locklevel="0" rowspan="1" colspan="1">
+                        <labels>
+                          <label description="Status" languagecode="1033" />
+                        </labels>
+                        <control id="statecode" classid="{3EF39988-22BB-4F0B-BBBE-64B5A3748AEE}" datafieldname="statecode" disabled="false" />
+                      </cell>
+                    </row>
                   </rows>
                 </section>
               </sections>
