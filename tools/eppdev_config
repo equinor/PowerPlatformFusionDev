@@ -10,7 +10,7 @@ environment_prefix="CfE"
 
 solutions_path="/workspaces/PowerPlatformFusionDev/solutions"
 components_path="/workspaces/PowerPlatformFusionDev/components"
-component_publisher_prefix="eds"
+component_publisher_prefix="josca"
 
 # default solution (logical name)
 solution_name="LivingQuarterIssuesAndMaintenance"
@@ -20,8 +20,8 @@ componentdev_env_id="20c085a1-7f1d-e2d5-b776-b6da38f7ce5c"
 componentdev_env_name="EDSComponentDev"
 
 # Development environment
-dev_env_id="edffaed6-96b0-4e61-8c4b-291f25201b5b"
-dev_env_name="CitizenDev"
+dev_env_id="c57aa9a3-de6e-423e-a274-195cb3a57b33"
+dev_env_name="DPNDev"
 
 # Test environment
 test_env_id="7ea712b5-e354-435c-8ac8-982ed61f8a1c"

@@ -6,9 +6,9 @@
       <LocalizedName description="Living Quarter Issues And Maintenance" languagecode="1033" />
     </LocalizedNames>
     <Descriptions>
-      <Description description="Upgrade of Living Quarter Issues And Maintenance." languagecode="1033" />
+      <Description description="Living Quarter Issues And Maintenance." languagecode="1033" />
     </Descriptions>
-    <Version>1.1.0.2</Version>
+    <Version>1.1.0.3</Version>
     <Managed>2</Managed>
     <Publisher>
       <UniqueName>JointOperationsSupportCateringAdmin</UniqueName>
