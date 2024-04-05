@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <EntityRelationships xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <EntityRelationship Name="msnfp_objective_josca_LivingQuarterMaintenanceTasks">
+  <EntityRelationship Name="adx_redirect_josca_LivingQuarterMaintenanceTasks">
     <EntityRelationshipType>OneToMany</EntityRelationshipType>
     <IsCustomizable>1</IsCustomizable>
-    <IntroducedVersion>0.1.0.0</IntroducedVersion>
+    <IntroducedVersion>0.1.0.1</IntroducedVersion>
     <IsHierarchical>0</IsHierarchical>
     <ReferencingEntityName>josca_LivingQuarterMaintenanceTask</ReferencingEntityName>
-    <ReferencedEntityName>msnfp_Objective</ReferencedEntityName>
+    <ReferencedEntityName>Adx_redirect</ReferencedEntityName>
     <CascadeAssign>Cascade</CascadeAssign>
     <CascadeDelete>Cascade</CascadeDelete>
     <CascadeArchive>NoCascade</CascadeArchive>

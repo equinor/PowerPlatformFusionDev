@@ -22,7 +22,7 @@
                     <row>
                       <cell id="{130a8828-25a5-4826-b466-b8b2bbd877ca}">
                         <labels>
-                          <label description="" languagecode="1033" />
+                          <label description="Plant" languagecode="1033" />
                         </labels>
                         <control id="josca_plant" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="josca_plant" />
                       </cell>

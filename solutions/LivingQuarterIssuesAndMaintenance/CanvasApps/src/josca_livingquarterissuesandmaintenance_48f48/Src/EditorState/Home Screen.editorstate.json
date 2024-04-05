@@ -4006,7 +4006,7 @@
       "MetaDataIDKey": "",
       "Name": "conFacilityTrendsAndDistributionsHS",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 1,
+      "ParentIndex": 0,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -4291,7 +4291,7 @@
       "MetaDataIDKey": "",
       "Name": "conInfographicsHS",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 0,
+      "ParentIndex": 1,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -8112,7 +8112,7 @@
       "MetaDataIDKey": "",
       "Name": "icoCloseStatsHS",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 0,
+      "ParentIndex": 1,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -10388,7 +10388,7 @@
       "MetaDataIDKey": "",
       "Name": "lblFacilityTrendsAndDistributionHeaderHS",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 1,
+      "ParentIndex": 0,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {

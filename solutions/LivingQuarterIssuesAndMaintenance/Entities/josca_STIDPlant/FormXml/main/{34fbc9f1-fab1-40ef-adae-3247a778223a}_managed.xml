@@ -22,7 +22,7 @@
                     <row>
                       <cell id="{ad119a75-04f7-42e2-a074-f4d0659fa1b9}">
                         <labels>
-                          <label description="" languagecode="1033" />
+                          <label description="Plant" languagecode="1033" />
                         </labels>
                         <control id="josca_plant" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="josca_plant" />
                       </cell>
@@ -30,7 +30,7 @@
                     <row>
                       <cell id="{e632dba7-cd0d-4692-9afc-360af9be1813}" locklevel="0" rowspan="1" colspan="1">
                         <labels>
-                          <label description="" languagecode="1033" />
+                          <label description="instCode" languagecode="1033" />
                         </labels>
                         <control id="josca_instcode" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="josca_instcode" disabled="false" />
                       </cell>
@@ -38,7 +38,7 @@
                     <row>
                       <cell id="{625283c5-45d0-4626-9d7b-815e543f2cdd}" locklevel="0" rowspan="1" colspan="1">
                         <labels>
-                          <label description="" languagecode="1033" />
+                          <label description="sapPlantId" languagecode="1033" />
                         </labels>
                         <control id="josca_sapplantid" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="josca_sapplantid" disabled="false" />
                       </cell>
@@ -46,7 +46,7 @@
                     <row>
                       <cell id="{890317a5-1cca-43d8-b435-f74e1c6a6ad4}" locklevel="0" colspan="1" rowspan="1">
                         <labels>
-                          <label description="" languagecode="1033" />
+                          <label description="description" languagecode="1033" />
                         </labels>
                         <control id="josca_description" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="josca_description" disabled="false" />
                       </cell>
@@ -54,7 +54,7 @@
                     <row>
                       <cell id="{a6237d45-13e9-49ac-ae92-ebfe09c0e9d3}" locklevel="0" colspan="1" rowspan="1">
                         <labels>
-                          <label description="" languagecode="1033" />
+                          <label description="businessArea" languagecode="1033" />
                         </labels>
                         <control id="josca_businessarea" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="josca_businessarea" disabled="false" />
                       </cell>
@@ -62,7 +62,7 @@
                     <row>
                       <cell id="{53aa817f-bea1-44b0-bb95-5f8210663d29}" locklevel="0" colspan="1" rowspan="1">
                         <labels>
-                          <label description="" languagecode="1033" />
+                          <label description="CA Management Email" languagecode="1033" />
                         </labels>
                         <control id="josca_camanagementemail" classid="{ADA2203E-B4CD-49BE-9DDF-234642B43B52}" datafieldname="josca_camanagementemail" disabled="false" />
                       </cell>
@@ -70,7 +70,7 @@
                     <row>
                       <cell id="{c22fcc2b-7446-462c-9cca-4ec369e9a613}" locklevel="0" rowspan="1" colspan="1">
                         <labels>
-                          <label description="" languagecode="1033" />
+                          <label description="Hotel" languagecode="1033" />
                         </labels>
                         <control id="josca_hotel" classid="{ADA2203E-B4CD-49BE-9DDF-234642B43B52}" datafieldname="josca_hotel" disabled="false" />
                       </cell>
@@ -78,7 +78,7 @@
                     <row>
                       <cell id="{2c144d2c-7c28-4b6d-ac0f-d24aa5d90ff8}" locklevel="0" rowspan="1" colspan="1">
                         <labels>
-                          <label description="" languagecode="1033" />
+                          <label description="Kitchen" languagecode="1033" />
                         </labels>
                         <control id="josca_kitchen" classid="{ADA2203E-B4CD-49BE-9DDF-234642B43B52}" datafieldname="josca_kitchen" disabled="false" />
                       </cell>
@@ -86,7 +86,7 @@
                     <row>
                       <cell id="{149666b5-ddbc-488a-ba03-65d7dddd2bab}" locklevel="0" rowspan="1" colspan="1">
                         <labels>
-                          <label description="" languagecode="1033" />
+                          <label description="Mechanical" languagecode="1033" />
                         </labels>
                         <control id="josca_mechanical" classid="{ADA2203E-B4CD-49BE-9DDF-234642B43B52}" datafieldname="josca_mechanical" disabled="false" />
                       </cell>
@@ -94,7 +94,7 @@
                     <row>
                       <cell id="{51aea95c-640a-458a-8cfd-cc26db6c0c6f}" locklevel="0" rowspan="1" colspan="1">
                         <labels>
-                          <label description="" languagecode="1033" />
+                          <label description="Electrical" languagecode="1033" />
                         </labels>
                         <control id="josca_electrical" classid="{ADA2203E-B4CD-49BE-9DDF-234642B43B52}" datafieldname="josca_electrical" disabled="false" />
                       </cell>
@@ -102,7 +102,7 @@
                     <row>
                       <cell id="{09f3e594-45f3-488c-ad33-a4ea26c4ca4e}" locklevel="0" rowspan="1" colspan="1">
                         <labels>
-                          <label description="" languagecode="1033" />
+                          <label description="Automation" languagecode="1033" />
                         </labels>
                         <control id="josca_automation" classid="{ADA2203E-B4CD-49BE-9DDF-234642B43B52}" datafieldname="josca_automation" disabled="false" />
                       </cell>
@@ -110,7 +110,7 @@
                     <row>
                       <cell id="{99eddaac-cd46-41d4-9ee8-ded4a5073185}" locklevel="0" rowspan="1" colspan="1">
                         <labels>
-                          <label description="" languagecode="1033" />
+                          <label description="Status" languagecode="1033" />
                         </labels>
                         <control id="statecode" classid="{3EF39988-22BB-4F0B-BBBE-64B5A3748AEE}" datafieldname="statecode" disabled="false" />
                       </cell>

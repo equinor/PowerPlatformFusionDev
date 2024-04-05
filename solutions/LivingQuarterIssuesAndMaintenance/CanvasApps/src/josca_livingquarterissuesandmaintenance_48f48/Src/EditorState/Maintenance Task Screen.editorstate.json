@@ -903,7 +903,7 @@
       "MetaDataIDKey": "",
       "Name": "btnCancelIssueTaskFormEditMTS",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 3,
+      "ParentIndex": 0,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -1222,7 +1222,7 @@
       "MetaDataIDKey": "",
       "Name": "btnCreateNewIssueRegistrationTaskMTS",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 3,
+      "ParentIndex": 4,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -1952,7 +1952,7 @@
       "MetaDataIDKey": "",
       "Name": "btnSendNotificationMTS",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 2,
+      "ParentIndex": 4,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -2503,7 +2503,7 @@
       "MetaDataIDKey": "",
       "Name": "btnSubmitIssueTaskFormMTS",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 4,
+      "ParentIndex": 1,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -6334,7 +6334,7 @@
       "MetaDataIDKey": "",
       "Name": "crdIssueTaskDescriptionMTS",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 3,
+      "ParentIndex": 2,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -6691,7 +6691,7 @@
       "MetaDataIDKey": "",
       "Name": "crdIssueTaskDisciplineMTS",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 0,
+      "ParentIndex": 1,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -6873,7 +6873,7 @@
       "MetaDataIDKey": "",
       "Name": "crdIssueTaskDisciplineTechnicianCommentMTS",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 1,
+      "ParentIndex": 3,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -7984,7 +7984,7 @@
       "MetaDataIDKey": "",
       "Name": "crdIssueTaskTitleMTS",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 2,
+      "ParentIndex": 0,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -12913,7 +12913,7 @@
       "MetaDataIDKey": "",
       "Name": "frmSelectedIssueTaskItemMTS",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 1,
+      "ParentIndex": 0,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -14146,7 +14146,7 @@
       "MetaDataIDKey": "",
       "Name": "galTabsTopBarMTS",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 2,
+      "ParentIndex": 4,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -14535,7 +14535,7 @@
       "MetaDataIDKey": "",
       "Name": "galTopBarHorizontalMenuMTS",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 4,
+      "ParentIndex": 6,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -17519,7 +17519,7 @@
       "MetaDataIDKey": "",
       "Name": "htmlDisciplineNotificationMailBodyMTS",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 2,
+      "ParentIndex": 1,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -20524,7 +20524,7 @@
       "MetaDataIDKey": "",
       "Name": "icoIssueRegistrationRecordStatusMTS",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 4,
+      "ParentIndex": 2,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -21000,7 +21000,7 @@
       "MetaDataIDKey": "",
       "Name": "icoIssueTaskFormSaveStatusMTS_DISABLED",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 0,
+      "ParentIndex": 2,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -22258,7 +22258,7 @@
       "MetaDataIDKey": "",
       "Name": "icoNotificationDetailsMTS",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 1,
+      "ParentIndex": 5,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -23192,7 +23192,7 @@
       "MetaDataIDKey": "",
       "Name": "icoToggleFocusSelectedIssueTaskMTS",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 1,
+      "ParentIndex": 3,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -24452,7 +24452,7 @@
       "MetaDataIDKey": "",
       "Name": "infSendNotificationDetailsMTS",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 5,
+      "ParentIndex": 3,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -24860,7 +24860,7 @@
       "MetaDataIDKey": "",
       "Name": "lblIssueRegistrationRecordStatusMTS",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 1,
+      "ParentIndex": 3,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -28624,7 +28624,7 @@
       "MetaDataIDKey": "",
       "Name": "lblSelectedIssueTaskTitleMTS",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 3,
+      "ParentIndex": 1,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -28939,7 +28939,7 @@
       "MetaDataIDKey": "",
       "Name": "lblTopBarAppScreenNameMTS",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 5,
+      "ParentIndex": 2,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -29761,7 +29761,7 @@
       "MetaDataIDKey": "",
       "Name": "rtxDisciplineNotificationMailBodyMTS_DISABLED",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 0,
+      "ParentIndex": 2,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -31683,7 +31683,7 @@
       "MetaDataIDKey": "",
       "Name": "shpTopBarMenuDividerMTS",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 3,
+      "ParentIndex": 5,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -31926,7 +31926,7 @@
       "MetaDataIDKey": "",
       "Name": "shpTopBarMenuSpacerMTS",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 1,
+      "ParentIndex": 3,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -33395,7 +33395,7 @@
       "MetaDataIDKey": "",
       "Name": "tabIssueTaskDisciplinesMTS",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 2,
+      "ParentIndex": 1,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -33794,7 +33794,7 @@
       "MetaDataIDKey": "",
       "Name": "tabUserDisplayLanguageSettingMTS",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 6,
+      "ParentIndex": 1,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {

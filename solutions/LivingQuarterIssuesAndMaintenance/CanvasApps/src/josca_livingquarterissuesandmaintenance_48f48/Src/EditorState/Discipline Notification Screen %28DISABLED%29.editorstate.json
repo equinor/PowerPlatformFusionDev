@@ -3499,7 +3499,7 @@
       "MetaDataIDKey": "",
       "Name": "galTabsTopBarDNS",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 2,
+      "ParentIndex": 4,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -3888,7 +3888,7 @@
       "MetaDataIDKey": "",
       "Name": "galTopBarHorizontalMenuDNS",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 4,
+      "ParentIndex": 6,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -7523,7 +7523,7 @@
       "MetaDataIDKey": "",
       "Name": "lblTopBarAppScreenNameDNS",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 5,
+      "ParentIndex": 2,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -8914,7 +8914,7 @@
       "MetaDataIDKey": "",
       "Name": "shpTopBarMenuDividerDNS",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 3,
+      "ParentIndex": 5,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -9157,7 +9157,7 @@
       "MetaDataIDKey": "",
       "Name": "shpTopBarMenuSpacerDNS",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 1,
+      "ParentIndex": 3,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -9362,7 +9362,7 @@
       "MetaDataIDKey": "",
       "Name": "tabUserDisplayLanguageSettingDNS",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 6,
+      "ParentIndex": 1,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {

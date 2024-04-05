@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <EntityRelationships xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <EntityRelationship Name="lpc_assetallocation_josca_LivingQuarterMaintenanceTasks">
+  <EntityRelationship Name="cr72d_octg_riggansvar_josca_LivingQuarterMaintenanceTasks">
     <EntityRelationshipType>OneToMany</EntityRelationshipType>
     <IsCustomizable>1</IsCustomizable>
-    <IntroducedVersion>0.1.0.0</IntroducedVersion>
+    <IntroducedVersion>0.1.0.1</IntroducedVersion>
     <IsHierarchical>0</IsHierarchical>
     <ReferencingEntityName>josca_LivingQuarterMaintenanceTask</ReferencingEntityName>
-    <ReferencedEntityName>lpc_AssetAllocation</ReferencedEntityName>
+    <ReferencedEntityName>cr72d_OCTG_Riggansvar</ReferencedEntityName>
     <CascadeAssign>Cascade</CascadeAssign>
     <CascadeDelete>Cascade</CascadeDelete>
     <CascadeArchive>NoCascade</CascadeArchive>

@@ -723,7 +723,7 @@
       "MetaDataIDKey": "",
       "Name": "btnCancelRegistrationEditIRS",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 2,
+      "ParentIndex": 3,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -1280,7 +1280,7 @@
       "MetaDataIDKey": "",
       "Name": "btnEditSaveIssueRegistrationIRS",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 3,
+      "ParentIndex": 2,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -16946,7 +16946,7 @@
       "MetaDataIDKey": "",
       "Name": "icoToggleFullScreenIssueRegistrationIRS",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 2,
+      "ParentIndex": 3,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -20802,7 +20802,7 @@
       "MetaDataIDKey": "",
       "Name": "lblIssueRegistrationsHeaderTitleIRS",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 3,
+      "ParentIndex": 2,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -27572,7 +27572,7 @@
       "MetaDataIDKey": "",
       "Name": "vcoIssueRegistrationSectionIRS",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 1,
+      "ParentIndex": 0,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -27938,7 +27938,7 @@
       "MetaDataIDKey": "",
       "Name": "vcoIssueRegistrationsIRS",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 0,
+      "ParentIndex": 1,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {

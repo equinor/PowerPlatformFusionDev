@@ -171,13 +171,7 @@
                 PaddingRight: =0
                 PaddingTop: =0
                 Size: =EDSFonts.Heading.H1.Size
-                Text: |-
-                    =Switch(
-                        gblDisplayLanguageSetting.Language,
-                        "no-NO",
-                        "Feil og vedlikeholdsoppgaver",
-                        "Issues and maintenance tasks"
-                    )
+                Text: ="Forenkla Vedlikeholdsoppgaver"
                 Visible: =hcoTopBarIRS.Width > (icoTopBarMenuToggleIRS.Width + galTopBarHorizontalMenuIRS.Width+shpTopBarMenuDividerIRS.Width+1+(Parent.LayoutGap*4))
                 Width: =EDSStyles.Label.Width
                 ZIndex: =3

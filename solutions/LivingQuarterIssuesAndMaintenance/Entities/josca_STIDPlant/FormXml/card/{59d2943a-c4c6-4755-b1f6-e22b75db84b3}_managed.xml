@@ -31,7 +31,7 @@
                     <row>
                       <cell id="{264401a8-0ba6-4f48-a410-53006a89600f}" showlabel="true" locklevel="0">
                         <labels>
-                          <label description="" languagecode="1033" />
+                          <label description="Status Reason" languagecode="1033" />
                         </labels>
                         <control id="statuscode" classid="{5D68B988-0661-4db2-BC3E-17598AD3BE6C}" datafieldname="statuscode" disabled="false" />
                       </cell>
@@ -56,7 +56,7 @@
                     <row>
                       <cell id="{12671d1a-35cd-4672-935b-39241df0ae7f}" showlabel="true" locklevel="0">
                         <labels>
-                          <label description="" languagecode="1033" />
+                          <label description="Plant" languagecode="1033" />
                         </labels>
                         <control id="josca_plant" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="josca_plant" disabled="false" />
                       </cell>
@@ -71,7 +71,7 @@
                     <row>
                       <cell id="{267e6cc4-4d65-4ce9-a3f1-2efa84b32c81}" showlabel="true" locklevel="0">
                         <labels>
-                          <label description="" languagecode="1033" />
+                          <label description="Created On" languagecode="1033" />
                         </labels>
                         <control id="createdon" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="createdon" disabled="false" />
                       </cell>

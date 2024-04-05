@@ -22,7 +22,7 @@
                     <row>
                       <cell id="{cd552258-fb01-4cac-9273-6d8fca03a5f4}">
                         <labels>
-                          <label description="" languagecode="1033" />
+                          <label description="Title" languagecode="1033" />
                         </labels>
                         <control id="subject" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="subject" />
                       </cell>
@@ -30,7 +30,7 @@
                     <row>
                       <cell id="{2cc186e2-5288-4036-9b7e-4dc50a6c9e53}">
                         <labels>
-                          <label description="" languagecode="1033" />
+                          <label description="Owner" languagecode="1033" />
                         </labels>
                         <control id="ownerid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="ownerid" />
                       </cell>
@@ -38,7 +38,7 @@
                     <row>
                       <cell id="{4c95b9f8-e6b0-49ff-9110-d36a437fb8ed}">
                         <labels>
-                          <label description="" languagecode="1033" />
+                          <label description="Account" languagecode="1033" />
                         </labels>
                         <control id="regardingobjectid" classid="{F3015350-44A2-4aa0-97B5-00166532B5E9}" datafieldname="regardingobjectid" />
                       </cell>
@@ -46,7 +46,7 @@
                     <row>
                       <cell id="{b1b69cad-e267-4748-878d-2618e8b9b99d}" locklevel="0" rowspan="1" colspan="1">
                         <labels>
-                          <label description="" languagecode="1033" />
+                          <label description="Description" languagecode="1033" />
                         </labels>
                         <control id="description" classid="{E0DECE4B-6FC8-4A8F-A065-082708572369}" datafieldname="description" disabled="false" />
                       </cell>
@@ -54,7 +54,7 @@
                     <row>
                       <cell id="{c453d2da-c26d-4489-9e29-decf256d4f77}" locklevel="0" rowspan="1" colspan="1">
                         <labels>
-                          <label description="" languagecode="1033" />
+                          <label description="Technician" languagecode="1033" />
                         </labels>
                         <control id="josca_technician" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="josca_technician" disabled="false">
                           <parameters>
@@ -67,7 +67,7 @@
                     <row>
                       <cell id="{b12a3ca6-fab4-4ae6-8c47-e159844105f0}" locklevel="0" rowspan="1" colspan="1">
                         <labels>
-                          <label description="" languagecode="1033" />
+                          <label description="Discipline" languagecode="1033" />
                         </labels>
                         <control id="josca_discipline" classid="{3EF39988-22BB-4F0B-BBBE-64B5A3748AEE}" datafieldname="josca_discipline" disabled="false" />
                       </cell>
@@ -75,7 +75,7 @@
                     <row>
                       <cell id="{c8adf733-bb9f-41b1-bebb-ef8df889c603}" locklevel="0" rowspan="1" colspan="1">
                         <labels>
-                          <label description="" languagecode="1033" />
+                          <label description="Discipline Manager Comment" languagecode="1033" />
                         </labels>
                         <control id="josca_disciplinemanagercomment" classid="{E0DECE4B-6FC8-4A8F-A065-082708572369}" datafieldname="josca_disciplinemanagercomment" disabled="false" />
                       </cell>
@@ -83,7 +83,7 @@
                     <row>
                       <cell id="{11651d67-b4a4-4e03-8b7e-5dd1c69a5fc6}" locklevel="0" rowspan="1" colspan="1">
                         <labels>
-                          <label description="" languagecode="1033" />
+                          <label description="Discipline Technician Comment" languagecode="1033" />
                         </labels>
                         <control id="josca_disciplinetechniciancomment" classid="{E0DECE4B-6FC8-4A8F-A065-082708572369}" datafieldname="josca_disciplinetechniciancomment" disabled="false" />
                       </cell>
@@ -91,7 +91,7 @@
                     <row>
                       <cell id="{4b1a9064-0066-4246-ab26-e07052b66f9a}" locklevel="0" rowspan="1" colspan="1">
                         <labels>
-                          <label description="" languagecode="1033" />
+                          <label description="Actual Duration" languagecode="1033" />
                         </labels>
                         <control id="actualdurationminutes" classid="{AA987274-CE4E-4271-A803-66164311A958}" datafieldname="actualdurationminutes" disabled="false" />
                       </cell>
@@ -99,7 +99,7 @@
                     <row>
                       <cell id="{fab36cbd-247f-4244-b6c9-84e6471fa08c}" locklevel="0" rowspan="1" colspan="1">
                         <labels>
-                          <label description="" languagecode="1033" />
+                          <label description="Issue Registration" languagecode="1033" />
                         </labels>
                         <control id="josca_issue" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="josca_issue" disabled="false" />
                       </cell>
@@ -107,7 +107,7 @@
                     <row>
                       <cell id="{735fe743-9fd0-4baa-be1b-92b0651b215c}" locklevel="0" rowspan="1" colspan="1">
                         <labels>
-                          <label description="" languagecode="1033" />
+                          <label description="M2" languagecode="1033" />
                         </labels>
                         <control id="josca_failurereport" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="josca_failurereport" disabled="false" />
                       </cell>
@@ -115,7 +115,7 @@
                     <row>
                       <cell id="{62faffae-a40b-4df9-b48b-0fbe76530337}" locklevel="0" rowspan="1" colspan="1">
                         <labels>
-                          <label description="" languagecode="1033" />
+                          <label description="M3" languagecode="1033" />
                         </labels>
                         <control id="josca_activityreport" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="josca_activityreport" disabled="false" />
                       </cell>
@@ -169,25 +169,25 @@
           <row>
             <cell id="{2ecf7e70-cb02-4354-970c-d8c0e8c631aa}">
               <labels>
-                <label description="" languagecode="1033" />
+                <label description="Priority" languagecode="1033" />
               </labels>
               <control id="header_prioritycode" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="prioritycode" disabled="false" />
             </cell>
             <cell id="{4388b8f5-bc45-416f-b3b1-13ae855a2625}">
               <labels>
-                <label description="" languagecode="1033" />
+                <label description="End Date" languagecode="1033" />
               </labels>
               <control id="header_scheduledend" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="scheduledend" disabled="false" />
             </cell>
             <cell id="{b58637ba-c464-4ae6-b194-67fda62de92e}">
               <labels>
-                <label description="" languagecode="1033" />
+                <label description="Activity Status" languagecode="1033" />
               </labels>
               <control id="header_statecode" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="statecode" disabled="false" />
             </cell>
             <cell id="{9c7a49fa-ce45-482a-9991-213963e91134}">
               <labels>
-                <label description="" languagecode="1033" />
+                <label description="Owner" languagecode="1033" />
               </labels>
               <control id="header_ownerid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="ownerid" disabled="false" />
             </cell>
