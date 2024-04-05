@@ -89,7 +89,7 @@
       <RootComponent type="20" id="{4c1cc225-8899-ee11-be37-000d3a2d6687}" behavior="0" />
       <RootComponent type="20" id="{de59ba43-1298-ee11-be37-0022488b6bbf}" behavior="0" />
       <RootComponent type="29" id="{5b895750-de98-ee11-be37-000d3a2c6d1c}" behavior="0" />
-      <RootComponent type="300" schemaName="josca_livingquarterissuesandmaintenance_48f48" behavior="0" />
+      <RootComponent type="300" schemaName="josca_lqiam_48f48" behavior="0" />
       <RootComponent type="62" schemaName="josca_LQIaMInstallationconfiguration" behavior="0" />
       <RootComponent type="80" schemaName="josca_LQIaMInstallationconfiguration" behavior="0" />
       <RootComponent type="9" schemaName="josca_maintenancediscipline" behavior="0" />

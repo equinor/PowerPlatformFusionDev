@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <CanvasApp xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <Name>josca_livingquarterissuesandmaintenance_48f48</Name>
+  <Name>josca_lqiam_48f48</Name>
   <AppVersion>2024-02-29T07:47:43Z</AppVersion>
   <Status>Ready</Status>
   <CreatedByClientVersion>3.24012.8.0</CreatedByClientVersion>
@@ -25,9 +25,9 @@
   <IntroducedVersion>1.0</IntroducedVersion>
   <CdsDependencies>{"cdsdependencies":[{"componenttype":1,"logicalname":"josca_issueregistration"},{"componenttype":1,"logicalname":"josca_livingquartermaintenancetask"},{"componenttype":1,"logicalname":"josca_stidplant"},{"componenttype":1,"logicalname":"systemuser"}]}</CdsDependencies>
   <IsCustomizable>1</IsCustomizable>
-  <BackgroundImageUri>/CanvasApps/josca_livingquarterissuesandmaintenance_48f48_BackgroundImageUri</BackgroundImageUri>
-  <DocumentUri>/CanvasApps/josca_livingquarterissuesandmaintenance_48f48_DocumentUri.msapp</DocumentUri>
+  <BackgroundImageUri>/CanvasApps/josca_lqiam_48f48_BackgroundImageUri</BackgroundImageUri>
+  <DocumentUri>/CanvasApps/josca_lqiam_48f48_DocumentUri.msapp</DocumentUri>
   <AdditionalUris>
-    <AdditionalUri>/CanvasApps/josca_livingquarterissuesandmaintenance_48f48_AdditionalUris0_identity.json</AdditionalUri>
+    <AdditionalUri>/CanvasApps/josca_lqiam_48f48_AdditionalUris0_identity.json</AdditionalUri>
   </AdditionalUris>
 </CanvasApp>
