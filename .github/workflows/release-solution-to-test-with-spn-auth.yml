@@ -17,6 +17,7 @@ on:
         default: 'https://XXXXXX.crmX.dynamics.com'
       solution_name:
         description: 'name of the solution to worked on from Power Platform'
+        type: choice
         required: true
         default: PowerPlatformFusionDev
         options: 

@@ -11,6 +11,7 @@ on:
       # Change this value
       solution_name:
         description: 'name of the solution to worked on from Power Platform'
+        type: choice
         required: true
         default: PowerPlatformFusionDev
         options: 
