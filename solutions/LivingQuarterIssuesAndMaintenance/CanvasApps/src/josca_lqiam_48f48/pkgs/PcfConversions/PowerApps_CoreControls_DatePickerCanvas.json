@@ -102,7 +102,29 @@
       ],
       "From": "0.0.12",
       "To": "0.0.13"
+    },
+    {
+      "Action": [
+        {
+          "Name": "EndYear",
+          "Type": "remove"
+        },
+        {
+          "Name": "StartYear",
+          "Type": "remove"
+        },
+        {
+          "Name": "EndDate",
+          "Type": "add"
+        },
+        {
+          "Name": "StartDate",
+          "Type": "add"
+        }
+      ],
+      "From": "0.0.16",
+      "To": "0.0.17"
     }
   ],
-  "Version": "0.0.15"
+  "Version": "0.0.20"
 }

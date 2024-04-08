@@ -11,7 +11,7 @@
                 locIssueReportListFocused: false
             }
         )
-    OnVisible: |+
+    OnVisible: |
         =If(
             And(
                 !IsBlank(Param("issueId")),
@@ -48,13 +48,12 @@
             UpdateContext(
                 {
                     locIssueReportsStatusFilter: 'Status (Issue Registrations)'.Active,
-                    //locActiveIssueReport: Blank(),
+                    // locActiveIssueReport: Defaults('Issue Registrations').FailureReport,
                     locIssueReportFocused: false
                 }
             );
             //Reset(rdoIssueReportStatusIRS)
         );
-        
 
     vcoMainIRS As groupContainer.verticalAutoLayoutContainer:
         Height: =Parent.Height

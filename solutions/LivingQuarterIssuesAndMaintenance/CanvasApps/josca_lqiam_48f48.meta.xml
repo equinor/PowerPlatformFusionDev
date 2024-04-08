@@ -1,29 +1,30 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <CanvasApp xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Name>josca_lqiam_48f48</Name>
-  <AppVersion>2024-02-29T07:47:43Z</AppVersion>
+  <AppVersion>2024-04-05T13:44:33Z</AppVersion>
   <Status>Ready</Status>
-  <CreatedByClientVersion>3.24012.8.0</CreatedByClientVersion>
-  <MinClientVersion>3.24012.8.0</MinClientVersion>
-  <Tags>{"primaryDeviceWidth":"1366","primaryDeviceHeight":"768","supportsPortrait":"true","supportsLandscape":"true","primaryFormFactor":"Tablet","showStatusBar":"false","publisherVersion":"3.24012.8","minimumRequiredApiVersion":"2.2.0","hasComponent":"false","hasUnlockedComponent":"false","isUnifiedRootApp":"false","offlineLargeFilesSupport":"false","sienaVersion":"20240110T155052Z-3.23122.19.0"}</Tags>
+  <CreatedByClientVersion>3.24034.17.0</CreatedByClientVersion>
+  <MinClientVersion>3.24034.17.0</MinClientVersion>
+  <Tags>{"primaryDeviceWidth":"1366","primaryDeviceHeight":"768","supportsPortrait":"true","supportsLandscape":"true","primaryFormFactor":"Tablet","showStatusBar":"false","publisherVersion":"3.24034.17","minimumRequiredApiVersion":"2.2.0","hasComponent":"false","hasUnlockedComponent":"false","isUnifiedRootApp":"false","offlineLargeFilesSupport":"false","sienaVersion":"20240405T133254Z-3.24012.8.0"}</Tags>
   <IsCdsUpgraded>0</IsCdsUpgraded>
   <GalleryItemId xsi:nil="true"></GalleryItemId>
   <BackgroundColor>rgba(255, 255, 255, 1)</BackgroundColor>
   <DisplayName>Livingquarter Issues and Maintenance</DisplayName>
   <Description>Manages issue reports and maintenance work on living quarters and accommodation modules embedded in Equinor installations</Description>
-  <CommitMessage></CommitMessage>
+  <CommitMessage xsi:nil="true"></CommitMessage>
   <Publisher></Publisher>
   <AuthorizationReferences>[]</AuthorizationReferences>
-  <ConnectionReferences>{"bac0b5b9-521d-4c4c-ac90-be8f8e9839d8":{"id":"/providers/microsoft.powerapps/apis/shared_office365","displayName":"Office 365 Outlook","iconUri":"https://connectoricons-prod.azureedge.net/releases/v1.0.1676/1.0.1676.3617/office365/icon.png","dataSources":["Office365Outlook"],"dependencies":[],"dependents":[],"parameterHints":{},"parameterHintsV2":{},"isOnPremiseConnection":false,"bypassConsent":false,"dataSets":{},"apiTier":"Standard","actions":["SendEmailV2"]}}</ConnectionReferences>
+  <ConnectionReferences>{"bac0b5b9-521d-4c4c-ac90-be8f8e9839d8":{"id":"/providers/microsoft.powerapps/apis/shared_office365","displayName":"Office 365 Outlook","iconUri":"https://connectoricons-prod.azureedge.net/releases/v1.0.1677/1.0.1677.3637/office365/icon.png","dataSources":["Office365Outlook"],"dependencies":[],"dependents":[],"parameterHints":{},"parameterHintsV2":{},"isOnPremiseConnection":false,"bypassConsent":false,"dataSets":{},"apiTier":"Standard","actions":["SendEmailV2"]}}</ConnectionReferences>
   <DatabaseReferences>{"default.cds":{"databaseDetails":{"referenceType":"Environmental","environmentName":"default.cds","overrideValues":{"status":"NotSpecified","environmentVariableName":""}},"dataSources":{"Issue Registrations":{"entitySetName":"josca_issueregistrations","logicalName":"josca_issueregistration"},"Living Quarter Maintenance Tasks":{"entitySetName":"josca_livingquartermaintenancetasks","logicalName":"josca_livingquartermaintenancetask"},"Installations":{"entitySetName":"josca_stidplants","logicalName":"josca_stidplant"},"Users":{"entitySetName":"systemusers","logicalName":"systemuser"}}}}</DatabaseReferences>
   <AppComponents>[]</AppComponents>
   <AppComponentDependencies>[]</AppComponentDependencies>
-  <CanConsumeAppPass>1</CanConsumeAppPass>
+  <CanConsumeAppPass>0</CanConsumeAppPass>
   <CanvasAppType>0</CanvasAppType>
   <BypassConsent>0</BypassConsent>
+  <AdminControlBypassConsent>0</AdminControlBypassConsent>
   <EmbeddedApp xsi:nil="true"></EmbeddedApp>
   <IntroducedVersion>1.0</IntroducedVersion>
-  <CdsDependencies>{"cdsdependencies":[{"componenttype":1,"logicalname":"josca_issueregistration"},{"componenttype":1,"logicalname":"josca_livingquartermaintenancetask"},{"componenttype":1,"logicalname":"josca_stidplant"},{"componenttype":1,"logicalname":"systemuser"}]}</CdsDependencies>
+  <CdsDependencies>{"cdsdependencies":[{"logicalname":"josca_issueregistration","componenttype":1},{"logicalname":"josca_livingquartermaintenancetask","componenttype":1},{"logicalname":"josca_stidplant","componenttype":1},{"logicalname":"systemuser","componenttype":1}]}</CdsDependencies>
   <IsCustomizable>1</IsCustomizable>
   <BackgroundImageUri>/CanvasApps/josca_lqiam_48f48_BackgroundImageUri</BackgroundImageUri>
   <DocumentUri>/CanvasApps/josca_lqiam_48f48_DocumentUri.msapp</DocumentUri>

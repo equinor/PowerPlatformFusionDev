@@ -9,20 +9,22 @@
         "PropertyKind": 1,
         "SectionIndex": 0,
         "SectionName": null,
-        "SectionType": null,
+        "SectionType": "GeneralSection",
+        "ShowInCanvasInlineActionBar": false,
         "Type": 0,
         "WizardStep": null
       },
       "BasePaletteColor": {
         "EnabledForFlyout": false,
-        "HelperUI": "color",
+        "HelperUI": null,
         "Hidden": false,
         "PropertyGroupName": "",
         "PropertyKind": 1,
-        "SectionIndex": 2,
+        "SectionIndex": 3,
         "SectionName": null,
-        "SectionType": null,
-        "Type": 32,
+        "SectionType": "StyleAndThemeSection",
+        "ShowInCanvasInlineActionBar": false,
+        "Type": 53,
         "WizardStep": null
       },
       "Height": {
@@ -31,9 +33,10 @@
         "Hidden": false,
         "PropertyGroupName": "Size",
         "PropertyKind": 2,
-        "SectionIndex": 3,
+        "SectionIndex": 2,
         "SectionName": null,
-        "SectionType": null,
+        "SectionType": "SizeAndPositioningSection",
+        "ShowInCanvasInlineActionBar": false,
         "Type": 0,
         "WizardStep": null
       },
@@ -43,9 +46,10 @@
         "Hidden": false,
         "PropertyGroupName": "",
         "PropertyKind": 1,
-        "SectionIndex": 0,
+        "SectionIndex": 1,
         "SectionName": null,
-        "SectionType": null,
+        "SectionType": "BehaviorSection",
+        "ShowInCanvasInlineActionBar": false,
         "Type": 0,
         "WizardStep": null
       },
@@ -55,9 +59,10 @@
         "Hidden": false,
         "PropertyGroupName": "",
         "PropertyKind": 1,
-        "SectionIndex": 1,
+        "SectionIndex": 0,
         "SectionName": null,
-        "SectionType": null,
+        "SectionType": "GeneralSection",
+        "ShowInCanvasInlineActionBar": false,
         "Type": 0,
         "WizardStep": null
       },
@@ -67,9 +72,10 @@
         "Hidden": false,
         "PropertyGroupName": "",
         "PropertyKind": 1,
-        "SectionIndex": 0,
+        "SectionIndex": 3,
         "SectionName": null,
-        "SectionType": null,
+        "SectionType": "StyleAndThemeSection",
+        "ShowInCanvasInlineActionBar": false,
         "Type": 0,
         "WizardStep": null
       },
@@ -79,9 +85,10 @@
         "Hidden": false,
         "PropertyGroupName": "",
         "PropertyKind": 1,
-        "SectionIndex": 0,
+        "SectionIndex": 3,
         "SectionName": null,
-        "SectionType": null,
+        "SectionType": "StyleAndThemeSection",
+        "ShowInCanvasInlineActionBar": false,
         "Type": 0,
         "WizardStep": null
       },
@@ -91,9 +98,10 @@
         "Hidden": false,
         "PropertyGroupName": "",
         "PropertyKind": 1,
-        "SectionIndex": 0,
+        "SectionIndex": 3,
         "SectionName": null,
-        "SectionType": null,
+        "SectionType": "StyleAndThemeSection",
+        "ShowInCanvasInlineActionBar": false,
         "Type": 0,
         "WizardStep": null
       },
@@ -103,9 +111,10 @@
         "Hidden": false,
         "PropertyGroupName": "",
         "PropertyKind": 1,
-        "SectionIndex": 1,
+        "SectionIndex": 0,
         "SectionName": null,
-        "SectionType": null,
+        "SectionType": "GeneralSection",
+        "ShowInCanvasInlineActionBar": false,
         "Type": 0,
         "WizardStep": null
       },
@@ -115,9 +124,10 @@
         "Hidden": false,
         "PropertyGroupName": "",
         "PropertyKind": 1,
-        "SectionIndex": 3,
+        "SectionIndex": 0,
         "SectionName": null,
-        "SectionType": null,
+        "SectionType": "GeneralSection",
+        "ShowInCanvasInlineActionBar": false,
         "Type": 0,
         "WizardStep": null
       },
@@ -127,9 +137,10 @@
         "Hidden": false,
         "PropertyGroupName": "Size",
         "PropertyKind": 2,
-        "SectionIndex": 3,
+        "SectionIndex": 2,
         "SectionName": null,
-        "SectionType": null,
+        "SectionType": "SizeAndPositioningSection",
+        "ShowInCanvasInlineActionBar": false,
         "Type": 0,
         "WizardStep": null
       },
@@ -139,9 +150,10 @@
         "Hidden": false,
         "PropertyGroupName": "Position",
         "PropertyKind": 2,
-        "SectionIndex": 3,
+        "SectionIndex": 2,
         "SectionName": null,
-        "SectionType": null,
+        "SectionType": "SizeAndPositioningSection",
+        "ShowInCanvasInlineActionBar": false,
         "Type": 0,
         "WizardStep": null
       },
@@ -151,9 +163,10 @@
         "Hidden": false,
         "PropertyGroupName": "Position",
         "PropertyKind": 2,
-        "SectionIndex": 3,
+        "SectionIndex": 2,
         "SectionName": null,
-        "SectionType": null,
+        "SectionType": "SizeAndPositioningSection",
+        "ShowInCanvasInlineActionBar": false,
         "Type": 0,
         "WizardStep": null
       }
@@ -658,12 +671,12 @@
     {
       "Category": "data",
       "DefaultValue": "",
-      "Description": "You can provide a different color palette for the selected item by specifying a base palette color. This color generates a set of similar colors that are then applied to different aspects of the item, most commonly: fill, border, and interaction states. A blank value indicates the item will use the color palette of the app's theme.",
+      "Description": "Choose a color palette that's different from the theme.",
       "DescriptionResourceString": "Base_Palette_Color_description",
-      "DisplayName": "Base palette color",
+      "DisplayName": "Color palette",
       "DisplayNameResourceString": "Base_Palette_Color",
       "EnumValues": [],
-      "HelperUI": "color",
+      "HelperUI": null,
       "Hidden": false,
       "IsDataSourceProperty": false,
       "IsLinkableToParentTheme": true,
@@ -743,6 +756,13 @@
     },
     {
       "IsControlSpecific": false,
+      "LoadingOrder": 5,
+      "ModifiedPath": "",
+      "Path": "/ctrllib/common/js/container.js",
+      "Type": 0
+    },
+    {
+      "IsControlSpecific": false,
       "LoadingOrder": 6,
       "ModifiedPath": "",
       "Path": "/ctrllib/PCFControls/js/PCFControlWrapper.js",
@@ -757,45 +777,38 @@
     },
     {
       "IsControlSpecific": false,
-      "LoadingOrder": 7,
-      "ModifiedPath": "",
-      "Path": "{\"Id\":\"ManifestTemplate\",\"Data\":{\"ConstructorName\":\"PowerApps.CoreControls.Progress\",\"CustomControlId\":\"PowerApps.CoreControls.Progress\",\"IsVirtual\":true,\"Properties\":{\"Resources\":[{\"Name\":\"/PCF/prop-types.js\",\"LoadOrder\":1,\"Type\":0,\"LibraryName\":null},{\"Name\":\"/PCF/react-fela.js\",\"LoadOrder\":2,\"Type\":0,\"LibraryName\":null},{\"Name\":\"/PCF/fela.js\",\"LoadOrder\":3,\"Type\":0,\"LibraryName\":null},{\"Name\":\"/PCF/fela-dom.js\",\"LoadOrder\":4,\"Type\":0,\"LibraryName\":null},{\"Name\":\"/ctrllib/PCFControls/js/PCFControlWrapper.js\",\"LoadOrder\":6,\"Type\":0,\"LibraryName\":null},{\"Name\":\"/ctrllib/PcfControlProxy/js/PcfControlProxy.js\",\"LoadOrder\":7,\"Type\":0,\"LibraryName\":null}],\"GroupDefinitions\":null,\"DataSetDefinitions\":{},\"Properties\":{\"AccessibleLabel\":{\"Required\":true,\"Usage\":1,\"DefaultValue\":\"\"},\"Value\":{\"Required\":true,\"Usage\":0,\"DefaultValue\":\"50\"},\"Max\":{\"Required\":true,\"Usage\":0,\"DefaultValue\":\"100\"},\"Thickness\":{\"Required\":true,\"Usage\":1,\"DefaultValue\":\"Medium\"},\"Shape\":{\"Required\":true,\"Usage\":1,\"DefaultValue\":\"Rounded\"},\"Indeterminate\":{\"Required\":true,\"Usage\":1,\"DefaultValue\":\"false\"},\"ProgressColor\":{\"Required\":true,\"Usage\":1,\"DefaultValue\":\"Brand\"},\"TabIndex\":{\"Required\":true,\"Usage\":1,\"DefaultValue\":\"\"},\"Tooltip\":{\"Required\":true,\"Usage\":1,\"DefaultValue\":\"\"},\"BasePaletteColor\":{\"Required\":true,\"Usage\":1,\"DefaultValue\":\"\"}},\"FeatureUsage\":null},\"Events\":null,\"CommonEvents\":null,\"DesignMap\":null,\"PropertyDependencies\":[],\"Children\":null}}",
-      "Type": 3
-    },
-    {
-      "IsControlSpecific": false,
       "LoadingOrder": 8,
       "ModifiedPath": "",
-      "Path": "{\"Id\":\"ManifestPropertyTypes\",\"Data\":{\"Properties\":[{\"Name\":\"AccessibleLabel\",\"Type\":\"SingleLine_Text\",\"ComplexType\":\"None\",\"IsPrimary\":false,\"IsIncluded\":false},{\"Name\":\"Value\",\"Type\":\"FP\",\"ComplexType\":\"None\",\"IsPrimary\":false,\"IsIncluded\":false},{\"Name\":\"Max\",\"Type\":\"Whole_None\",\"ComplexType\":\"None\",\"IsPrimary\":false,\"IsIncluded\":false},{\"Name\":\"Thickness\",\"Type\":\"Enum\",\"ComplexType\":\"None\",\"IsPrimary\":false,\"IsIncluded\":false},{\"Name\":\"Shape\",\"Type\":\"Enum\",\"ComplexType\":\"None\",\"IsPrimary\":false,\"IsIncluded\":false},{\"Name\":\"Indeterminate\",\"Type\":\"TwoOptions\",\"ComplexType\":\"None\",\"IsPrimary\":false,\"IsIncluded\":false},{\"Name\":\"ProgressColor\",\"Type\":\"Enum\",\"ComplexType\":\"None\",\"IsPrimary\":false,\"IsIncluded\":false},{\"Name\":\"TabIndex\",\"Type\":\"Whole_None\",\"ComplexType\":\"\",\"IsPrimary\":false,\"IsIncluded\":false},{\"Name\":\"Tooltip\",\"Type\":\"SingleLine_Text\",\"ComplexType\":\"\",\"IsPrimary\":false,\"IsIncluded\":false},{\"Name\":\"BasePaletteColor\",\"Type\":\"SingleLine_Text\",\"ComplexType\":\"FillColor\",\"IsPrimary\":false,\"IsIncluded\":false},{\"Name\":\"PCFTeamsTheme\",\"Type\":\"String\",\"ComplexType\":\"\",\"IsPrimary\":false,\"IsIncluded\":true},{\"Name\":\"X\",\"Type\":\"Number\",\"ComplexType\":\"\",\"IsPrimary\":false,\"IsIncluded\":true},{\"Name\":\"Y\",\"Type\":\"Number\",\"ComplexType\":\"\",\"IsPrimary\":false,\"IsIncluded\":true},{\"Name\":\"Width\",\"Type\":\"Number\",\"ComplexType\":\"\",\"IsPrimary\":false,\"IsIncluded\":true},{\"Name\":\"Height\",\"Type\":\"Number\",\"ComplexType\":\"\",\"IsPrimary\":false,\"IsIncluded\":true},{\"Name\":\"Visible\",\"Type\":\"Boolean\",\"ComplexType\":\"\",\"IsPrimary\":false,\"IsIncluded\":true},{\"Name\":\"DisplayMode\",\"Type\":\"DisplayMode\",\"ComplexType\":\"\",\"IsPrimary\":false,\"IsIncluded\":true}]}}",
+      "Path": "{\"Id\":\"ManifestTemplate\",\"Data\":{\"ConstructorName\":\"PowerApps.CoreControls.Progress\",\"CustomControlId\":\"PowerApps.CoreControls.Progress\",\"IsVirtual\":true,\"Properties\":{\"Resources\":[{\"Name\":\"/PCF/prop-types.js\",\"LoadOrder\":1,\"Type\":0,\"LibraryName\":null},{\"Name\":\"/PCF/react-fela.js\",\"LoadOrder\":2,\"Type\":0,\"LibraryName\":null},{\"Name\":\"/PCF/fela.js\",\"LoadOrder\":3,\"Type\":0,\"LibraryName\":null},{\"Name\":\"/PCF/fela-dom.js\",\"LoadOrder\":4,\"Type\":0,\"LibraryName\":null},{\"Name\":\"/ctrllib/common/js/container.js\",\"LoadOrder\":5,\"Type\":0,\"LibraryName\":null},{\"Name\":\"/ctrllib/PCFControls/js/PCFControlWrapper.js\",\"LoadOrder\":6,\"Type\":0,\"LibraryName\":null},{\"Name\":\"/ctrllib/PcfControlProxy/js/PcfControlProxy.js\",\"LoadOrder\":7,\"Type\":0,\"LibraryName\":null}],\"GroupDefinitions\":null,\"DataSetDefinitions\":{},\"Properties\":{\"AccessibleLabel\":{\"Required\":true,\"Usage\":1,\"DefaultValue\":\"\"},\"Value\":{\"Required\":true,\"Usage\":0,\"DefaultValue\":\"50\"},\"Max\":{\"Required\":true,\"Usage\":0,\"DefaultValue\":\"100\"},\"Thickness\":{\"Required\":true,\"Usage\":1,\"DefaultValue\":\"Medium\"},\"Shape\":{\"Required\":true,\"Usage\":1,\"DefaultValue\":\"Rounded\"},\"Indeterminate\":{\"Required\":true,\"Usage\":1,\"DefaultValue\":\"false\"},\"ProgressColor\":{\"Required\":true,\"Usage\":1,\"DefaultValue\":\"Brand\"},\"TabIndex\":{\"Required\":true,\"Usage\":1,\"DefaultValue\":\"\"},\"Tooltip\":{\"Required\":true,\"Usage\":1,\"DefaultValue\":\"\"},\"BasePaletteColor\":{\"Required\":true,\"Usage\":1,\"DefaultValue\":\"\"}},\"FeatureUsage\":null},\"Events\":null,\"CommonEvents\":null,\"DesignMap\":null,\"PropertyDependencies\":[],\"Children\":null}}",
       "Type": 3
     },
     {
       "IsControlSpecific": false,
       "LoadingOrder": 9,
       "ModifiedPath": "",
-      "Path": "{\"Id\":\"PowerAppsControlInfo\",\"Data\":{\"TemplateVersion\":1,\"Version\":\"1.1.17\",\"IsFirstParty\":true}}",
+      "Path": "{\"Id\":\"ManifestPropertyTypes\",\"Data\":{\"Properties\":[{\"Name\":\"AccessibleLabel\",\"Type\":\"SingleLine_Text\",\"ComplexType\":\"None\",\"IsPrimary\":false,\"IsIncluded\":false},{\"Name\":\"Value\",\"Type\":\"FP\",\"ComplexType\":\"None\",\"IsPrimary\":false,\"IsIncluded\":false},{\"Name\":\"Max\",\"Type\":\"Whole_None\",\"ComplexType\":\"None\",\"IsPrimary\":false,\"IsIncluded\":false},{\"Name\":\"Thickness\",\"Type\":\"Enum\",\"ComplexType\":\"None\",\"IsPrimary\":false,\"IsIncluded\":false},{\"Name\":\"Shape\",\"Type\":\"Enum\",\"ComplexType\":\"None\",\"IsPrimary\":false,\"IsIncluded\":false},{\"Name\":\"Indeterminate\",\"Type\":\"TwoOptions\",\"ComplexType\":\"None\",\"IsPrimary\":false,\"IsIncluded\":false},{\"Name\":\"ProgressColor\",\"Type\":\"Enum\",\"ComplexType\":\"None\",\"IsPrimary\":false,\"IsIncluded\":false},{\"Name\":\"TabIndex\",\"Type\":\"Whole_None\",\"ComplexType\":\"\",\"IsPrimary\":false,\"IsIncluded\":false},{\"Name\":\"Tooltip\",\"Type\":\"SingleLine_Text\",\"ComplexType\":\"\",\"IsPrimary\":false,\"IsIncluded\":false},{\"Name\":\"BasePaletteColor\",\"Type\":\"SingleLine_Text\",\"ComplexType\":\"ColorPalette\",\"IsPrimary\":false,\"IsIncluded\":false},{\"Name\":\"PCFTeamsTheme\",\"Type\":\"String\",\"ComplexType\":\"\",\"IsPrimary\":false,\"IsIncluded\":true},{\"Name\":\"X\",\"Type\":\"Number\",\"ComplexType\":\"\",\"IsPrimary\":false,\"IsIncluded\":true},{\"Name\":\"Y\",\"Type\":\"Number\",\"ComplexType\":\"\",\"IsPrimary\":false,\"IsIncluded\":true},{\"Name\":\"Width\",\"Type\":\"Number\",\"ComplexType\":\"\",\"IsPrimary\":false,\"IsIncluded\":true},{\"Name\":\"Height\",\"Type\":\"Number\",\"ComplexType\":\"\",\"IsPrimary\":false,\"IsIncluded\":true},{\"Name\":\"Visible\",\"Type\":\"Boolean\",\"ComplexType\":\"\",\"IsPrimary\":false,\"IsIncluded\":true},{\"Name\":\"DisplayMode\",\"Type\":\"DisplayMode\",\"ComplexType\":\"\",\"IsPrimary\":false,\"IsIncluded\":true}]}}",
+      "Type": 3
+    },
+    {
+      "IsControlSpecific": false,
+      "LoadingOrder": 10,
+      "ModifiedPath": "",
+      "Path": "{\"Id\":\"PowerAppsControlInfo\",\"Data\":{\"TemplateVersion\":1,\"Version\":\"1.1.23\",\"IsFirstParty\":true}}",
       "Type": 3
     },
     {
       "IsControlSpecific": true,
-      "LoadingOrder": 10,
+      "LoadingOrder": 11,
       "ModifiedPath": "",
       "Path": "/PCFControls/PowerApps_CoreControls_Progress/bundle.js",
       "Type": 0
     },
     {
       "IsControlSpecific": true,
-      "LoadingOrder": 9,
+      "LoadingOrder": 10,
       "ModifiedPath": "",
       "Path": "/PCFControls/PowerApps_CoreControls_Progress/strings/Progress.1033.resx",
       "Type": 2
-    },
-    {
-      "IsControlSpecific": false,
-      "LoadingOrder": 12,
-      "ModifiedPath": "",
-      "Path": "{\"Id\":\"FormattingData\",\"Data\":{\"timeZoneUtcOffsetMinutes\":0,\"dateTimeFormatInfo\":{\"AMDesignator\":\"AM\",\"Calendar\":{\"MinSupportedDateTime\":\"0001-01-01T00:00:00\",\"MaxSupportedDateTime\":\"9999-12-31T23:59:59.9999999\",\"AlgorithmType\":1,\"CalendarType\":1,\"Eras\":[1],\"TwoDigitYearMax\":2049,\"IsReadOnly\":false},\"DateSeparator\":\"/\",\"FirstDayOfWeek\":0,\"CalendarWeekRule\":0,\"FullDateTimePattern\":\"dddd, MMMM d, yyyy h:mm:ss tt\",\"LongDatePattern\":\"dddd, MMMM d, yyyy\",\"LongTimePattern\":\"h:mm:ss tt\",\"MonthDayPattern\":\"MMMM d\",\"PMDesignator\":\"PM\",\"RFC1123Pattern\":\"ddd, dd MMM yyyy HH':'mm':'ss 'GMT'\",\"ShortDatePattern\":\"M/d/yyyy\",\"ShortTimePattern\":\"h:mm tt\",\"SortableDateTimePattern\":\"yyyy'-'MM'-'dd'T'HH':'mm':'ss\",\"TimeSeparator\":\":\",\"UniversalSortableDateTimePattern\":\"yyyy'-'MM'-'dd HH':'mm':'ss'Z'\",\"YearMonthPattern\":\"MMMM yyyy\",\"AbbreviatedDayNames\":[\"Sun\",\"Mon\",\"Tue\",\"Wed\",\"Thu\",\"Fri\",\"Sat\"],\"ShortestDayNames\":[\"Su\",\"Mo\",\"Tu\",\"We\",\"Th\",\"Fr\",\"Sa\"],\"DayNames\":[\"Sunday\",\"Monday\",\"Tuesday\",\"Wednesday\",\"Thursday\",\"Friday\",\"Saturday\"],\"AbbreviatedMonthNames\":[\"Jan\",\"Feb\",\"Mar\",\"Apr\",\"May\",\"Jun\",\"Jul\",\"Aug\",\"Sep\",\"Oct\",\"Nov\",\"Dec\",\"\"],\"MonthNames\":[\"January\",\"February\",\"March\",\"April\",\"May\",\"June\",\"July\",\"August\",\"September\",\"October\",\"November\",\"December\",\"\"],\"IsReadOnly\":false,\"NativeCalendarName\":\"Gregorian Calendar\",\"AbbreviatedMonthGenitiveNames\":[\"Jan\",\"Feb\",\"Mar\",\"Apr\",\"May\",\"Jun\",\"Jul\",\"Aug\",\"Sep\",\"Oct\",\"Nov\",\"Dec\",\"\"],\"MonthGenitiveNames\":[\"January\",\"February\",\"March\",\"April\",\"May\",\"June\",\"July\",\"August\",\"September\",\"October\",\"November\",\"December\",\"\"]},\"numberFormatInfo\":{\"CurrencyDecimalDigits\":2,\"CurrencyDecimalSeparator\":\".\",\"IsReadOnly\":false,\"CurrencyGroupSizes\":[3],\"NumberGroupSizes\":[3],\"PercentGroupSizes\":[3],\"CurrencyGroupSeparator\":\",\",\"CurrencySymbol\":\"$\",\"NaNSymbol\":\"NaN\",\"CurrencyNegativePattern\":0,\"NumberNegativePattern\":1,\"PercentPositivePattern\":1,\"PercentNegativePattern\":1,\"NegativeInfinitySymbol\":\"-∞\",\"NegativeSign\":\"-\",\"NumberDecimalDigits\":2,\"NumberDecimalSeparator\":\".\",\"NumberGroupSeparator\":\",\",\"CurrencyPositivePattern\":0,\"PositiveInfinitySymbol\":\"∞\",\"PositiveSign\":\"+\",\"PercentDecimalDigits\":2,\"PercentDecimalSeparator\":\".\",\"PercentGroupSeparator\":\",\",\"PercentSymbol\":\"%\",\"PerMilleSymbol\":\"‰\",\"NativeDigits\":[\"0\",\"1\",\"2\",\"3\",\"4\",\"5\",\"6\",\"7\",\"8\",\"9\"],\"DigitSubstitution\":1},\"timeZoneAdjusters\":[],\"formatInfoCultureName\":\"en-US\",\"formatter\":null,\"languagesByCode\":{\"1033\":\"English (United States)\",\"-1\":\"All Languages\"}}}",
-      "Type": 3
     },
     {
       "IsControlSpecific": true,
@@ -1116,7 +1129,7 @@
       "IsControlSpecific": false,
       "LoadingOrder": 13,
       "ModifiedPath": "",
-      "Path": "{\"Id\":\"LocalizedStrings\",\"Data\":{\"LocStrings\":{\"ProgressBar_Display_Key\":\"Progress Bar\",\"ProgressBar_Desc_Key\":\"Let users visualise Progress Bar effect\",\"ProgressBar_Shape_Display_Key\":\"Shape\",\"ProgressBar_Shape_Desc_Key\":\"Shape of Progress Bar component\",\"ProgressBar_AccessibleLabel_Display_Key\":\"Accessibility Label\",\"ProgressBar_AccessibleLabel_Desc_Key\":\"Aria label text of the component\",\"ProgressBar_ProgressColor_Display_Key\":\"Progress Color\",\"ProgressBar_ProgressColor_Desc_Key\":\"Color of Progress Bar\",\"ProgressBar_Thickness_Display_Key\":\"Thickness\",\"ProgressBar_Thickness_Desc_Key\":\"Define thickness of the Progress Bar\",\"ProgressBar_Max_Display_Key\":\"Max\",\"ProgressBar_Max_Desc_Key\":\"Max description of Progress Bar\",\"ProgressBar_Value_Display_Key\":\"Value\",\"ProgressBar_Value_Desc_Key\":\"A decimal number between 0 and 100 (or Max if given) which specifies how much of the task has been compeleted.\",\"ProgressBar_Thickness_Medium\":\"Medium\",\"ProgressBar_Thickness_Large\":\"Large\",\"ProgressBar_Shape_Square\":\"Square\",\"ProgressBar_Shape_Rounded\":\"Rounded\",\"ProgressBar_Rounded_Desc_Key\":\"Shape of the progress bar to be rounded\",\"ProgressBar_Color_Success\":\"Success\",\"ProgressBar_Color_Brand\":\"Brand\",\"ProgressBar_Color_Warning\":\"Warning\",\"ProgressBar_Color_Error\":\"Error\",\"ProgressBar_Indeterminate_Display_Key\":\"Indeterminate\",\"ProgressBar_Indeterminate_Desc_Key\":\"Indeterminate Progress bar\",\"Base_Palette_Color\":\"Base palette color\",\"Base_Palette_Color_description\":\"You can provide a different color palette for the selected item by specifying a base palette color. This color generates a set of similar colors that are then applied to different aspects of the item, most commonly: fill, border, and interaction states. A blank value indicates the item will use the color palette of the app's theme.\"}}}",
+      "Path": "{\"Id\":\"LocalizedStrings\",\"Data\":{\"LocStrings\":{\"ProgressBar_Display_Key\":\"Progress Bar\",\"ProgressBar_Desc_Key\":\"Let users visualise Progress Bar effect\",\"ProgressBar_Shape_Display_Key\":\"Shape\",\"ProgressBar_Shape_Desc_Key\":\"Shape of Progress Bar component\",\"ProgressBar_AccessibleLabel_Display_Key\":\"Accessibility Label\",\"ProgressBar_AccessibleLabel_Desc_Key\":\"Aria label text of the component\",\"ProgressBar_ProgressColor_Display_Key\":\"Progress Color\",\"ProgressBar_ProgressColor_Desc_Key\":\"Color of Progress Bar\",\"ProgressBar_Thickness_Display_Key\":\"Thickness\",\"ProgressBar_Thickness_Desc_Key\":\"Define thickness of the Progress Bar\",\"ProgressBar_Max_Display_Key\":\"Max\",\"ProgressBar_Max_Desc_Key\":\"Max description of Progress Bar\",\"ProgressBar_Value_Display_Key\":\"Value\",\"ProgressBar_Value_Desc_Key\":\"A decimal number between 0 and 100 (or Max if given) which specifies how much of the task has been compeleted.\",\"ProgressBar_Thickness_Medium\":\"Medium\",\"ProgressBar_Thickness_Large\":\"Large\",\"ProgressBar_Shape_Square\":\"Square\",\"ProgressBar_Shape_Rounded\":\"Rounded\",\"ProgressBar_Rounded_Desc_Key\":\"Shape of the progress bar to be rounded\",\"ProgressBar_Color_Success\":\"Success\",\"ProgressBar_Color_Brand\":\"Brand\",\"ProgressBar_Color_Warning\":\"Warning\",\"ProgressBar_Color_Error\":\"Error\",\"ProgressBar_Indeterminate_Display_Key\":\"Indeterminate\",\"ProgressBar_Indeterminate_Desc_Key\":\"Indeterminate Progress bar\",\"Base_Palette_Color\":\"Color palette\",\"Base_Palette_Color_description\":\"Choose a color palette that's different from the theme.\"}}}",
       "Type": 3
     },
     {
@@ -1141,5 +1154,5 @@
       "Type": 4
     }
   ],
-  "Version": "1.1.17"
+  "Version": "1.1.23"
 }
