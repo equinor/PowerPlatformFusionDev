@@ -24,10 +24,10 @@ dev_env_id="c57aa9a3-de6e-423e-a274-195cb3a57b33"
 dev_env_name="DPNDev"
 
 # Test environment
-test_env_id="7ea712b5-e354-435c-8ac8-982ed61f8a1c"
-test_env_name="CitizenTest"
+test_env_id="a69e37c8-7754-428e-8440-14aba3841189"
+test_env_name="DPNTest"
 
 # Production environment 
 # NOTE: Production configuration should not be used unless you are certain about the implications!
-prod_env_id="e3826ef7-60b0-4e30-a6cf-f469aa3883d8"
-prod_env_name="CitizenProd"
+prod_env_id="39d04b94-76f7-48f9-8ab3-3ab354a81af4"
+prod_env_name="DPNProd"
