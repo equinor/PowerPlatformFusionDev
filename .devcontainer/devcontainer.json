@@ -49,6 +49,15 @@
 				"vscodevim.vim",
 				"bierner.markdown-mermaid"
 			]
+		},
+		"codespaces": {
+			"repositories": {
+				"equinor/powerplatform": {
+					"permissions": {
+						"contents": "read"
+					}
+				}
+			}
 		}
 	}
 }
